@@ -1,0 +1,15 @@
+package org.paperplane.organizationsregister.data;
+
+import org.paperplane.organizationsregister.data.custom.BankCustomQueriesCaller;
+import org.paperplane.organizationsregister.domain.Bank;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface BankRepository extends JpaRepository<Bank, Integer>, BankCustomQueriesCaller {
+    Bank save(Bank bank);
+    Bank update(Bank bank);
+    Bank findById(int id);
+    List<Bank> findAllByName(String name);
+    boolean existsById(Integer id);
+}

@@ -1,0 +1,42 @@
+{
+  "name": "organizations-register",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p",
+    "dev": "webpack -d --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "babel-loader": "^7.1.3",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "date-fns": "^2.0.0-alpha.7",
+    "lodash": "^4.17.5",
+    "material-ui": "^1.0.0-beta.37",
+    "material-ui-icons": "^1.0.0-beta.36",
+    "material-ui-pickers": "^1.0.0-rc.3",
+    "material-ui-time-picker": "^0.1.5",
+    "prop-types": "^15.6.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^4.0.8",
+    "react-select": "^1.2.1",
+    "recompose": "^0.26.0",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
+    "webpack": "^4.0.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^2.0.9"
+  }
+}

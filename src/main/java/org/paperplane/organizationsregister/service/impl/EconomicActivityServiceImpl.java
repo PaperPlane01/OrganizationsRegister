@@ -1,0 +1,43 @@
+package org.paperplane.organizationsregister.service.impl;
+
+import org.paperplane.organizationsregister.data.EconomicActivityRepository;
+import org.paperplane.organizationsregister.domain.EconomicActivity;
+import org.paperplane.organizationsregister.service.EconomicActivityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+
+@Service
+@Transactional
+public class EconomicActivityServiceImpl implements EconomicActivityService {
+
+    @Autowired
+    private EconomicActivityRepository economicActivityRepository;
+
+    @Override
+    public EconomicActivity save(EconomicActivity economicActivity) {
+        return economicActivityRepository.save(economicActivity);
+    }
+
+    @Override
+    public List<EconomicActivity> findByNameLike(String possibleName) {
+        return economicActivityRepository.findAllByNameLike(possibleName);
+    }
+
+    @Override
+    public List<EconomicActivity> findByNameContains(String name) {
+        return economicActivityRepository.findAllByNameContains(name);
+    }
+
+    @Override
+    public EconomicActivity findById(int id) {
+        return economicActivityRepository.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Integer id) {
+        return economicActivityRepository.existsById(id);
+    }
+}
