@@ -16,7 +16,7 @@ class YearSelect extends React.Component {
     render() {
         const {years, onSelect, classes, selectedYear} = this.props;
         let selectedOption = selectedYear != undefined ?
-            () => ({label: selectedYear, value: selectedYear})
+            {label: selectedYear, value: selectedYear}
             : null;
         let options = years != undefined ? (years.map(year => ({label: year, value: year}))) : [];
 
@@ -29,7 +29,8 @@ class YearSelect extends React.Component {
                           simpleValue: false,
                           options: options,
                           onChange: onSelect
-                      }}/>
+                      }}
+        />
     }
 }
 

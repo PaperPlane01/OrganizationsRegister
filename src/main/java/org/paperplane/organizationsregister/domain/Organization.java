@@ -2,6 +2,8 @@ package org.paperplane.organizationsregister.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Organization implements Comparable<Organization> {
 
     @Id
@@ -64,7 +67,7 @@ public class Organization implements Comparable<Organization> {
     @Size(min = 1, max = 30)
     private String phoneNumber;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "organization")
     private List<FinancialStatisticsByQuarter> financialStatisticByQuarters;
 

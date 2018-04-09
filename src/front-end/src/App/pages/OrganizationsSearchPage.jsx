@@ -3,8 +3,8 @@ import OrganizationsTable from '../components/OrganizationsTable.jsx';
 import OrganizationsSearchForm from '../components/OrganizationsSearchForm.jsx';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router-dom';
 import {searchOrganizationsByCriteria} from "../actions/organizations-actions";
+import Typography from "material-ui/es/Typography/Typography";
 
 class OrganizationsSearchPage extends React.Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class OrganizationsSearchPage extends React.Component {
 
             {this.props.searchResults !== undefined && this.props.searchResults.length !== 0
                 ? <OrganizationsTable dataSource={this.props.searchResults}/>
-                : <p>Поиск не дал результатов.</p>
+                : <Typography variant="body1">Поиск не дал результатов.</Typography>
             }
         </div>
     }

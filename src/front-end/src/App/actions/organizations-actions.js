@@ -87,9 +87,17 @@ export const organizationFoundByBin = (organization) => {
     }
 };
 
-export const organizationNotFoundByBin = () => {
+export const organizationNotFoundByBin = (exception) => {
     return {
         type: organizationsActionConstants.ORGANIZATION_NOT_FOUND_BY_BIN,
+        exception: exception
+    }
+};
+
+export const numberOfYearsSinceRegistrationFetched = (numberOfYears) => {
+    return {
+        type: organizationsActionConstants.NUMBER_OF_YEARS_SINCE_REGISTRATION_FETCHED,
+        numberOfYears: numberOfYears
     }
 };
 
@@ -185,7 +193,7 @@ export const handleOrganizationSelect = (option) => {
     }
 };
 
-export const getOrganizationByBin = (bin) => {
+export const findOrganizationByBin = (bin) => {
     return (dispatch) => {
         axios.get(API_URL.concat(ORGANIZATIONS).concat(bin))
             .then(response => {
@@ -194,5 +202,15 @@ export const getOrganizationByBin = (bin) => {
             .catch(error => {
                 dispatch(organizationNotFoundByBin(error.response.data.exception))
             })
+    }
+};
+
+export const fetchNumberOfYearsSinceRegistration = (bin) => {
+    return (dispatch) => {
+        axios.get(API_URL.concat(ORGANIZATIONS).concat(bin), {params: {
+            action: 'getNumberOfYearsSinceOrganizationHasBeenRegistered'
+        }}).then(response => {
+            dispatch(numberOfYearsSinceRegistrationFetched(response.data));
+        })
     }
 };

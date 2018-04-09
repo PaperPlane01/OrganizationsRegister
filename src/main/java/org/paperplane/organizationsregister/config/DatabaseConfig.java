@@ -36,6 +36,8 @@ public class DatabaseConfig {
         basicDataSource.setUsername(environment.getProperty("database.username"));
         basicDataSource.setPassword(environment.getProperty("database.password"));
         basicDataSource.setUrl(environment.getProperty("database.url"));
+        basicDataSource.setInitialSize(Integer.valueOf(environment.getProperty("database.initial_number_of_connections")));
+        basicDataSource.setMaxTotal(Integer.valueOf(environment.getProperty("database.max_number_of_connections")));
         return basicDataSource;
     }
 

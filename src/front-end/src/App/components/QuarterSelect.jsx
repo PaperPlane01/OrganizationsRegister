@@ -13,7 +13,9 @@ class QuarterSelect extends React.Component {
     }
 
     render() {
-        let {classes} = this.props;
+        let {classes, selectedQuarter, onSelect} = this.props;
+
+        const selectedOption = selectedQuarter != undefined ? {label: selectedQuarter, value: selectedQuarter} : null;
 
         return <Input fullWidth={true}
                       inputComponent={WrappedSelect}
@@ -21,9 +23,9 @@ class QuarterSelect extends React.Component {
                           classes,
                           label: 'Квартал',
                           placeholder: 'Выберите квартал',
-                          value: this.props.selectedQuarter,
+                          value: selectedOption,
                           simpleValue: false,
-                          onChange: this.handleQuarterSelect,
+                          onChange: onSelect,
                           options: this.state.quartersOptions
                       }}
         />
@@ -32,7 +34,7 @@ class QuarterSelect extends React.Component {
 
 QuarterSelect.propTypes = {
     onSelect: PropTypes.func,
-    selectedQuarter: PropTypes.func
+    selectedQuarter: PropTypes.number
 };
 
 export default QuarterSelect;

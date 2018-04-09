@@ -5,8 +5,9 @@ import {organizationsTypesReducer} from "./organizations-types-reducer";
 import {organizationSearchReducer, organizationValidationReducer} from "./organizations-reducers.js";
 import {userReducer} from "./user-reducer";
 import {routerReducer} from 'react-router-redux';
-import {organizationsReducer} from "./organizations-reducers";
-import {financialStatisticsReducer} from "./financial-statistics-reducers";
+import {organizationPageReducer, organizationsReducer} from "./organizations-reducers";
+import {financialStatisticsReducer, financialStatisticsSearchReducer} from "./financial-statistics-reducers";
+
 export default combineReducers({
     organizationsSearch: combineReducers({
         searchedOrganizations: organizationSearchReducer,
@@ -18,7 +19,11 @@ export default combineReducers({
     }),
     financialStatisticsSearch: combineReducers({
        organizations: organizationsReducer,
-       financialStatistics: financialStatisticsReducer
+       financialStatistics: financialStatisticsReducer,
+       searchCriteria: financialStatisticsSearchReducer
+    }),
+    organizationPage: combineReducers({
+       organizationData: organizationPageReducer
     }),
     routing: routerReducer,
     userData: userReducer

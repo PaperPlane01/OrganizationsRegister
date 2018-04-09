@@ -16,17 +16,44 @@ export const yearsOfFinancialStatisticsLoaded = (years) => {
     }
 };
 
+export const yearsCleared = (years) => {
+    return {
+        type: financialStatisticsConstants.YEARS_CLEARED,
+        years: years
+    }
+};
+
 export const yearSelected = (year) => {
     return {
         type: financialStatisticsConstants.YEAR_SELECTED,
-        year: year
+        selectedYear: year
+    }
+};
+
+export const yearSelectionCleared = (year) => {
+    return {
+        type: financialStatisticsConstants.YEAR_SELECTION_CLEARED,
+        selectedYear: year
     }
 };
 
 export const quarterSelected = (quarter) => {
     return {
         type: financialStatisticsConstants.QUARTER_SELECTED,
-        quarter: quarter
+        selectedQuarter: quarter
+    }
+};
+
+export const stateCleared = () => {
+    return {
+        type: financialStatisticsConstants.STATE_CLEARED
+    }
+};
+
+export const quarterSelectionCleared = (quarter) => {
+    return {
+        type: financialStatisticsConstants.QUARTER_SELECTION_CLEARED,
+        selectedQuarter: quarter
     }
 };
 
@@ -34,18 +61,18 @@ export const loadFinancialStatistics = (bin, year, quarter) => {
     let params = {bin: bin};
 
     if (year != undefined) {
-        params = {...params, year: year};
+        params.year = year;
     }
 
     if (quarter != undefined) {
-        params = {...params, quarter: quarter};
+        params.quarter = quarter;
     }
 
     return (dispatch) => {
-        axios.get(API_URL.concat(FINANCIAL_STATISTICS), {params: params
-        }).then(response => {
-            dispatch(financialStatisticsLoaded(response.data))
-        })
+        axios.get(API_URL.concat(FINANCIAL_STATISTICS), {params: {...params}})
+            .then(response => {
+                dispatch(financialStatisticsLoaded(response.data))
+            })
     }
 };
 
@@ -68,5 +95,29 @@ export const handleYearSelect = (year) => {
 export const handleQuarterSelect = (quarter) => {
     return (dispatch) => {
         dispatch(quarterSelected(quarter))
+    }
+};
+
+export const clearQuarterSelection = () => {
+    return (dispatch) => {
+        dispatch(quarterSelectionCleared(null));
+    }
+};
+
+export const clearYears = () => {
+    return (dispatch) => {
+        dispatch(yearsCleared([]));
+    }
+};
+
+export const clearYearSelection = () => {
+    return (dispatch) => {
+        dispatch(yearSelectionCleared(null));
+    }
+};
+
+export const clearState = () => {
+    return (dipsatch) => {
+        dipsatch(stateCleared())
     }
 };

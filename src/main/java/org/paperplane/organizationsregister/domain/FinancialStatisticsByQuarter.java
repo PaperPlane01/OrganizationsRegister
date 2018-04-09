@@ -19,7 +19,6 @@ public class FinancialStatisticsByQuarter {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "organizationBIN")
-    @JsonBackReference
     @NotNull
     private Organization organization;
 

@@ -57,6 +57,7 @@ public class OrganizationController {
 
     @AssertEntityExistsById(entityClass = OrganizationType.class)
     @RequestMapping(value = "/organization-types/{id}", method = RequestMethod.GET)
+    @ResponseBody
     public OrganizationType findById(@PathVariable("id") @EntityIdentifier int id) {
         return organizationService.findOrganizationTypeById(id);
     }
@@ -102,6 +103,7 @@ public class OrganizationController {
 
     @RequestMapping(value = "/{bin}", method = RequestMethod.GET,
             params = {"action=getNumberOfYearsSinceOrganizationHasBeenRegistered"})
+    @ResponseBody
     public int findNumberOfYearsSinceOrganizationHasBeenRegistered(@PathVariable("bin") long bin) {
         return organizationService.findNumberOfYearsSinceOrganizationHasBeenRegistered(bin);
     }

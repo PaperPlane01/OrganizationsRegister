@@ -7,6 +7,7 @@ import Table, {
 } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import TableHeaderWithSorting from './TableHeaderWithSorting.jsx';
+import {Link} from "react-router-dom";
 
 class OrganizationsTable extends React.Component {
 
@@ -71,7 +72,11 @@ class OrganizationsTable extends React.Component {
                             return (
                                 <TableRow key={organization.bin}>
                                     <TableCell numeric>{organization.bin}</TableCell>
-                                    <TableCell>{organization.fullName}</TableCell>
+                                    <TableCell>
+                                        {<Link to={"/organizations-register/organizations/".concat(organization.bin)}>
+                                            {organization.fullName}
+                                        </Link>}
+                                    </TableCell>
                                     <TableCell>{organization.shortName !== null ? organization.shortName : '-'}</TableCell>
                                     <TableCell>{organization.organizationType.name}</TableCell>
                                     <TableCell>{organization.registrationDate}</TableCell>

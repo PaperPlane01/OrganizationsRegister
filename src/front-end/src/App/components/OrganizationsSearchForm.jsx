@@ -20,6 +20,7 @@ import {validateAddress, validateFounder,
 } from "../actions/organizations-actions";
 import compose from 'recompose/compose';
 import {formStyle} from "../form-style/";
+import Typography from "material-ui/es/Typography/Typography";
 
 const styles = theme => formStyle(theme);
 
@@ -165,36 +166,35 @@ class OrganizationsSearchForm extends React.Component {
             selectedOrganizationTypeOption,
             handleOrganizationTypeSelect
         } = this.props;
-        let labelStyle = {'font-family': 'roboto'};
-        let errorLabelStyle = {'font-family': 'roboto', 'color': 'red'};
+        let errorLabelStyle = {'color': 'red'};
 
         return <div>
-            <h2 style={labelStyle}>Поиск организаций</h2>
-            <div style={labelStyle}>Полное название организации:</div>
+            <Typography variant="headline">Поиск организаций</Typography>
+            <Typography variant="body1">Полное название организации:</Typography>
             {!this.props.fullNameValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" style={errorLabelStyle}>
                     {this.props.fullNameValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
             <Input placeholder={'Введите полное название органиации'}
                    onChange={event => this.handleOrganizationFullName(event.target.value)}
                    fullWidth={true}/>
 
-            <div style={labelStyle}>Сокращённое название организации:</div>
+            <Typography variant="body1">Сокращённое название организации:</Typography>
             {!this.props.shortNameValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" style={errorLabelStyle}>
                     {this.props.shortNameValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
             <Input placeholder={'Введите сокращённое название организации'}
                    onChange={event => this.handleOrganizationShortName(event.target.value)}
                    fullWidth={true}/>
 
-            <div style={labelStyle}>Тип организации:</div>
+            <Typography variant="body1">Тип организации:</Typography>
             <OrganizationTypeSelect organizationTypes={loadedOrganizationTypes}
                                     selectedOption={selectedOrganizationTypeOption}
                                     onSelect={option => handleOrganizationTypeSelect(option)}
                                     classes={classes}/><br/>
 
-            <div style={labelStyle}>Выполняемые хозяйственные деятельности:</div>
+            <Typography variant="body1">Выполняемые хозяйственные деятельности:</Typography>
             <EconomicActivitySelect economicActivities={loadedEconomicActivities}
                                     selectedOptions={selectedEconomicActivitiesOptions}
                                     onSelect={option => handleEconomicActivitiesSelect(option)}
@@ -202,32 +202,32 @@ class OrganizationsSearchForm extends React.Component {
                                     classes={classes}
                                     multipleSelectEnabled={true}/><br/>
 
-            <div style={labelStyle}>Налоговый комитет:</div>
+            <Typography variant="body1">Налоговый комитет:</Typography>
             <TaxesCommitteeSelect taxesCommittees={loadedTaxesCommittees}
                                   selectedOption={selectedTaxesCommitteeOption}
                                   onSelect={option => handleTaxesCommitteeSelect(option)}
                                   onInput={nameContains => fetchTaxesCommittees(nameContains)}
                                   classes={classes}/>
 
-            <div style={labelStyle}>Минимальное количество сотрудников:</div>
+            <Typography variant="body1">Минимальное количество сотрудников:</Typography>
             {!this.props.minNumberOfEmployeesValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" style={errorLabelStyle}>
                     {this.props.minNumberOfEmployeesValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
             <Input placeholder={'Введите минимальное количество содтрудников'}
                    onChange={event => this.handleMinNumberOfEmployees(event.target.value)}
                    fullWidth={true}/>
 
-            <div style={labelStyle}>Максимальное количетсво сотрудников:</div>
+            <Typography variant="body1">Максимальное количетсво сотрудников:</Typography>
             {!this.props.maxNumberOfEmployeesValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" style={errorLabelStyle}>
                     {this.props.maxNumberOfEmployeesValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
             <Input placeholder={'Введите максимальное количество сотрудников'}
                    onChange={event => this.handleMaxNumberOfEmployees(event.target.value)}
                    fullWidth={true}/>
 
-            <div style={labelStyle}>Минимальная дата регистрации:</div>
+            <Typography variant="body1">Минимальная дата регистрации:</Typography>
             <DatePicker label={'Выберите минимальную дату регистрации'}
                         clearable
                         disableFuture
@@ -239,7 +239,7 @@ class OrganizationsSearchForm extends React.Component {
                         cancelLabel={'Отменить'}
                         clearLabel={'Очистить'}/>
 
-            <div style={labelStyle}>Максимальная дата регистрации:</div>
+            <Typography variant="body1">Максимальная дата регистрации:</Typography>
             <DatePicker label={'Выберите максимальную дату регистрации'}
                         clearable
                         disableFuture
@@ -251,38 +251,38 @@ class OrganizationsSearchForm extends React.Component {
                         cancelLabel={'Отменить'}
                         clearLabel={'Очистить'}/>
 
-            <div style={labelStyle}>Учредитель:</div>
+            <Typography variant="body1">Учредитель:</Typography>
             {!this.props.founderValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" color={'red'}>
                     {this.props.founderValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
             <Input placeholder={'Введите учредителя организации'}
                    onChange={event => this.handleFounder(event.target.value)}
                    fullWidth={true}/>
 
-            <div style={labelStyle}>Телефонный номер:</div>
+            <Typography variant="body1">Телефонный номер:</Typography>
             {!this.props.phoneNumberValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" style={errorLabelStyle}>
                     {this.props.phoneNumberValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
             <Input placeholder={'Введите телефонный номер организации'}
                    onChange={event => this.handlePhoneNumber(event.target.value)}
                    fullWidth={true}/>
 
-            <div style={labelStyle}>Адрес:</div>
+            <Typography variant="body1">Адрес:</Typography>
             {!this.props.addressValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" style={errorLabelStyle}>
                     {this.props.addressValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
             <Input placeholder={'Введите адрес организации'}
                    onChange={event => this.handleAddress(event.target.value)}
                    fullWidth={true}/><br/>
 
             <Button variant={'raised'} color={'primary'} onClick={() => this.handleSearchRequest()}>Поиск</Button>
             {!this.state.overallValidationResult.isSuccessful() ?
-                <span style={errorLabelStyle}>
+                <Typography variant="body1" style={errorLabelStyle}>
                     {this.state.overallValidationResult.getMessage()}
-                </span> : ''}
+                </Typography> : ''}
         </div>
     }
 }

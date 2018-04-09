@@ -6,6 +6,8 @@ import {handleOrganizationSelect, loadOrganizationsWithNameContains} from "../ac
 import YearSelect from "./YearSelect.jsx";
 import QuarterSelect from "./QuarterSelect.jsx";
 import {
+    clearQuarterSelection, clearState,
+    clearYears, clearYearSelection,
     handleQuarterSelect, handleYearSelect,
     loadYearsOfFinancialStatistics
 } from "../actions/financial-statistics-actions";
@@ -13,48 +15,88 @@ import Button from 'material-ui/Button';
 import compose from 'recompose/compose';
 import {withStyles} from 'material-ui';
 import {formStyle} from "../form-style/";
+import Typography from "material-ui/es/Typography/Typography";
+import ValidationResult from "../validation/ValidationResult";
 
 const styles = theme => formStyle(theme);
 
 class FinancialStatisticsSearchForm extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            formValidationResult: new ValidationResult(true, ''),
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.selectedOrganizationOption != undefined && nextProps.years == undefined) {
+            this.props.fetchFinancialStatisticsYears(nextProps.selectedOrganizationOption.value.bin);
+        }
     }
 
     handleSearchRequest = () => {
-        this.props.handleSearchRequest();
+        if (this.props.selectedOrganizationOption == undefined) {
+            this.setState({formValidationResult: new ValidationResult(false, 'Вы не выбрали организацию.')});
+            return;
+        }
+
+        if (this.props.selectedYear == undefined && this.props.selectedQuarter != undefined) {
+            this.setState({formValidationResult: new ValidationResult(false, 'Вы не выбрали год.')});
+            return;
+        }
+
+        this.setState({formValidationResult: new ValidationResult(true, '')}, () => {
+            this.props.onFormSubmitted(this.props.selectedOrganizationOption.value.bin, this.props.selectedYear,
+                this.props.selectedQuarter);
+        });
+    };
+
+    handleOrganizationSelect = (option) => {
+        if (option == undefined) {
+            this.props.clearState();
+        };
+
+        this.props.handleOrganizationSelect(option);
     };
 
     render() {
         const {classes, fetchOrganizations, handleOrganizationSelect,
-            selectedOrganizationOption, handleYearSelect, years, selectedYear, selectedQuarter, loadedOrganizations} = this.props;
-
-        console.log('rendering!');
-
-        selectedOrganizationOption != undefined
-            ? this.props.fetchFinancialStatisticsYears(selectedOrganizationOption.value.bin)
-            : [];
+            selectedOrganizationOption, handleYearSelect, handleQuarterSelect, years, selectedYear,
+            selectedQuarter, loadedOrganizations} = this.props;
 
         return <div>
+            <Typography variant="headline">Поиск финансовой статистики</Typography>
+
+            <Typography variant="body1">Организация:</Typography>
             <OrganizationSelect onInput={(nameContains) => fetchOrganizations(nameContains)}
                                 organizations={loadedOrganizations}
-                                onSelect={(option) => handleOrganizationSelect(option)}
+                                onSelect={(option) => this.handleOrganizationSelect(option)}
                                 selectedOption={selectedOrganizationOption}
                                 classes={classes}
             />
 
+            <Typography variant="body1">Год:</Typography>
             <YearSelect years={years}
                         selectedYear={selectedYear}
-                        onSelect={(year) => handleYearSelect(year)}
+                        onSelect={(option) => option == undefined ? handleYearSelect(null) : handleYearSelect(option.value)}
                         classes={classes}
             />
 
-            <QuarterSelect onSelect={(quarter) => handleQuarterSelect(quarter)}
+            <Typography variant="body1">Квартал:</Typography>
+            <QuarterSelect onSelect={(option) => option == undefined ? handleQuarterSelect(null) : handleQuarterSelect(option.value)}
                            selectedQuarter={selectedQuarter}
                            classes={classes}
             />
 
-            <Button color={'primary'} variant={'raised'} onClick={() => this.handleSearchRequest()}>Поиск</Button>
+            {!this.state.formValidationResult.isSuccessful()
+                ? <Typography variant="body1" style={{'color': 'red'}}>{this.state.formValidationResult.getMessage()}</Typography>
+                : ''
+            }
+            <Button color={'primary'} variant={'raised'}
+                    onClick={() => this.handleSearchRequest()}>
+                Поиск
+            </Button>
         </div>
     }
  }
@@ -67,9 +109,11 @@ FinancialStatisticsSearchForm.propTypes = {
     selectedOrganizationOption: PropTypes.object,
     years: PropTypes.array,
     selectedQuarter: PropTypes.number,
+    selectedYear: PropTypes.number,
     handleYearSelect: PropTypes.func,
     handleQuarterSelect: PropTypes.func,
-    onFormSubmitted: PropTypes.func
+    onFormSubmitted: PropTypes.func,
+    clearState: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -78,10 +122,10 @@ const mapStateToProps = (state) => {
     return {
         loadedOrganizations: financialStatisticsSearch.organizations.payload.data.loadedOrganizations,
         selectedOrganizationOption: financialStatisticsSearch.organizations.payload.data.selectedOrganizationOption,
-        years: financialStatisticsSearch.financialStatistics.payload.data.years,
+        years: financialStatisticsSearch.searchCriteria.payload.data.years,
         loadedFinancialStatistics: financialStatisticsSearch.financialStatistics.payload.data.financialStatisticsSearchResults,
-        selectedYear: financialStatisticsSearch.financialStatistics.payload.data.selectedYear,
-        selectedQuarter: financialStatisticsSearch.financialStatistics.payload.data.selectedQuarter
+        selectedYear: financialStatisticsSearch.searchCriteria.payload.data.year,
+        selectedQuarter: financialStatisticsSearch.searchCriteria.payload.data.quarter
     }
 };
 
@@ -91,7 +135,8 @@ const mapDispatchToProps = (dispatch) => {
          fetchFinancialStatisticsYears: (organizationBIN) => dispatch(loadYearsOfFinancialStatistics(organizationBIN)),
          handleOrganizationSelect: (option) => dispatch(handleOrganizationSelect(option)),
          handleQuarterSelect: (quarter) => dispatch(handleQuarterSelect(quarter)),
-         handleYearSelect: (year) => dispatch(handleYearSelect(year))
+         handleYearSelect: (year) => dispatch(handleYearSelect(year)),
+         clearState: () => dispatch(clearState())
      }
  };
 

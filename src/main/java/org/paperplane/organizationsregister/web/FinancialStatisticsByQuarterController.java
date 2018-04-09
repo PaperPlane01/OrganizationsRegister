@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -45,10 +47,11 @@ public class FinancialStatisticsByQuarterController {
     @AssertEntityExistsById(entityClass = Organization.class)
     @RequestMapping(method = RequestMethod.GET, params = {"bin", "year", "quarter"})
     @ResponseBody
-    public FinancialStatisticsByQuarter getFinancialStatisticsOfOrganizationByQuarterAndYear(
+    public List<FinancialStatisticsByQuarter> getFinancialStatisticsOfOrganizationByQuarterAndYear(
             @RequestParam("bin") @EntityIdentifier long bin, @RequestParam("year") int year,
             @RequestParam("quarter") byte quarter) {
-        return financialStatisticsService.findByOrganizationAndYearAndQuarter(new Organization(bin), year, quarter);
+        return Collections.singletonList(financialStatisticsService
+                .findByOrganizationAndYearAndQuarter(new Organization(bin), year, quarter));
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"action=getMaxYear"})

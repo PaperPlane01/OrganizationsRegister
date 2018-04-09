@@ -11,6 +11,7 @@ import Table, {
 import Paper from 'material-ui/Paper';
 import TableHeaderWithSorting from "./TableHeaderWithSorting.jsx";
 import PropTypes from 'prop-types';
+import {Link} from "react-router-dom";
 
 class FinancialStatisticsTable extends React.Component {
     constructor(props) {
@@ -42,6 +43,27 @@ class FinancialStatisticsTable extends React.Component {
             order = 'asc';
         }
 
+        if (orderBy === 'year') {
+            let dataSource = this.state.dataSource.sort((a, b) => {
+                if (a.year === b.year) {
+                    if (order === 'desc') {
+                        return (a.quarter > b.quarter ? 1 : -1);
+                    } else {
+                        return (a.quarter > b.quarter ? -1 : 1);
+                    }
+                } else {
+                    if (order === 'desc') {
+                        return (a.year > b.year ? 1 : -1);
+                    } else {
+                        return (a.year > b.year ? -1 : 1);
+                    }
+                }
+            });
+
+            this.setState({dataSource: dataSource});
+            return;
+        }
+
         const dataSource =
             order === 'desc'
                 ? this.state.dataSource.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
@@ -68,11 +90,15 @@ class FinancialStatisticsTable extends React.Component {
                     {dataSource.map(financialStatistics => {
                         return (
                             <TableRow key={financialStatistics.id}>
-                                <TableCell>{financialStatistics.organization.fullName}</TableCell>
+                                <TableCell>
+                                    <Link to={"/organizations-register/organizations/".concat(financialStatistics.organization.bin)}>
+                                        {financialStatistics.organization.fullName}
+                                    </Link>
+                                </TableCell>
                                 <TableCell numeric>{financialStatistics.year}</TableCell>
-                                <TableCell numberic>{financialStatistics.quarter}</TableCell>
+                                <TableCell numeric>{financialStatistics.quarter}</TableCell>
                                 <TableCell numeric>{financialStatistics.sum}</TableCell>
-                                <TableCell>{financialStatistics.attribute}</TableCell>
+                                <TableCell>{financialStatistics.attribute === 'debit' ? 'Дебит' : 'Кредит'}</TableCell>
                             </TableRow>
                         )
                     })}

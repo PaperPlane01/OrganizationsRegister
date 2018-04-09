@@ -8,8 +8,7 @@ import org.paperplane.organizationsregister.domain.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.StoredProcedureQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -35,12 +34,11 @@ public class OrganizationRepositoryImpl implements OrganizationCustomQueriesCall
 
     @Override
     public int findNumberOfYearsSinceOrganizationHasBeenRegistered(long bin) {
-        StoredProcedureQuery query = entityManagerFactory.createEntityManager()
-                .createNamedStoredProcedureQuery("findNumberOfYearsSinceOrganizationHasBeenRegistered")
+        Query query = entityManagerFactory.createEntityManager()
+                .createNativeQuery("exec findNumberOfYearsSinceOrganizationHasBeenRegistered @organizationBIN = :organizationBIN")
                 .setParameter("organizationBIN", bin);
-        query.execute();
 
-        return (Integer) query.getOutputParameterValue("numberOfYears");
+        return (Integer) query.getSingleResult();
     }
 
     @Override

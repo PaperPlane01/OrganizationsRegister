@@ -5,6 +5,7 @@ import Button from 'material-ui/Button';
 import FinancialStatisticsTable from "../components/FinancialStatisticsTable.jsx";
 import {loadFinancialStatistics} from "../actions/financial-statistics-actions";
 import {connect} from 'react-redux';
+import Typography from "material-ui/es/Typography/Typography";
 
 class FinancialStatisticsSearchPage extends React.Component {
     constructor(props) {
@@ -15,8 +16,9 @@ class FinancialStatisticsSearchPage extends React.Component {
         <FinancialStatisticsSearchForm onFormSubmitted={(bin, year, quarter) => this.props.handleSearchRequest(bin, year, quarter)}/>
 
         {this.props.searchResults == undefined
-            ? <p>Поиск не дал результатов</p>
-            : <FinancialStatisticsTable dataSource={this.props.searchResults}/>}
+            ? <Typography variant="body1" >Поиск не дал результатов</Typography>
+            : <FinancialStatisticsTable dataSource={this.props.searchResults}/>
+        }
     </div>
     }
 }
@@ -30,7 +32,7 @@ const mapStateToProps = (state) => {
     let financialStatisticsSearch = state.financialStatisticsSearch;
 
     return {
-        searchResults: financialStatisticsSearch.searchResults
+        searchResults: financialStatisticsSearch.financialStatistics.payload.data.financialStatisticsSearchResults
     }
 };
 
