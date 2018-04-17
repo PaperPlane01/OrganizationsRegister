@@ -11,7 +11,7 @@ public class Token {
     private long id;
 
     @JoinColumn(name = "userID")
-    @ManyToOne(fetch = FetchType.LAZY, cascade  = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade  = CascadeType.MERGE)
     private User user;
     private String value;
     private boolean expired;

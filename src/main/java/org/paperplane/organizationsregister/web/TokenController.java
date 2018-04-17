@@ -47,12 +47,11 @@ public class TokenController {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user-id")
+    @RequestMapping(method = RequestMethod.GET, value = "/user")
     @RequiresToken
     @ResponseBody
-    public int getUserIDByTokenValue(@RequestHeader(value = "token", required = false) String tokenValue) {
+    public User getUserByTokenValue(@RequestHeader(value = "token", required = false) String tokenValue) {
         Token token = tokenService.getTokenByValue(tokenValue);
-        User user = token.getUser();
-        return user.getId();
+        return token.getUser();
     }
 }

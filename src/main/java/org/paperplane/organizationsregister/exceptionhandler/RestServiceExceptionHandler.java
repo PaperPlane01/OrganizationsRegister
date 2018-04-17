@@ -1,5 +1,6 @@
 package org.paperplane.organizationsregister.exceptionhandler;
 
+import com.google.common.collect.ImmutableMap;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.exception.*;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.BankNotFoundException;
@@ -88,9 +89,10 @@ public class RestServiceExceptionHandler extends ResponseEntityExceptionHandler 
     }
 
     private Map<String, String> createExceptionResponseMap(Class exceptionClass, String message) {
-        Map<String, String> exceptionResponseMap = new LinkedHashMap<>();
-        exceptionResponseMap.put("exception", exceptionClass.getSimpleName());
-        exceptionResponseMap.put("message", message);
-        return exceptionResponseMap;
+        return ImmutableMap
+                .<String, String>builder()
+                .put("exception", exceptionClass.getSimpleName())
+                .put("message", message)
+                .build();
     }
 }

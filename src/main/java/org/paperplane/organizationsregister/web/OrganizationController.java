@@ -5,6 +5,7 @@ import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
 import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
+import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
 import org.paperplane.organizationsregister.service.OrganizationService;
@@ -71,10 +72,10 @@ public class OrganizationController {
     @RequestMapping(method = RequestMethod.POST)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
-    public ResponseEntity save(@RequestBody Organization organization,
+    @ResponseBody
+    public long save(@RequestBody Organization organization,
                                           @RequestHeader(value = "token", required = false) String tokenValue) {
-        organizationService.save(organization);
-        return ResponseEntity.ok().build();
+        return organizationService.save(organization).getBin();
     }
 
     @RequestMapping(method = RequestMethod.PUT)
@@ -101,10 +102,18 @@ public class OrganizationController {
         return organizationService.findOrganizationsByCriteria(criteria);
     }
 
+    @AssertEntityExistsById(entityClass = Organization.class)
     @RequestMapping(value = "/{bin}", method = RequestMethod.GET,
             params = {"action=getNumberOfYearsSinceOrganizationHasBeenRegistered"})
     @ResponseBody
-    public int findNumberOfYearsSinceOrganizationHasBeenRegistered(@PathVariable("bin") long bin) {
+    public int findNumberOfYearsSinceOrganizationHasBeenRegistered(@PathVariable("bin") @EntityIdentifier long bin) {
         return organizationService.findNumberOfYearsSinceOrganizationHasBeenRegistered(bin);
+    }
+
+    @AssertEntityExistsById(entityClass = Organization.class)
+    @RequestMapping(value = "/{bin}/bank-accounts", method = RequestMethod.GET)
+    @ResponseBody
+    public List<BankAccount> findBankAccountsOfOrganization(@PathVariable("bin") @EntityIdentifier long bin) {
+        return organizationService.findBankAccountsOfOrganization(new Organization(bin));
     }
 }

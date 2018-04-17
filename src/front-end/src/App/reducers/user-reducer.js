@@ -1,6 +1,6 @@
 import {userActionsConstants} from "../constants/action-constants";
 
-export const userReducer = (state = {
+export const currentUserReducer = (state = {
     pending: false,
     loggedIn: localStorage.getItem("token") != undefined,
     currentUserData: {
@@ -8,6 +8,7 @@ export const userReducer = (state = {
         userID: localStorage.getItem('userID'),
         token: localStorage.getItem('token')
     },
+    currentUser: null,
     loginError: null,
     registrationError: {}
 }, action) => {
@@ -26,6 +27,11 @@ export const userReducer = (state = {
             return {...state, pending: false, loggedIn: false, currentUserData: {}, loginError: null};
         case userActionsConstants.LOGIN_FAILURE:
             return {...state, loginError: action.exception};
+        case userActionsConstants.FETCH_USER_BY_TOKEN:
+            return {...state, pending: true};
+        case userActionsConstants.USER_FETCHED_BY_TOKEN:
+            console.log('user fetched!');
+            return {...state, currentUser: action.user};
         default:
             return state;
     }

@@ -1,11 +1,11 @@
-import {API_URL, ORGANIZATIONS, SEARCH} from "../constants/api-constants";
+import {API_URL, BANK_ACCOUNTS, ORGANIZATIONS, SEARCH} from "../constants/api-constants";
 import {organizationsActionConstants} from "../constants/action-constants";
 import Validation from '../validation/Validation.js';
 import axios from 'axios';
 
-export const organizationsLoaded = (organizations) => {
+export const organizationsFetched = (organizations) => {
     return {
-        type: organizationsActionConstants.ORGANIZATIONS_LOADING_SUCCESS,
+        type: organizationsActionConstants.ORGANIZATIONS_FETCHED,
         organizations: organizations
     }
 };
@@ -19,8 +19,8 @@ export const organizationsSearchResultsReceived = (organizations) => {
 
 export const organizationSelected = (option) => {
     return {
-        type: organizationsActionConstants.SELECT_ORGANIZATION,
-        selectedOrganizationOption: option
+        type: organizationsActionConstants.ORGANIZATION_SELECTED,
+        selectedOption: option
     }
 };
 
@@ -97,7 +97,7 @@ export const organizationNotFoundByBin = (exception) => {
 export const numberOfYearsSinceRegistrationFetched = (numberOfYears) => {
     return {
         type: organizationsActionConstants.NUMBER_OF_YEARS_SINCE_REGISTRATION_FETCHED,
-        numberOfYears: numberOfYears
+        numberOfYearsSinceRegistration: numberOfYears
     }
 };
 
@@ -151,6 +151,19 @@ export const validateMaxNumberOfEmployees = (maxNumberOfEmployees, acceptEmpty) 
     }
 };
 
+export const binValidated = (validationResult) => {
+    return {
+        type: organizationsActionConstants.BIN_VALIDATED,
+        binValidationResult: validationResult
+    }
+};
+
+export const validateBin = (bin, acceptEmpty) => {
+    return (dispatch) => {
+        dispatch(binValidated(Validation.validateOrganizationBin(bin, acceptEmpty)));
+    }
+};
+
 export const searchOrganizationsByCriteria = (organizationsSearchCriteria) => {
     return (dispatch) => {
         axios.post(API_URL.concat(ORGANIZATIONS).concat(SEARCH), JSON.stringify(organizationsSearchCriteria), {headers: {
@@ -161,10 +174,10 @@ export const searchOrganizationsByCriteria = (organizationsSearchCriteria) => {
     }
 };
 
-export const loadOrganizationsWithNameContains = (nameContains) => {
+export const fetchOrganizationsByName = (nameContains) => {
     if (nameContains === '') {
         return (dispatch) => {
-            dispatch(organizationsLoaded([]));
+            dispatch(organizationsFetched([]));
         }
     }
 
@@ -172,17 +185,7 @@ export const loadOrganizationsWithNameContains = (nameContains) => {
         axios.get(API_URL.concat(ORGANIZATIONS), {params: {
             nameContains: nameContains
         }}).then(response => {
-            dispatch(organizationsLoaded(response.data));
-        })
-    }
-};
-
-export const loadOrganizationsByPage = (page) => {
-    return (dispatch) => {
-        axios.get(API_URL.concat(ORGANIZATIONS), {params: {
-            page: page
-        }}).then(response => {
-            dispatch(organizationsLoaded(response.data));
+            dispatch(organizationsFetched(response.data));
         })
     }
 };
@@ -211,6 +214,57 @@ export const fetchNumberOfYearsSinceRegistration = (bin) => {
             action: 'getNumberOfYearsSinceOrganizationHasBeenRegistered'
         }}).then(response => {
             dispatch(numberOfYearsSinceRegistrationFetched(response.data));
+        })
+    }
+};
+
+export const clearOrganizationPageState = () => {
+    return {
+        type: organizationsActionConstants.CLEAR_ORGANIZATION_PAGE_STATE
+    }
+};
+
+export const bankAccountsFetched = (bankAccounts) => {
+    return {
+        type: organizationsActionConstants.BANK_ACCOUNTS_FETCHED,
+        bankAccounts: bankAccounts
+    }
+};
+
+export const fetchBankAccounts = (organizationBIN) => {
+    return (dispatch) => {
+        axios.get(API_URL.concat(ORGANIZATIONS)
+            .concat("/").concat(organizationBIN)
+            .concat(BANK_ACCOUNTS))
+            .then(response => {
+                dispatch(bankAccountsFetched(response.data))
+            })
+    }
+};
+
+export const organizationAdded = (organizationBIN) => {
+    return {
+        type: organizationsActionConstants.ORGANIZATION_ADDING_SUCCESS,
+        addedOrganizationBin: organizationBIN
+    }
+};
+
+export const organizationAddingFailure = (exception) => {
+    return {
+        type: organizationsActionConstants.ORGANIZATION_ADDING_FAILURE,
+        exception: exception
+    }
+};
+
+export const addOrganization = (organization) => {
+    return (dispatch) => {
+        axios.post(API_URL.concat(ORGANIZATIONS), JSON.stringify(organization), {headers: {
+            token: localStorage.getItem('token'),
+            'Content-type': 'application/json'
+        }}).then(response => {
+            dispatch(organizationAdded(response.data));
+        }).catch(error => {
+            dispatch(organizationAddingFailure(error.response.data.exception))
         })
     }
 };

@@ -3,13 +3,15 @@ import ValidationResult from "../validation/ValidationResult";
 
 export const organizationValidationReducer = (state = {
     validationResults: {
+        binValidationResult: new ValidationResult(true, ''),
         addressValidationResult: new ValidationResult(true, ''),
         fullNameValidationResult: new ValidationResult(true, ''),
         shortNameValidationResult: new ValidationResult(true, ''),
         phoneNumberValidationResult: new ValidationResult(true, ''),
         founderValidationResult: new ValidationResult(true, ''),
         minNumberOfEmployeesValidationResult: new ValidationResult(true, ''),
-        maxNumberOfEmployeesValidationResult: new ValidationResult(true, '')
+        maxNumberOfEmployeesValidationResult: new ValidationResult(true, ''),
+        numberOfEmployeesValidationResult: new ValidationResult(true, '')
     }
 }, action) => {
     switch (action.type) {
@@ -41,31 +43,30 @@ export const organizationValidationReducer = (state = {
             return {...state, validationResults: {
                 ...state.validationResults, founderValidationResult: action.founderValidationResult
             }};
+        case organizationsActionConstants.BIN_VALIDATED:
+            return {...state, validationResults: {
+                ...state.validationResults, binValidationResult: action.binValidationResult
+            }};
         default:
             return state;
     }
 };
 
-export const organizationsReducer = (state = {
+export const organizationSelectReducer = (state = {
     pending: false,
-    payload: {data: {}},
+    data: {
+        dataSource: null,
+        selectedOption: null
+    },
     error: null
 }, action) => {
     switch (action.type) {
-        case organizationsActionConstants.LOAD_ORGANIZATIONS:
-            return {...state, pending: true, payload: {data: {}}, error: null};
-        case organizationsActionConstants.ORGANIZATIONS_LOADING_SUCCESS:
-            return {...state, pending: false,
-                payload:
-                    {data: {...state.payload.data, loadedOrganizations: action.organizations}},
-                error: null
-            };
-        case organizationsActionConstants.SELECT_ORGANIZATION:
-            return {...state, pending: false,
-                payload:
-                    {data: {...state.payload.data, selectedOrganizationOption: action.selectedOrganizationOption}},
-                error: null
-            };
+        case organizationsActionConstants.FETCH_ORGANIZATIONS_BY_NAME:
+            return {...state, pending: true};
+        case organizationsActionConstants.ORGANIZATIONS_FETCHED:
+            return {...state, pending: false, data: {...state.data, dataSource: action.organizations}, error: null};
+        case organizationsActionConstants.ORGANIZATION_SELECTED:
+            return {...state, pending: false, data: {...state.data, selectedOption: action.selectedOption}};
         default:
             return state;
     }
@@ -97,7 +98,7 @@ export const organizationSearchReducer = (state = {
 };
 
 export const organizationPageReducer = (state = {
-    pending: false,
+    pending: true,
     organization: null,
     error: null
 }, action) => {
@@ -112,6 +113,27 @@ export const organizationPageReducer = (state = {
             return {...state, pending: true};
         case organizationsActionConstants.NUMBER_OF_YEARS_SINCE_REGISTRATION_FETCHED:
             return {...state, pending: false, numberOfYearsSinceRegistration: action.numberOfYearsSinceRegistration};
+        case organizationsActionConstants.CLEAR_ORGANIZATION_PAGE_STATE:
+            return {...state, pending: false, organization: null, numberOfYearsSinceRegistration: null};
+        case organizationsActionConstants.BANK_ACCOUNTS_FETCHED:
+            return {...state, pending: false, bankAccounts: action.bankAccounts, error: null};
+        default:
+            return state;
+    }
+};
+
+export const organizationAddingPageReducer = (state ={
+    pending: false,
+    error: null,
+    addedOrganizationBin: null
+}, action) => {
+    switch (action.type) {
+        case organizationsActionConstants.ADD_ORGANIZATION:
+            return {...state, pending: true, error: null};
+        case organizationsActionConstants.ORGANIZATION_ADDING_SUCCESS:
+            return {...state, pending: false, addedOrganizationBin: action.addedOrganizationBin};
+        case organizationsActionConstants.ORGANIZATION_ADDING_FAILURE:
+            return {...state, pending: false, error: action.exception};
         default:
             return state;
     }

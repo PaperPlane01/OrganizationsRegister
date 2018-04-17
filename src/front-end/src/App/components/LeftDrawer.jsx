@@ -31,7 +31,7 @@ class LeftDrawer extends React.Component {
 
                 <Link to="/organizations-register/financial-statistics" style={{textDecoration: 'none'}}>
                     <ListItem button>
-                        <ListItemText primary={'Финансовая статистика'}/>
+                        <ListItemText primary={'Финансовые показатели'}/>
                     </ListItem>
                 </Link>
 

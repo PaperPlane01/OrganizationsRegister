@@ -1,7 +1,7 @@
 package org.paperplane.organizationsregister.service.impl;
 
 import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
-import org.paperplane.organizationsregister.domain.EconomicActivity;
+import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.OrganizationNotFoundException;
@@ -26,17 +26,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationTypeRepository organizationTypeRepository;
 
     @Autowired
-    private EconomicActivityRepository economicActivityRepository;
-
-    @Autowired
-    private FinancialAccountRepository financialAccountRepository;
-
-    @Autowired
-    private TaxesCommitteeRepository taxesCommitteeRepository;
+    private BankAccountRepository bankAccountRepository;
 
     @Override
-    //TODO
     public Organization save(Organization organization) {
+        if (!organization.getPermittedEconomicActivities().contains(organization.getPrimaryEconomicActivity())) {
+            organization.getPermittedEconomicActivities().add(organization.getPrimaryEconomicActivity());
+        }
+
         return organizationRepository.save(organization);
     }
 
@@ -73,7 +70,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public List<Organization> findOrganizationsWithNameContains(String nameContains) {
         List<Organization> organizations = organizationRepository.findAllByFullNameContains(nameContains);
-        organizations.addAll(organizationRepository.findAllByShortNameContains(nameContains));
+
+        organizationRepository.findAllByShortNameContains(nameContains).forEach(organization -> {
+            if (!organizations.contains(organization)) {
+                organizations.add(organization);
+            }
+        });
+
         return organizations;
     }
 
@@ -113,5 +116,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public int findNumberOfYearsSinceOrganizationHasBeenRegistered(long bin) {
         return organizationRepository.findNumberOfYearsSinceOrganizationHasBeenRegistered(bin);
+    }
+
+    @Override
+    public List<BankAccount> findBankAccountsOfOrganization(Organization organization) {
+        return bankAccountRepository.findAllByOrganization(organization);
     }
 }

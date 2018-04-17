@@ -2,6 +2,7 @@ package org.paperplane.organizationsregister.service;
 
 import org.paperplane.organizationsregister.domain.User;
 import org.paperplane.organizationsregister.domain.UserRole;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

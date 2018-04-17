@@ -1,6 +1,7 @@
 package org.paperplane.organizationsregister.service;
 
 import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
+import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.EconomicActivity;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
@@ -25,4 +26,5 @@ public interface OrganizationService {
     Organization update(Organization organization);
     void assertOrganizationExistByBin(long bin);
     int findNumberOfYearsSinceOrganizationHasBeenRegistered(long bin);
+    List<BankAccount> findBankAccountsOfOrganization(Organization organization);
 }

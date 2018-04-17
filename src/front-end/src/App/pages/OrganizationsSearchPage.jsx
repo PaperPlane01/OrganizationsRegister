@@ -1,6 +1,6 @@
 import React from 'react';
-import OrganizationsTable from '../components/OrganizationsTable.jsx';
-import OrganizationsSearchForm from '../components/OrganizationsSearchForm.jsx';
+import OrganizationsTable from '../components/tables/OrganizationsTable.jsx';
+import OrganizationsSearchForm from '../components/forms/OrganizationsSearchForm.jsx';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {searchOrganizationsByCriteria} from "../actions/organizations-actions";
@@ -15,10 +15,12 @@ class OrganizationsSearchPage extends React.Component {
         return <div>
             <OrganizationsSearchForm onFormSubmitted={this.props.handleSearchRequest}/><br/>
 
-            {this.props.searchResults !== undefined && this.props.searchResults.length !== 0
-                ? <OrganizationsTable dataSource={this.props.searchResults}/>
-                : <Typography variant="body1">Поиск не дал результатов.</Typography>
-            }
+            <div id={'searchResults'}>
+                {this.props.searchResults !== undefined && this.props.searchResults.length !== 0
+                    ? <OrganizationsTable dataSource={this.props.searchResults}/>
+                    : <Typography variant="body1">Поиск не дал результатов.</Typography>
+                }
+            </div>
         </div>
     }
 }

@@ -2,10 +2,12 @@ package org.paperplane.organizationsregister.data;
 
 import org.paperplane.organizationsregister.data.custom.OrganizationCustomQueriesCaller;
 import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
+import org.paperplane.organizationsregister.domain.Bank;
 import org.paperplane.organizationsregister.domain.EconomicActivity;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,18 +21,13 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
     List<Organization> findAllByFullNameContains(String line);
     List<Organization> findAllByShortNameContains(String line);
     List<Organization> findAllByRegistrationDateGreaterThan(Date date);
-    List<Organization> findAllByPermittedEconomicActivitiesContains(EconomicActivity economicActivity);
     int findNumberOfYearsSinceOrganizationHasBeenRegistered(Organization organization);
     int findNumberOfYearsSinceOrganizationHasBeenRegistered(long bin);
-
     List<Organization> findAllBy(Pageable pageRequest);
-
-    @Query("update Organization set fullName = :#{#organization.fullName} where bin = :#{#organization.bin}")
-    void updateFullName(@Param("organization") Organization organization);
-
-    @Query("update Organization set shortName = :#{#organization.shortName} where bin = :#{#organization.bin}")
-    void updateShortName(@Param("organization") Organization organization);
-
     Organization update(Organization organization);
+
     List<Organization> findByCriteria(OrganizationSearchCriteria criteria);
+
+    @Query("select organization from BankAccount bankAccount where bankAccount.bank = :#{#bank}")
+    List<Organization> findOrganizationsServedByBank(@Param("bank") Bank bank);
 }

@@ -1,6 +1,8 @@
 import ValidationResult from './ValidationResult.js';
 
-let Constraints = {
+const Constraints = {
+    ORGANIZATION_BIN_LENGTH: 12,
+    ORGANIZATION_BIN_REGEX: /^\d+$/,
     ORGANIZATION_FULL_NAME_MIN_LENGTH: 1,
     ORGANIZATION_FULL_NAME_MAX_LENGTH: 80,
     ORGANIZATION_SHORT_NAME_MIN_LENGTH: 1,
@@ -28,7 +30,7 @@ let Constraints = {
 
 class Validation {
     static validateOrganizationFullName(organizationFullName, acceptEmpty) {
-        if ((organizationFullName === undefined || organizationFullName === '') && acceptEmpty !== true) {
+        if ((organizationFullName == undefined || organizationFullName === '') && acceptEmpty !== true) {
             return new ValidationResult(false, 'Полное название организации не может быть пустым.');
         }
 
@@ -39,8 +41,28 @@ class Validation {
         return new ValidationResult(true, '');
     }
 
+    static validateOrganizationBin = (organizationBin, acceptEmpty) => {
+        if (organizationBin == undefined || organizationBin === '') {
+            if (acceptEmpty === true) {
+                return new ValidationResult(true, '');
+            } else {
+                return new ValidationResult(false, 'БИН организации не мложет быть пустым.');
+            }
+        }
+
+        if (!organizationBin.match(Constraints.ORGANIZATION_BIN_REGEX)) {
+            return new ValidationResult(false, 'БИН должен состоять из цифр.');
+        }
+
+        if (organizationBin.length !== Constraints.ORGANIZATION_BIN_LENGTH) {
+            return new ValidationResult(false, 'БИН организации должен состоять из 12 символов.');
+        }
+
+        return new ValidationResult(true, '');
+    };
+
     static validateOrganizationShortName(organizationShortName, acceptEmpty) {
-        if (organizationShortName === undefined || organizationShortName === '') {
+        if (organizationShortName == undefined || organizationShortName === '') {
             return new ValidationResult(true, '');
         }
 
@@ -52,8 +74,12 @@ class Validation {
     }
 
     static validateOrganizationAddress(organizationAddress, acceptEmpty) {
-        if ((organizationAddress === undefined ||organizationAddress === '') && acceptEmpty !== true) {
-            return new ValidationResult(false, 'Адрес организации не может быть пустым.');
+        if (organizationAddress == undefined ||organizationAddress === '') {
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Адрес организации не может быть пустым.');
+            } else {
+                return new ValidationResult(true, '');
+            }
         }
 
         if (organizationAddress.length > Constraints.ORGANIZATION_ADDRESS_MAX_LENGTH) {
@@ -67,11 +93,11 @@ class Validation {
         console.log(numberOfEmployees);
         console.log(acceptEmpty);
 
-        if ((numberOfEmployees === undefined || numberOfEmployees === '') && acceptEmpty === true) {
+        if ((numberOfEmployees == undefined || numberOfEmployees === '') && acceptEmpty === true) {
             return new ValidationResult(true, '');
         }
 
-        if ((numberOfEmployees === undefined || numberOfEmployees === '') && acceptEmpty !== true) {
+        if ((numberOfEmployees == undefined || numberOfEmployees === '') && acceptEmpty === false) {
             return new ValidationResult(false, 'Количество сотрудников не может быть пустым.')
         }
 
@@ -83,7 +109,7 @@ class Validation {
     }
 
     static validateOrganizationPhoneNumber(phoneNumber, acceptEmpty) {
-        if ((phoneNumber === undefined || phoneNumber === '') && acceptEmpty !== true) {
+        if ((phoneNumber == undefined || phoneNumber === '') && acceptEmpty !== true) {
             return new ValidationResult(false, 'Номер терефона организации не может быть пустым.');
         }
 
@@ -95,8 +121,8 @@ class Validation {
     }
 
     static validateOrganizationFounder(founder, acceptEmpty) {
-        if ((founder === undefined || founder === '') && acceptEmpty !== true) {
-            return new ValidationResult(false, 'Имя учредителя организации не может содержать быть пустым.');
+        if ((founder == undefined || founder === '') && acceptEmpty !== true) {
+            return new ValidationResult(false, 'Имя учредителя организации не может быть пустым.');
         }
 
         if (founder.length > Constraints.ORGANIZATION_FOUNDER_MAX_LENGTH) {
@@ -107,7 +133,7 @@ class Validation {
     }
 
     static validateBankName(bankName) {
-        if (bankName === undefined || bankName === '') {
+        if (bankName == undefined || bankName === '') {
             return new ValidationResult(false, 'Имя банка не должно быть пустым.');
         }
 
@@ -119,7 +145,7 @@ class Validation {
     }
 
     static validateBankAddress(bankAddress) {
-        if (bankAddress === undefined || bankAddress === '') {
+        if (bankAddress == undefined || bankAddress === '') {
             return new ValidationResult(false, 'Адрес банка не должен быть пустым.');
         }
 
@@ -131,7 +157,7 @@ class Validation {
     }
 
     static validateEconomicActivityName(economicActivityName) {
-        if (economicActivityName === undefined || economicActivityName === '') {
+        if (economicActivityName == undefined || economicActivityName === '') {
             return new ValidationResult(false, 'Название хозяйственной деятельности не может быть пустым.');
         }
 
@@ -143,7 +169,7 @@ class Validation {
     }
 
     static validateOrganizationTypeName(organizationTypeName) {
-        if (organizationTypeName === undefined || organizationTypeName === '') {
+        if (organizationTypeName == undefined || organizationTypeName === '') {
             return new ValidationResult(false, 'Название типа организации не может быть пустым.');
         }
 
@@ -155,7 +181,7 @@ class Validation {
     }
 
     static validateTaxesCommitteeName(taxesCommitteeName) {
-        if (taxesCommitteeName === undefined || taxesCommitteeName === '') {
+        if (taxesCommitteeName == undefined || taxesCommitteeName === '') {
             return new ValidationResult(false, 'Название налогового комитета не может быть пустым.');
         }
 
@@ -167,7 +193,7 @@ class Validation {
     }
 
     static validateTaxesCommitteeAddress(taxesCommitteeAddress) {
-        if (taxesCommitteeAddress === undefined || taxesCommitteeAddress === '') {
+        if (taxesCommitteeAddress == undefined || taxesCommitteeAddress === '') {
             return new ValidationResult(false, 'Адрес налогового комитета не может быть пустым.');
         }
 

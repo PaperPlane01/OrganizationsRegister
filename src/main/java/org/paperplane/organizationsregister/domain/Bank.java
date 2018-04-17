@@ -25,6 +25,10 @@ public class Bank {
     public Bank() {
     }
 
+    public Bank(int id) {
+        this.id = id;
+    }
+
     public Bank(String name, String address) {
         this.name = name;
         this.address = address;

@@ -4,21 +4,14 @@ import axios from 'axios';
 
 export const financialStatisticsLoaded = (financialStatisticsList) => {
     return {
-        type: financialStatisticsConstants.FINANCIAL_STATISTICS_LOADING_SUCCESS,
-        loadedFinancialStatistics: financialStatisticsList
+        type: financialStatisticsConstants.FINANCIAL_STATISTICS_FETCHED,
+        financialStatistics: financialStatisticsList
     }
 };
 
-export const yearsOfFinancialStatisticsLoaded = (years) => {
+export const yearsOfFinancialStatisticsFetched = (years) => {
     return {
-        type: financialStatisticsConstants.YEARS_LOADING_SUCCESS,
-        years: years
-    }
-};
-
-export const yearsCleared = (years) => {
-    return {
-        type: financialStatisticsConstants.YEARS_CLEARED,
+        type: financialStatisticsConstants.YEARS_FETCHED,
         years: years
     }
 };
@@ -26,34 +19,14 @@ export const yearsCleared = (years) => {
 export const yearSelected = (year) => {
     return {
         type: financialStatisticsConstants.YEAR_SELECTED,
-        selectedYear: year
+        selectedOption: year
     }
 };
 
-export const yearSelectionCleared = (year) => {
-    return {
-        type: financialStatisticsConstants.YEAR_SELECTION_CLEARED,
-        selectedYear: year
-    }
-};
-
-export const quarterSelected = (quarter) => {
+export const quarterSelected = (quarterOption) => {
     return {
         type: financialStatisticsConstants.QUARTER_SELECTED,
-        selectedQuarter: quarter
-    }
-};
-
-export const stateCleared = () => {
-    return {
-        type: financialStatisticsConstants.STATE_CLEARED
-    }
-};
-
-export const quarterSelectionCleared = (quarter) => {
-    return {
-        type: financialStatisticsConstants.QUARTER_SELECTION_CLEARED,
-        selectedQuarter: quarter
+        selectedOption: quarterOption
     }
 };
 
@@ -76,48 +49,48 @@ export const loadFinancialStatistics = (bin, year, quarter) => {
     }
 };
 
-export const loadYearsOfFinancialStatistics = (bin) => {
+export const fetchYearsOfFinancialStatistics = (bin) => {
     return (dispatch) => {
         axios.get(API_URL.concat(FINANCIAL_STATISTICS).concat(YEARS), {params: {
             bin: bin
         }}).then(response => {
-            dispatch(yearsOfFinancialStatisticsLoaded(response.data))
+            dispatch(yearsOfFinancialStatisticsFetched(response.data))
         })
     }
 };
 
-export const handleYearSelect = (year) => {
+export const handleYearSelect = (yearOption) => {
     return (dispatch) => {
-        dispatch(yearSelected(year))
+        dispatch(yearSelected(yearOption))
     }
 };
 
-export const handleQuarterSelect = (quarter) => {
+export const handleQuarterSelect = (quarterOption) => {
     return (dispatch) => {
-        dispatch(quarterSelected(quarter))
+        dispatch(quarterSelected(quarterOption))
+    }
+};
+
+export const handleClearQuarterSelectionRequest = () => {
+    return {
+        type: financialStatisticsConstants.CLEAR_QUARTER_SELECTION
     }
 };
 
 export const clearQuarterSelection = () => {
     return (dispatch) => {
-        dispatch(quarterSelectionCleared(null));
+        dispatch(handleClearQuarterSelectionRequest());
     }
 };
 
-export const clearYears = () => {
-    return (dispatch) => {
-        dispatch(yearsCleared([]));
+export const handleClearYearSelectionRequest = () => {
+    return {
+        type: financialStatisticsConstants.CLEAR_YEAR_SELECTION
     }
 };
 
 export const clearYearSelection = () => {
-    return (dispatch) => {
-        dispatch(yearSelectionCleared(null));
-    }
-};
-
-export const clearState = () => {
-    return (dipsatch) => {
-        dipsatch(stateCleared())
-    }
+   return (dispatch) => {
+       dispatch(handleClearYearSelectionRequest());
+   }
 };

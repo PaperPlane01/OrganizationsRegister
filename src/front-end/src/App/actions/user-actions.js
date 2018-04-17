@@ -1,4 +1,4 @@
-import {API_URL, TOKENS} from "../constants/api-constants";
+import {API_URL, TOKENS, USER} from "../constants/api-constants";
 import {userActionsConstants} from "../constants/action-constants";
 import axios from 'axios';
 
@@ -24,6 +24,20 @@ export const logoutDone = () => (
     }
 );
 
+export const userFetchedByToken = (user) => {
+    return {
+        type: userActionsConstants.USER_FETCHED_BY_TOKEN,
+        user: user
+    }
+};
+
+export const userFetchingByTokenFailure = (exception) => {
+    return {
+        type: userActionsConstants.USER_FETCHING_BY_TOKEN_FAILURE,
+        exception: exception
+    }
+};
+
 export const doLogout = () => {
     return (dispatch) => {
         axios.delete(API_URL.concat(TOKENS), {headers: {
@@ -48,8 +62,19 @@ export const doLogin = (username, password) => {
             localStorage.setItem("token", response.data.token);
             dispatch(loginSuccess(response.data.userID, response.data.username, response.data.token));
         }).catch(error => {
-            console.log(error.response);
             dispatch(loginFailure(error.response.data.exception));
+        })
+    }
+};
+
+export const fetchCurrentUser = () => {
+    return (dispatch) => {
+        axios.get(API_URL.concat(TOKENS).concat(USER), {headers: {
+            token: localStorage.getItem('token')
+        }}).then(response => {
+            dispatch(userFetchedByToken(response.data))
+        }).catch(error => {
+            dispatch(userFetchingByTokenFailure(error.response.data.exception))
         })
     }
 };

@@ -1,23 +1,32 @@
 package org.paperplane.organizationsregister.service.impl;
 
+import org.paperplane.organizationsregister.data.BankAccountRepository;
 import org.paperplane.organizationsregister.data.BankRepository;
+import org.paperplane.organizationsregister.data.OrganizationRepository;
 import org.paperplane.organizationsregister.domain.Bank;
+import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.BankNotFoundException;
 import org.paperplane.organizationsregister.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
 public class BankServiceImpl implements BankService {
 
     private BankRepository bankRepository;
+    private BankAccountRepository bankAccountRepository;
+    private OrganizationRepository organizationRepository;
 
     @Autowired
-    public BankServiceImpl(BankRepository bankRepository) {
+    public BankServiceImpl(BankRepository bankRepository, BankAccountRepository bankAccountRepository,
+                           OrganizationRepository organizationRepository) {
         this.bankRepository = bankRepository;
+        this.bankAccountRepository = bankAccountRepository;
+        this.organizationRepository = organizationRepository;
     }
 
 
@@ -34,6 +43,11 @@ public class BankServiceImpl implements BankService {
     @Override
     public Bank findById(int id) {
         return bankRepository.findById(id);
+    }
+
+    @Override
+    public List<Organization> getOrganizationsServedByBank(Bank bank) {
+        return organizationRepository.findOrganizationsServedByBank(bank);
     }
 
     @Override

@@ -1,38 +1,56 @@
 import {financialStatisticsConstants} from "../constants/action-constants";
 
-export const financialStatisticsSearchReducer = (state = {
+export const yearSelectReducer = (state = {
     pending: false,
-    payload: {data: {}},
-    error: null
+    data: {
+        dataSource: null,
+        selectedOption: null
+    }
 }, action) => {
     switch (action.type) {
-        case financialStatisticsConstants.LOAD_YEARS_OF_FINANCIAL_STATISTICS:
+        case financialStatisticsConstants.FETCH_YEARS:
             return {...state, pending: true};
-        case financialStatisticsConstants.YEARS_LOADING_SUCCESS:
-            return {...state, pending: false, payload: {data: {...state.payload.data, years: action.years}}};
+        case financialStatisticsConstants.YEARS_FETCHED:
+            console.log(action.years);
+            return {...state, pending: false, data: {...state.data, dataSource: action.years}, error: null};
         case financialStatisticsConstants.YEAR_SELECTED:
-            return {...state, pending: false, payload: {data: {...state.payload.data, year: action.selectedYear}}};
-        case financialStatisticsConstants.QUARTER_SELECTED:
-            return {...state, pending: false, payload: {data: {...state.payload.data, quarter: action.selectedQuarter}}};
-        case financialStatisticsConstants.STATE_CLEARED:
-            return {...state, payload: {data: {...state.payload.data, quarter: null, year: null, years: null}}};
+            return {...state, pending: false, data: {...state.data, selectedOption: action.selectedOption}};
+        case financialStatisticsConstants.CLEAR_YEAR_SELECTION:
+            return {...state, pending: false, data: {dataSource: null, selectedOption: null}, error: null};
         default:
             return state;
     }
 };
 
-export const financialStatisticsReducer = (state = {
+export const quarterSelectReducer = (state = {
+    data: {
+        dataSource: [1, 2, 3, 4],
+        selectedOption: null,
+    }
+}, action) => {
+    switch (action.type) {
+        case financialStatisticsConstants.QUARTER_SELECTED:
+            return {...state, data: {...state.data, selectedOption: action.selectedOption}};
+        case financialStatisticsConstants.CLEAR_QUARTER_SELECTION:
+            console.log('clearing quarter selection');
+            return {...state, data: {...state.data, selectedOption: null}};
+        default:
+            return state;
+    }
+};
+
+export const financialStatisticsSearchReducer = (state = {
     pending: false,
-    payload: {data: {}},
+    data: {
+        searchResults: null
+    },
     error: null
 }, action) => {
     switch (action.type) {
-        case financialStatisticsConstants.LOAD_FINANCIAL_STATISTICS:
+        case financialStatisticsConstants.FETCH_FINANCIAL_STATISTICS:
             return {...state, pending: true};
-        case financialStatisticsConstants.FINANCIAL_STATISTICS_LOADING_SUCCESS:
-            return {...state, pending: false, payload: {data: {
-                ...state.payload.data, financialStatisticsSearchResults: action.loadedFinancialStatistics
-            }}};
+        case financialStatisticsConstants.FINANCIAL_STATISTICS_FETCHED:
+            return {...state, pending: false, data: {...state.data, searchResults: action.financialStatistics}};
         default:
             return state;
     }

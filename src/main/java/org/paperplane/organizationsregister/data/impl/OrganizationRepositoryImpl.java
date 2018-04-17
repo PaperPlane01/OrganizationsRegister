@@ -15,6 +15,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Transactional
@@ -35,7 +36,9 @@ public class OrganizationRepositoryImpl implements OrganizationCustomQueriesCall
     @Override
     public int findNumberOfYearsSinceOrganizationHasBeenRegistered(long bin) {
         Query query = entityManagerFactory.createEntityManager()
-                .createNativeQuery("exec findNumberOfYearsSinceOrganizationHasBeenRegistered @organizationBIN = :organizationBIN")
+                .createNativeQuery("declare @numberOfYears int;" +
+                        "execute @numberOfYears = findNumberOfYearsSinceOrganizationHasBeenRegistered @organizationBIN = :organizationBIN " +
+                        "select @numberOfYears")
                 .setParameter("organizationBIN", bin);
 
         return (Integer) query.getSingleResult();
@@ -104,12 +107,12 @@ public class OrganizationRepositoryImpl implements OrganizationCustomQueriesCall
         }
 
         if (organizationSearchCriteria.getMaxRegistrationDate() != null) {
-            predicates.add(criteriaBuilder.lessThan(root.get("registrationDate"),
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("registrationDate"),
                     organizationSearchCriteria.getMaxRegistrationDate()));
         }
 
         if (organizationSearchCriteria.getMinRegistrationDate() != null) {
-            predicates.add(criteriaBuilder.greaterThan(root.get("registrationDate"),
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("registrationDate"),
                     organizationSearchCriteria.getMinRegistrationDate()));
         }
 

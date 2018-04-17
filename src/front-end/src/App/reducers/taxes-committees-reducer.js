@@ -1,24 +1,20 @@
 import {taxesCommitteesActionsConstants} from "../constants/action-constants";
 
-export const taxesCommitteesReducer = (state = {
+export const taxesCommitteesSelectReducer = (state = {
     pending: false,
-    payload:
-        {data: {}},
+    data: {
+        dataSource: null,
+        selectedOption: null
+    },
     error: null
 }, action) => {
     switch (action.type) {
-        case taxesCommitteesActionsConstants.LOAD_TAXES_COMMITTEES_BY_NAME:
-            return {...state, pending: true, payload: {data: {}}, error: null};
-        case taxesCommitteesActionsConstants.TAXES_COMMITTEES_LOADING_SUCCESS:
-            return {...state, pending: false, payload: {
-                data: { ...state.payload.data,
-                    loadedTaxesCommittees: action.taxesCommittees,
-                }
-            }, error: null};
+        case taxesCommitteesActionsConstants.FETCH_TAXES_COMMITTEES_BY_NAME:
+            return {...state, pending: true};
+        case taxesCommitteesActionsConstants.TAXES_COMMITTEES_FETCHED:
+            return {...state, pending: false, data: {...state.data, dataSource: action.taxesCommittees}};
         case taxesCommitteesActionsConstants.SELECT_TAXES_COMMITTEE:
-            return {...state, pending: false, payload: {
-                data: {...state.payload.data, selectedTaxesCommitteeOption: action.selectedTaxesCommitteeOption}
-            }, error: null};
+            return {...state, pending: false, data: {...state.data, selectedOption: action.selectedOption}};
         default:
             return state;
     }

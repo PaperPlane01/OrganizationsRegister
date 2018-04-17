@@ -16,10 +16,10 @@ import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import ruLocale from 'date-fns/locale/ru';
 import OrganizationsSearchPage from "./pages/OrganizationsSearchPage.jsx";
-import AddOrganizationPage from './pages/AddOrganizationPage.jsx'
 import {withRouter} from 'react-router-dom';
 import PageNotFoundErrorPage from './pages/PageNotFoundErrorPage.jsx';
 import OrganizationPage from "./pages/OrganizationPage.jsx";
+import OrganizationAddingPage from "./pages/OrganizationAddingPage.jsx";
 
 const theme = createMuiTheme({
     palette: {
@@ -122,6 +122,7 @@ class Content extends React.Component {
     render() { return <Switch>
         <Route exact path="/organizations-register/" component={OrganizationsSearchPage}/>
         <Route path="/organizations-register/financial-statistics/" component={FinancialStatisticsSearchPage}/>
+        <Route exact path='/organizations-register/organizations/add-organization' component={OrganizationAddingPage}/>
         <Route path="/organizations-register/organizations/:bin" component={OrganizationPage}/>
         <Route component={PageNotFoundErrorPage}/>
     </Switch>
