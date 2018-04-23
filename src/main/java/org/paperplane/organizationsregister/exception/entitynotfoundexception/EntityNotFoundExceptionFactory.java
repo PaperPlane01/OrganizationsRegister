@@ -22,7 +22,7 @@ public class EntityNotFoundExceptionFactory {
 
     public CustomEntityNotFoundException createForEntityClass(Class entityClass) {
         if (!exceptionsMap.containsKey(entityClass)) {
-            throw new IllegalArgumentException("There is no mapped exception for given entity class");
+            throw new IllegalArgumentException("There is no mapped exception for " + entityClass.getName() + " class!");
         }
 
         return exceptionsMap.get(entityClass);

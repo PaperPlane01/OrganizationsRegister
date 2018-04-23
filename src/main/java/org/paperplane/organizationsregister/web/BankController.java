@@ -1,10 +1,12 @@
 package org.paperplane.organizationsregister.web;
 
-import org.paperplane.organizationsregister.annotation.AssertEntityExistsById;
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
+import org.paperplane.organizationsregister.domain.search.BankSearchCriteria;
 import org.paperplane.organizationsregister.domain.Bank;
+import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,9 @@ public class BankController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @AssertEntityExistsById(entityClass = Bank.class)
+    @AssertEntityExists
     @ResponseBody
-    public Bank getById(@PathVariable("id") @EntityIdentifier int id) {
+    public Bank getById(@PathVariable("id") @EntityIdentifier(entityClass = Bank.class) int id) {
         return bankService.findById(id);
     }
 
@@ -42,8 +44,29 @@ public class BankController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/organizations")
+    @AssertEntityExists
     @ResponseBody
-    public List<Organization> findOrganizationsServedByBank(@PathVariable("id") int bankID) {
+    public List<Organization> findOrganizationsServedByBank(@PathVariable("id")
+                                                                @EntityIdentifier(entityClass = Bank.class) int bankID) {
         return bankService.getOrganizationsServedByBank(new Bank(bankID));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/bank-accounts")
+    @AssertEntityExists
+    @ResponseBody
+    public List<BankAccount> findBankAccountsOfBank(@PathVariable("id") @EntityIdentifier(entityClass = Bank.class)
+                                                                int bankID) {
+        return bankService.findBankAccountsOfBank(new Bank(bankID));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"nameContains"})
+    public List<Bank> findBanksWithNameContains(@RequestParam("nameContains") String nameContains) {
+        return bankService.findBanksWithNameContains(nameContains);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    @ResponseBody
+    public List<Bank> findBanksByCriteria(@RequestBody BankSearchCriteria searchCriteria) {
+        return bankService.findBanksByCriteria(searchCriteria);
     }
 }

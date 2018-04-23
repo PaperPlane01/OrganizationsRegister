@@ -1,6 +1,6 @@
 package org.paperplane.organizationsregister.web;
 
-import org.paperplane.organizationsregister.annotation.AssertEntityExistsById;
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
@@ -28,10 +28,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @AssertEntityExistsById(entityClass = User.class)
+    @AssertEntityExists
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public User getUser(@PathVariable("id") @EntityIdentifier int id) {
+    public User getUser(@PathVariable("id") @EntityIdentifier(entityClass = User.class) int id) {
         return userService.findUserById(id);
     }
 
@@ -45,10 +45,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @AssertEntityExistsById(entityClass = User.class)
+    @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/roles")
     @ResponseBody
-    public List<UserRole> getUserRolesByUserId(@PathVariable("id") @EntityIdentifier int id) {
+    public List<UserRole> getUserRolesByUserId(@PathVariable("id") @EntityIdentifier(entityClass = User.class) int id) {
         return userService.findUserById(id).getRoles();
     }
 }

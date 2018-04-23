@@ -1,4 +1,4 @@
-package org.paperplane.organizationsregister.data.search;
+package org.paperplane.organizationsregister.domain.search;
 
 import org.paperplane.organizationsregister.domain.EconomicActivity;
 import org.paperplane.organizationsregister.domain.OrganizationType;

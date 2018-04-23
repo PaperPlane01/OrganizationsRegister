@@ -2,6 +2,7 @@ package org.paperplane.organizationsregister.service;
 
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
+import org.paperplane.organizationsregister.domain.search.FinancialStatisticsSearchCriteria;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
@@ -20,4 +21,5 @@ public interface FinancialStatisticsService {
     int findMaxYear(long organizationBin);
     int findMinYear(long organizationBin);
     List<Integer> findYearsOfFinancialStatisticsOfOrganization(long organizationBin);
+    List<FinancialStatisticsByQuarter> findByCriteria(FinancialStatisticsSearchCriteria searchCriteria);
 }

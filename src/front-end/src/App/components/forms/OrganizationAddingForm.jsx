@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import ValidationResult from "../../validation/ValidationResult";
 import {connect} from 'react-redux';
 import {
-    fetchEconomicActivitiesByName, handleEconomicActivitiesSelect,
-    handlePermittedEconomicActivitiesSelect, handlePrimaryEconomicActivitySelect
+    fetchEconomicActivitiesByName, handlePermittedEconomicActivitiesSelect, handlePrimaryEconomicActivitySelect
 } from "../../actions/economic-activites-actions";
 import {fetchOrganizationTypes, handleOrganizationTypeSelect} from "../../actions/organizations-types-actions";
 import {fetchTaxesCommitteesByName, handleTaxesCommitteeSelect} from "../../actions/taxes-committees-actions";

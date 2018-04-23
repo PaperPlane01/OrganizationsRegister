@@ -1,7 +1,5 @@
 package org.paperplane.organizationsregister.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

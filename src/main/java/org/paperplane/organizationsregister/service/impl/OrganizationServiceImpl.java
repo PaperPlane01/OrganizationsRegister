@@ -1,6 +1,6 @@
 package org.paperplane.organizationsregister.service.impl;
 
-import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
+import org.paperplane.organizationsregister.domain.search.OrganizationSearchCriteria;
 import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-@Transactional
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
@@ -101,8 +102,17 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @Transactional
     public Organization update(Organization organization) {
-        return organizationRepository.update(organization);
+        if (organization.getPermittedEconomicActivities() == null) {
+            organization.setPermittedEconomicActivities(Collections.singletonList(organization.getPrimaryEconomicActivity()));
+        }
+
+        if (!organization.getPermittedEconomicActivities().contains(organization.getPrimaryEconomicActivity())) {
+            organization.getPermittedEconomicActivities().add(organization.getPrimaryEconomicActivity());
+        }
+
+        return organizationRepository.save(organization);
     }
 
     @Override

@@ -5,12 +5,18 @@ import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from "material-ui/es/Typography/Typography";
 import {
     clearOrganizationPageState, fetchBankAccounts, fetchNumberOfYearsSinceRegistration,
-    findOrganizationByBin
+    findOrganizationByBin, initializeOrganizationUpdate
 } from "../actions/organizations-actions";
 import {exceptions} from "../constants/exception-constants";
-import FinancialStatisticsTable from "../components/tables/FinancialStatisticsTable.jsx";
-import {loadFinancialStatistics} from "../actions/financial-statistics-actions";
 import BankAccountsTable from "../components/tables/BankAccountsTable.jsx";
+import {fetchCurrentUser} from "../actions/user-actions";
+import OrganizationUpdateDialog from "../components/dialogs/OrganizationUpdateDialog.jsx";
+import {
+    initializePermittedEconomicActivitiesSelect,
+    initializePrimaryEconomicActivitySelect
+} from "../actions/economic-activites-actions";
+import {initializeOrganizationTypeSelect} from "../actions/organizations-types-actions";
+import {initializeTaxesCommitteeSelect} from "../actions/taxes-committees-actions";
 
 class OrganizationPage extends React.Component {
     constructor(props) {
@@ -18,6 +24,10 @@ class OrganizationPage extends React.Component {
     }
 
     componentDidMount() {
+        if (this.props.userLoggedIn) {
+            this.props.fetchCurrentUser();
+        }
+
         this.props.fetchOrganization(this.props.match.params.bin);
         this.props.fetchNumberOfYearsSinceRegistration(this.props.match.params.bin);
         this.props.fetchBankAccounts(this.props.match.params.bin);
@@ -27,11 +37,18 @@ class OrganizationPage extends React.Component {
         this.props.clearState();
     }
 
+    handleOrganizationUpdateDialogOpenSelect = () => {
+        const organization = this.props.organization;
+        this.props.initializeOrganizationUpdate(organization);
+    };
+
     render() {
         const {organization, numberOfYearsSinceRegistration, error, bankAccounts} = this.props;
 
+        let displayOrganizationUpdateDialog = false;
+
         if (error != undefined) {
-            if (error.exception === exceptions.ORGANIZATION_NOT_FOUND) {
+            if (error === exceptions.ORGANIZATION_NOT_FOUND) {
                 return <Typography variant="body1">Организация не была найдена.</Typography>
             } else {
                 return <Typography variant="body1">Во время загрузки произошло что-то нехорошее. Но мы уже работаем над этим! Повторите попытку позже.</Typography>
@@ -40,6 +57,14 @@ class OrganizationPage extends React.Component {
 
         if (organization == undefined) {
             return <Typography variant="body1">Загрузка...</Typography>
+        }
+
+        if (this.props.userLoggedIn) {
+            if (this.props.currentUser != undefined) {
+                if (this.props.currentUser.roles.map(role => (role.name)).includes('admin') || organization != undefined) {
+                    displayOrganizationUpdateDialog = true;
+                }
+            }
         }
 
         return <div>
@@ -69,6 +94,12 @@ class OrganizationPage extends React.Component {
                     <Typography variant="body1">Количество сотрудников: {organization.numberOfEmployees}</Typography>
                     <Typography variant="body1">Номер телефона: {organization.phoneNumber}</Typography>
                     <Typography variant="body1">Адрес: {organization.address}</Typography>
+
+                    {displayOrganizationUpdateDialog === true
+                        ? <OrganizationUpdateDialog
+                            onOpen={() => this.handleOrganizationUpdateDialogOpenSelect()}
+                        />
+                        : ''}
                 </CardContent>
             </Card>
 
@@ -90,29 +121,33 @@ class OrganizationPage extends React.Component {
 OrganizationPage.propTypes = {
     fetchOrganization: PropTypes.func,
     organization: PropTypes.object,
-    fetchFinancialStatistics: PropTypes.func,
-    financialStatistics: PropTypes.array,
-    fetchFinancialStatisticsYears: PropTypes.func,
-    financialStatisticsYears: PropTypes.array,
     fetchNumberOfYearsSinceRegistration: PropTypes.func,
     numberOfYearsSinceRegistration: PropTypes.number,
     bankAccounts: PropTypes.array,
     fetchBankAccounts: PropTypes.func,
-    pending: PropTypes.bool,
     error: PropTypes.object,
-    clearState: PropTypes.func
+    clearState: PropTypes.func,
+    userLoggedIn: PropTypes.bool,
+    fetchCurrentUser: PropTypes.func,
+    currentUser: PropTypes.object,
+    initializeOrganizationUpdate: PropTypes.func,
+    initializeOrganizationTypeSelect: PropTypes.func,
+    initializeTaxesCommitteeSelect: PropTypes.func,
+    initializePrimaryEconomicActivitySelect: PropTypes.func,
+    initializePermittedEconomicActivitiesSelect: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
     const organizationPage = state.organizationPage;
+    const {userData} = state;
 
     return {
         organization: organizationPage.organizationData.organization,
-        pending: organizationPage.organizationData.pending,
         numberOfYearsSinceRegistration: organizationPage.organizationData.numberOfYearsSinceRegistration,
-        financialStatistics: organizationPage.financialStatistics.searchResults,
         bankAccounts: organizationPage.organizationData.bankAccounts,
-        error: organizationPage.error
+        error: organizationPage.organizationData.error,
+        userLoggedIn: userData.loggedIn,
+        currentUser: userData.currentUser
     }
 };
 
@@ -120,9 +155,14 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchOrganization: (bin) => dispatch(findOrganizationByBin(bin)),
         fetchNumberOfYearsSinceRegistration: (bin) => dispatch(fetchNumberOfYearsSinceRegistration(bin)),
-        fetchFinancialStatistics: (bin, year, quarter) => dispatch(loadFinancialStatistics(bin, year, quarter)),
         fetchBankAccounts: (bin) => dispatch(fetchBankAccounts(bin)),
-        clearState: () => (dispatch(clearOrganizationPageState()))
+        clearState: () => (dispatch(clearOrganizationPageState())),
+        fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+        initializeOrganizationUpdate: (organization) => dispatch(initializeOrganizationUpdate(organization)),
+        initializePermittedEconomicActivitiesSelect: (options) => dispatch(initializePermittedEconomicActivitiesSelect(options)),
+        initializePrimaryEconomicActivitySelect: (option) => dispatch(initializePrimaryEconomicActivitySelect(option)),
+        initializeOrganizationTypeSelect: (option) => dispatch(initializeOrganizationTypeSelect(option)),
+        initializeTaxesCommitteeSelect: (option) => dispatch(initializeTaxesCommitteeSelect(option))
     }
 };
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -32,12 +33,12 @@ public class Organization implements Comparable<Organization> {
 
     @NotNull
     @JoinColumn(name = "organizationTypeID")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private OrganizationType organizationType;
 
     @NotNull
     @JoinColumn(name = "primaryEconomicActivityID")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     private EconomicActivity primaryEconomicActivity;
 
     @NotNull
@@ -48,7 +49,7 @@ public class Organization implements Comparable<Organization> {
     private int numberOfEmployees;
 
     @NotNull
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name = "OrganizationsAndPermittedEconomicActivities",
             joinColumns = @JoinColumn(name = "organizationBIN"),
             inverseJoinColumns = @JoinColumn(name = "economicActivityID"))
@@ -56,7 +57,7 @@ public class Organization implements Comparable<Organization> {
 
     @NotNull
     @JoinColumn(name = "taxesCommitteeID")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE} )
     private TaxesCommittee taxesCommittee;
 
     @NotNull
@@ -66,10 +67,6 @@ public class Organization implements Comparable<Organization> {
     @NotNull
     @Size(min = 1, max = 30)
     private String phoneNumber;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "organization")
-    private List<FinancialStatisticsByQuarter> financialStatisticByQuarters;
 
     public Organization() {
     }
@@ -174,14 +171,6 @@ public class Organization implements Comparable<Organization> {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<FinancialStatisticsByQuarter> getFinancialStatisticByQuarters() {
-        return financialStatisticByQuarters;
-    }
-
-    public void setFinancialStatisticByQuarters(List<FinancialStatisticsByQuarter> financialStatisticByQuarters) {
-        this.financialStatisticByQuarters = financialStatisticByQuarters;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -198,13 +187,12 @@ public class Organization implements Comparable<Organization> {
                 Objects.equal(permittedEconomicActivities, that.permittedEconomicActivities) &&
                 Objects.equal(taxesCommittee, that.taxesCommittee) &&
                 Objects.equal(founder, that.founder) &&
-                Objects.equal(phoneNumber, that.phoneNumber) &&
-                Objects.equal(financialStatisticByQuarters, that.financialStatisticByQuarters);
+                Objects.equal(phoneNumber, that.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(bin, fullName, shortName, address, organizationType, primaryEconomicActivity, registrationDate, numberOfEmployees, permittedEconomicActivities, taxesCommittee, founder, phoneNumber, financialStatisticByQuarters);
+        return Objects.hashCode(bin, fullName, shortName, address, organizationType, primaryEconomicActivity, registrationDate, numberOfEmployees, permittedEconomicActivities, taxesCommittee, founder, phoneNumber);
     }
 
     @Override

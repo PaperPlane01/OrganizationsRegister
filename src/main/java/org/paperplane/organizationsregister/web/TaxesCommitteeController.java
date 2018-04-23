@@ -1,11 +1,13 @@
 package org.paperplane.organizationsregister.web;
 
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
+import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
+import org.paperplane.organizationsregister.domain.search.TaxesCommitteeSearchCriteria;
 import org.paperplane.organizationsregister.domain.TaxesCommittee;
 import org.paperplane.organizationsregister.service.TaxesCommitteeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,13 @@ public class TaxesCommitteeController {
         this.taxesCommitteeService = taxesCommitteeService;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @AssertEntityExists
+    @ResponseBody
+    public TaxesCommittee findById(@PathVariable("id") @EntityIdentifier(entityClass = TaxesCommittee.class) int id) {
+        return taxesCommitteeService.findById(id);
+    }
+
     @RequestMapping(method = RequestMethod.GET, params = {"nameContains"})
     @ResponseBody
     public List<TaxesCommittee> getTaxesCommitteesWithNameContains(@RequestParam("nameContains") String nameContains) {
@@ -31,9 +40,24 @@ public class TaxesCommitteeController {
     @RequestMapping(method = RequestMethod.POST)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
-    public ResponseEntity save(@RequestBody TaxesCommittee taxesCommittee,
+    @ResponseBody
+    public int save(@RequestBody TaxesCommittee taxesCommittee,
                                             @RequestHeader(value = "token", required = false) String tokenValue) {
-        taxesCommitteeService.save(taxesCommittee);
-        return ResponseEntity.ok().build();
+        return taxesCommitteeService.save(taxesCommittee).getId();
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @RequiresToken
+    @RequiresRole(anyOf = {"admin"})
+    @ResponseBody
+    public TaxesCommittee update(@RequestBody TaxesCommittee taxesCommittee,
+                                 @RequestHeader(value = "token", required = false) String tokenValue) {
+       return taxesCommitteeService.update(taxesCommittee);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    @ResponseBody
+    public List<TaxesCommittee> findByCriteria(@RequestBody TaxesCommitteeSearchCriteria searchCriteria) {
+        return taxesCommitteeService.findByCriteria(searchCriteria);
     }
 }

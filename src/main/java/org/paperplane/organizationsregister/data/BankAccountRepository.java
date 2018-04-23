@@ -13,7 +13,9 @@ import java.util.List;
 
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
     BankAccount save(BankAccount bankAccount);
+    List<BankAccount> findAllByBank(Bank bank);
     List<BankAccount> findAllByOrganizationRegistrationDate(Date date);
     List<BankAccount> findAllByOrganization(Organization organization);
+    List<BankAccount> findAllByOrganizationAndBank(Organization organization, Bank bank);
     boolean existsById(Long id);
 }

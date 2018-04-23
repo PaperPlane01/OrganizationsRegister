@@ -96,3 +96,7 @@ export const formStyle = theme => {return {
 }};
 
 export const errorLabelStyle = {'color': 'red'};
+
+export const successLabelStyle = {'color': 'green'};
+
+export const menuLinkStyle = {textDecoration: 'none'};

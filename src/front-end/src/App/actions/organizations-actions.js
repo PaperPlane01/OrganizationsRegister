@@ -2,6 +2,7 @@ import {API_URL, BANK_ACCOUNTS, ORGANIZATIONS, SEARCH} from "../constants/api-co
 import {organizationsActionConstants} from "../constants/action-constants";
 import Validation from '../validation/Validation.js';
 import axios from 'axios';
+import {exceptions} from "../constants/exception-constants";
 
 export const organizationsFetched = (organizations) => {
     return {
@@ -200,10 +201,15 @@ export const findOrganizationByBin = (bin) => {
     return (dispatch) => {
         axios.get(API_URL.concat(ORGANIZATIONS).concat(bin))
             .then(response => {
-                dispatch(organizationFoundByBin(response.data))
-            })
+                dispatch(organizationFoundByBin(response.data))})
             .catch(error => {
-                dispatch(organizationNotFoundByBin(error.response.data.exception))
+                if (error.response.status === 400) {
+                    dispatch(organizationNotFoundByBin(exceptions.ORGANIZATION_NOT_FOUND));
+                } else if (error.response.status === 404) {
+                    dispatch(organizationNotFoundByBin(error.response.data.exception));
+                } else {
+                    dispatch(organizationNotFoundByBin(exceptions.SERVER_ERROR));
+                }
             })
     }
 };
@@ -266,5 +272,132 @@ export const addOrganization = (organization) => {
         }).catch(error => {
             dispatch(organizationAddingFailure(error.response.data.exception))
         })
+    }
+};
+
+export const organizationUpdated = (organization) => {
+    return {
+        type: organizationsActionConstants.ORGANIZATION_UPDATE_SUCCESS,
+        updatedOrganization: organization
+    }
+};
+
+export const organizationUpdateFailure = (exception) => {
+    return {
+        type: organizationsActionConstants.ORGANIZATION_UPDATE_FAILURE,
+        exception: exception
+    }
+};
+
+export const updateOrganization = (organization) => {
+    return (dispatch) => {
+        axios.put(API_URL.concat(ORGANIZATIONS), JSON.stringify(organization), {headers: {
+            'Content-type': 'application/json',
+            token: localStorage.getItem('token')
+        }}).then(response => {
+                organizationUpdated(response.data)
+        }).catch(error => {
+                if (error.response.data.exception != undefined) {
+                    dispatch(organizationUpdateFailure(error.response.data.exception))
+                } else {
+                    dispatch(organizationUpdateFailure(exceptions.SERVER_ERROR));
+                }
+            })
+    }
+};
+
+export const organizationUpdateInitialized = (initialOrganization) => {
+    return {
+        type: organizationsActionConstants.ORGANIZATION_UPDATE_INITIALIZED,
+        initialOrganization: initialOrganization
+    }
+};
+
+export const initializeOrganizationUpdate = (initialOrganization) => {
+    return (dispatch) => {
+        dispatch(organizationUpdateInitialized(initialOrganization));
+    }
+};
+
+export const updateOrganizationFullName = (fullName) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_FULL_NAME,
+        updatedFullName: fullName
+    }
+};
+
+export const updateOrganizationShortName = (shortName) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_SHORT_NAME,
+        updatedShortName: shortName
+    }
+};
+
+export const updateOrganizationAddress = (address) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_ADDRESS,
+        updatedAddress: address
+    }
+};
+
+export const updateOrganizationPhoneNumber = (phoneNumber) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_PHONE_NUMBER,
+        updatedPhoneNumber: phoneNumber
+    }
+};
+
+export const updateOrganizationFounder = (founder) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_FOUNDER,
+        updatedFounder: founder
+    }
+};
+
+export const updateOrganizationNumberOfEmployees = (numberOfEmployees) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_NUMBER_OF_EMPLOYEES,
+        updatedNumberOfEmployees: numberOfEmployees
+    }
+};
+
+export const updateOrganizationTaxesCommittee = (taxesCommittee) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_TAXES_COMMITTEE,
+        updatedTaxesCommittee: taxesCommittee
+    }
+};
+
+export const updateOrganizationOrganizationType = (organizationType) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_ORGANIZATION_TYPE,
+        updatedOrganizationType: organizationType
+    }
+};
+
+export const updateOrganizationPrimaryEconomicActivity = (primaryEconomicActivity) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_PRIMARY_ECONOMIC_ACTIVITY,
+        updatedPrimaryEconomicActivity: primaryEconomicActivity
+    }
+};
+
+export const updateOrganizationPermittedEconomicActivities = (permittedEconomicActivities) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_PERMITTED_ECONOMIC_ACTIVITIES,
+        updatedPermittedEconomicActivities: permittedEconomicActivities
+    }
+};
+
+export const updateOrganizationRegistrationDate = (registrationDate) => {
+    return {
+        type: organizationsActionConstants.UPDATE_ORGANIZATION_REGISTRATION_DATE,
+        updatedRegistrationDate: registrationDate
+    }
+};
+
+export const clearOrganizationsSearchPageState = () => {
+    return {
+        type: organizationsActionConstants.CLEAR_ORGANIZATIONS_SEARCH_PAGE_STATE
     }
 };

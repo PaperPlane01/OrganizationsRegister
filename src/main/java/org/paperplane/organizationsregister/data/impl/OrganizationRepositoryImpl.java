@@ -2,8 +2,7 @@ package org.paperplane.organizationsregister.data.impl;
 
 import com.google.common.collect.Iterables;
 import org.paperplane.organizationsregister.data.custom.OrganizationCustomQueriesCaller;
-import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
-import org.paperplane.organizationsregister.domain.EconomicActivity;
+import org.paperplane.organizationsregister.domain.search.OrganizationSearchCriteria;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,12 +12,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-@Transactional
 @Repository
 public class OrganizationRepositoryImpl implements OrganizationCustomQueriesCaller {
     private EntityManagerFactory entityManagerFactory;
@@ -123,14 +119,5 @@ public class OrganizationRepositoryImpl implements OrganizationCustomQueriesCall
         criteriaQuery.where(Iterables.toArray(predicates, Predicate.class));
 
         return entityManagerFactory.createEntityManager().createQuery(criteriaQuery).getResultList();
-    }
-
-    @Override
-    public Organization update(Organization organization) {
-        return merge(organization);
-    }
-
-    private Organization merge(Organization organization) {
-        return entityManagerFactory.createEntityManager().merge(organization);
     }
 }

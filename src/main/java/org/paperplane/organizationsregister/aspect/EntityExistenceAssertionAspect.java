@@ -4,7 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.paperplane.organizationsregister.annotation.AssertEntityExistsById;
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.data.RepositoriesSingleton;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.EntityNotFoundExceptionFactory;
@@ -17,7 +17,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Aspect
@@ -27,12 +29,12 @@ public class EntityExistenceAssertionAspect {
     private EntityNotFoundExceptionFactory entityNotFoundExceptionFactory;
 
     @Around("@annotation(assertEntityExistsById) && args(..)")
-    public Object assertEntityExists(ProceedingJoinPoint proceedingJoinPoint, AssertEntityExistsById assertEntityExistsById) throws Throwable {
+    public Object assertEntitiesExits(ProceedingJoinPoint proceedingJoinPoint, AssertEntityExists assertEntityExistsById) throws Throwable {
+        Map<Class, Object> entityIdentifiers = new LinkedHashMap<>();
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
-        Object[] arguments = proceedingJoinPoint.getArgs();
-        Object id = null;
-
+        List<Object> arguments = Arrays.asList(proceedingJoinPoint.getArgs());
         List<Parameter> parameters = Arrays.asList(methodSignature.getMethod().getParameters());
+        Repositories repositories = RepositoriesSingleton.getInstance();
 
         for (int index = 0; index < parameters.size(); index++) {
             Parameter parameter = parameters.get(index);
@@ -40,16 +42,17 @@ public class EntityExistenceAssertionAspect {
 
             for (Annotation annotation: parameterAnnotations) {
                 if (annotation instanceof EntityIdentifier) {
-                  id = arguments[index];
+                    entityIdentifiers.put(((EntityIdentifier) annotation).entityClass(), arguments.get(index));
                 }
             }
         }
 
-        Repositories repositories = RepositoriesSingleton.getInstance();
-        JpaRepository jpaRepository = (JpaRepository) repositories.getRepositoryFor(assertEntityExistsById.entityClass()).get();
+        for (Map.Entry<Class, Object> entryWithID : entityIdentifiers.entrySet()) {
+            JpaRepository jpaRepository = (JpaRepository) repositories.getRepositoryFor(entryWithID.getKey()).get();
 
-        if (!jpaRepository.existsById(id)) {
-            throw entityNotFoundExceptionFactory.createForEntityClass(assertEntityExistsById.entityClass());
+            if (!jpaRepository.existsById(entryWithID.getValue())) {
+                throw entityNotFoundExceptionFactory.createForEntityClass(entryWithID.getKey());
+            }
         }
 
         return proceedingJoinPoint.proceed();

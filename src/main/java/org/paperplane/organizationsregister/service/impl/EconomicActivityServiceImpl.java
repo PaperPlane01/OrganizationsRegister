@@ -2,6 +2,7 @@ package org.paperplane.organizationsregister.service.impl;
 
 import org.paperplane.organizationsregister.data.EconomicActivityRepository;
 import org.paperplane.organizationsregister.domain.EconomicActivity;
+import org.paperplane.organizationsregister.domain.search.EconomicActivitySearchCriteria;
 import org.paperplane.organizationsregister.service.EconomicActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,11 @@ public class EconomicActivityServiceImpl implements EconomicActivityService {
     @Override
     public EconomicActivity findById(int id) {
         return economicActivityRepository.findById(id);
+    }
+
+    @Override
+    public List<EconomicActivity> findByCriteria(EconomicActivitySearchCriteria searchCriteria) {
+        return economicActivityRepository.findByCriteria(searchCriteria);
     }
 
     @Override

@@ -90,15 +90,14 @@ class Validation {
     }
 
     static validateNumberOfEmployees(numberOfEmployees, acceptEmpty) {
-        console.log(numberOfEmployees);
-        console.log(acceptEmpty);
+        numberOfEmployees = ''.concat(numberOfEmployees);
 
-        if ((numberOfEmployees == undefined || numberOfEmployees === '') && acceptEmpty === true) {
-            return new ValidationResult(true, '');
-        }
-
-        if ((numberOfEmployees == undefined || numberOfEmployees === '') && acceptEmpty === false) {
-            return new ValidationResult(false, 'Количество сотрудников не может быть пустым.')
+        if (numberOfEmployees == undefined || numberOfEmployees === '') {
+            if (acceptEmpty === true) {
+                return new ValidationResult(true, '');
+            } else {
+                return new ValidationResult(false, 'Количество сотрудников не может быть пустым.');
+            }
         }
 
         if (!numberOfEmployees.match(Constraints.NUMBER_OF_EMPLOYEES_REGEX)) {
@@ -132,9 +131,13 @@ class Validation {
         return new ValidationResult(true, '');
     }
 
-    static validateBankName(bankName) {
+    static validateBankName(bankName, acceptEmpty) {
         if (bankName == undefined || bankName === '') {
-            return new ValidationResult(false, 'Имя банка не должно быть пустым.');
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Имя банка не должно быть пустым.');
+            } else {
+                return new ValidationResult(true, '');
+            }
         }
 
         if (bankName.length > Constraints.BANK_NAME_MAX_LENGTH) {
@@ -144,9 +147,13 @@ class Validation {
         return new ValidationResult(true, '');
     }
 
-    static validateBankAddress(bankAddress) {
+    static validateBankAddress(bankAddress, acceptEmpty) {
         if (bankAddress == undefined || bankAddress === '') {
-            return new ValidationResult(false, 'Адрес банка не должен быть пустым.');
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Адрес банка не должен быть пустым.');
+            } else {
+                return new ValidationResult(true, '');
+            }
         }
 
         if (bankAddress.length > Constraints.BANK_ADDRESS_MAX_LENGTH) {
@@ -156,9 +163,13 @@ class Validation {
         return new ValidationResult(true, '');
     }
 
-    static validateEconomicActivityName(economicActivityName) {
+    static validateEconomicActivityName(economicActivityName, acceptEmpty) {
         if (economicActivityName == undefined || economicActivityName === '') {
-            return new ValidationResult(false, 'Название хозяйственной деятельности не может быть пустым.');
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Название хозяйственной деятельности не может быть пустым.');
+            } else {
+                return new ValidationResult(true, '');
+            }
         }
 
         if (economicActivityName.length > Constraints.ECONOMIC_ACTIVITY_NAME_MAX_LENGTH) {
@@ -180,9 +191,13 @@ class Validation {
         return new ValidationResult(true, '');
     }
 
-    static validateTaxesCommitteeName(taxesCommitteeName) {
+    static validateTaxesCommitteeName(taxesCommitteeName, acceptEmpty) {
         if (taxesCommitteeName == undefined || taxesCommitteeName === '') {
-            return new ValidationResult(false, 'Название налогового комитета не может быть пустым.');
+            if (acceptEmpty == false) {
+                return new ValidationResult(false, 'Название налогового комитета не может быть пустым.');
+            } else {
+                return new ValidationResult(true, '');
+            }
         }
 
         if (taxesCommitteeName.length > Constraints.TAXES_COMMITTEE_NAME_MAX_LENGTH) {
@@ -192,9 +207,13 @@ class Validation {
         return new ValidationResult(true, '');
     }
 
-    static validateTaxesCommitteeAddress(taxesCommitteeAddress) {
+    static validateTaxesCommitteeAddress(taxesCommitteeAddress, acceptEmpty) {
         if (taxesCommitteeAddress == undefined || taxesCommitteeAddress === '') {
-            return new ValidationResult(false, 'Адрес налогового комитета не может быть пустым.');
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Адрес налогового комитета не может быть пустым.');
+            } else {
+                return new ValidationResult(true, '');
+            }
         }
 
         if (taxesCommitteeAddress.length > Constraints.TAXES_COMMITTEE_ADDRESS_MAX_LENGTH) {

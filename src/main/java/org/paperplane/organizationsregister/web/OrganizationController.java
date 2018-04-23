@@ -1,10 +1,10 @@
 package org.paperplane.organizationsregister.web;
 
-import org.paperplane.organizationsregister.annotation.AssertEntityExistsById;
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
-import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
+import org.paperplane.organizationsregister.domain.search.OrganizationSearchCriteria;
 import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
@@ -31,9 +31,9 @@ public class OrganizationController {
     }
 
     @RequestMapping(value = "/{bin}", method = RequestMethod.GET)
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @ResponseBody
-    public Organization getByBin(@PathVariable("bin") @EntityIdentifier long bin) {
+    public Organization getByBin(@PathVariable("bin") @EntityIdentifier(entityClass = Organization.class) long bin) {
         return organizationService.findByBin(bin);
     }
 
@@ -56,10 +56,10 @@ public class OrganizationController {
         return organizationService.findOrganizationTypesWithNameContains(nameContains);
     }
 
-    @AssertEntityExistsById(entityClass = OrganizationType.class)
+    @AssertEntityExists
     @RequestMapping(value = "/organization-types/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public OrganizationType findById(@PathVariable("id") @EntityIdentifier int id) {
+    public OrganizationType findById(@PathVariable("id") @EntityIdentifier(entityClass = OrganizationType.class) int id) {
         return organizationService.findOrganizationTypeById(id);
     }
 
@@ -81,10 +81,10 @@ public class OrganizationController {
     @RequestMapping(method = RequestMethod.PUT)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
-    public ResponseEntity update(@RequestBody Organization organization,
+    @ResponseBody
+    public Organization update(@RequestBody Organization organization,
                                              @RequestHeader(value = "token", required = false) String tokenValue) {
-        organizationService.update(organization);
-        return ResponseEntity.ok().build();
+        return organizationService.update(organization);
     }
 
     @RequestMapping(value = "/organization-types", method = RequestMethod.POST)
@@ -102,18 +102,20 @@ public class OrganizationController {
         return organizationService.findOrganizationsByCriteria(criteria);
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(value = "/{bin}", method = RequestMethod.GET,
             params = {"action=getNumberOfYearsSinceOrganizationHasBeenRegistered"})
     @ResponseBody
-    public int findNumberOfYearsSinceOrganizationHasBeenRegistered(@PathVariable("bin") @EntityIdentifier long bin) {
+    public int findNumberOfYearsSinceOrganizationHasBeenRegistered(
+            @PathVariable("bin") @EntityIdentifier(entityClass = Organization.class) long bin) {
         return organizationService.findNumberOfYearsSinceOrganizationHasBeenRegistered(bin);
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(value = "/{bin}/bank-accounts", method = RequestMethod.GET)
     @ResponseBody
-    public List<BankAccount> findBankAccountsOfOrganization(@PathVariable("bin") @EntityIdentifier long bin) {
+    public List<BankAccount> findBankAccountsOfOrganization(
+            @PathVariable("bin") @EntityIdentifier(entityClass = Organization.class) long bin) {
         return organizationService.findBankAccountsOfOrganization(new Organization(bin));
     }
 }

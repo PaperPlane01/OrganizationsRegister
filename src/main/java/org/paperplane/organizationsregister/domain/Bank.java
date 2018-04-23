@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 public class Bank {
@@ -56,5 +57,20 @@ public class Bank {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bank bank = (Bank) o;
+        return id == bank.id &&
+                Objects.equals(name, bank.name) &&
+                Objects.equals(address, bank.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, address);
     }
 }

@@ -57,7 +57,6 @@ public class DatabaseConfig {
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory){
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory);
-
         return transactionManager;
     }
 
@@ -67,6 +66,8 @@ public class DatabaseConfig {
         properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
         properties.put("hibernate.dialect", environment.getProperty("hibernate.dialect"));
         properties.put("hibernate.enable_lazy_load_no_trans", environment.getProperty("hibernate.enable_lazy_load_no_trans"));
+        properties.put("hibernate.connection.autocommit", environment.getProperty("hibernate.connection.autocommit"));
+        properties.put("hibernate.event.merge.entity_copy_observer", environment.getProperty("hibernate.event.merge.entity_copy_observer"));
         return properties;
     }
 }

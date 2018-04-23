@@ -57,7 +57,7 @@ public class TokenServiceImpl implements TokenService{
 
     @Override
     public Token update(Token token) {
-        return tokenRepository.update(token);
+        return tokenRepository.save(token);
     }
 
     @Override

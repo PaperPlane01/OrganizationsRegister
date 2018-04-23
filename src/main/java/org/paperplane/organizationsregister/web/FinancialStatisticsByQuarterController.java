@@ -1,6 +1,6 @@
 package org.paperplane.organizationsregister.web;
 
-import org.paperplane.organizationsregister.annotation.AssertEntityExistsById;
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,28 +26,30 @@ public class FinancialStatisticsByQuarterController {
         this.financialStatisticsService = financialStatisticsService;
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, params = {"bin"})
     @ResponseBody
-    public List<FinancialStatisticsByQuarter> getFinancialStatisticsOfOrganization(@RequestParam("bin") @EntityIdentifier long bin) {
+    public List<FinancialStatisticsByQuarter> getFinancialStatisticsOfOrganization(
+            @RequestParam("bin")
+            @EntityIdentifier(entityClass = Organization.class) long bin) {
         Organization organization = new Organization();
         organization.setBin(bin);
         return financialStatisticsService.findAllByOrganization(organization);
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, params = {"bin", "year"})
     @ResponseBody
     public List<FinancialStatisticsByQuarter> getFinancialStatisticsOfOrganizationByYear(
-            @RequestParam("bin") @EntityIdentifier long bin, @RequestParam(value = "year") int year) {
+            @RequestParam("bin") @EntityIdentifier(entityClass = Organization.class) long bin, @RequestParam(value = "year") int year) {
         return financialStatisticsService.findAllByOrganizationAndYear(new Organization(bin), year);
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, params = {"bin", "year", "quarter"})
     @ResponseBody
     public List<FinancialStatisticsByQuarter> getFinancialStatisticsOfOrganizationByQuarterAndYear(
-            @RequestParam("bin") @EntityIdentifier long bin, @RequestParam("year") int year,
+            @RequestParam("bin") @EntityIdentifier(entityClass = Organization.class) long bin, @RequestParam("year") int year,
             @RequestParam("quarter") byte quarter) {
         return Collections.singletonList(financialStatisticsService
                 .findByOrganizationAndYearAndQuarter(new Organization(bin), year, quarter));
@@ -66,17 +67,19 @@ public class FinancialStatisticsByQuarterController {
         return financialStatisticsService.findMinYear();
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, params = {"action=getMaxYear", "bin"})
     @ResponseBody
-    public int getMaxYearOfFinancialStatistics(@RequestParam("bin") @EntityIdentifier long organizationBin) {
+    public int getMaxYearOfFinancialStatistics(@RequestParam("bin") @EntityIdentifier(entityClass = Organization.class)
+                                                       long organizationBin) {
         return financialStatisticsService.findMaxYear(organizationBin);
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, params = {"action=getMinYear", "bin"})
     @ResponseBody
-    public int getMinYearOfFinancialStatistics(@RequestParam("bin") @EntityIdentifier long organizationBin) {
+    public int getMinYearOfFinancialStatistics(@RequestParam("bin")
+                                               @EntityIdentifier(entityClass = Organization.class) long organizationBin) {
         return financialStatisticsService.findMinYear(organizationBin);
     }
 
@@ -89,11 +92,12 @@ public class FinancialStatisticsByQuarterController {
         return ResponseEntity.ok().build();
     }
 
-    @AssertEntityExistsById(entityClass = Organization.class)
+    @AssertEntityExists
     @RequestMapping(value = "/years", method = RequestMethod.GET, params = {"bin"})
     @ResponseBody
-    public List<Integer> findYearsOfFinancialStatisticsOfOrganization(@RequestParam("bin")
-                                                                          @EntityIdentifier long organizationBin) {
+    public List<Integer> findYearsOfFinancialStatisticsOfOrganization(
+            @RequestParam("bin")
+            @EntityIdentifier(entityClass = Organization.class) long organizationBin) {
         return financialStatisticsService.findYearsOfFinancialStatisticsOfOrganization(organizationBin);
     }
 }

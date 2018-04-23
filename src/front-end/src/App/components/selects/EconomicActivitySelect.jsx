@@ -41,7 +41,7 @@ EconomicActivitySelect.propTypes = {
     classes: PropTypes.object,
     economicActivities: PropTypes.array,
     selectedOptions: PropTypes.array,
-    onInput: PropTypes.func.isRequired,
+    onInput: PropTypes.func,
     multipleSelectEnabled: PropTypes.bool
 };
 

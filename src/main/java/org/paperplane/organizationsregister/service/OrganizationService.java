@@ -1,8 +1,7 @@
 package org.paperplane.organizationsregister.service;
 
-import org.paperplane.organizationsregister.data.search.OrganizationSearchCriteria;
+import org.paperplane.organizationsregister.domain.search.OrganizationSearchCriteria;
 import org.paperplane.organizationsregister.domain.BankAccount;
-import org.paperplane.organizationsregister.domain.EconomicActivity;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
 import org.springframework.data.domain.Pageable;

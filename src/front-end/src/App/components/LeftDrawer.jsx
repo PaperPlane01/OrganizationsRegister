@@ -9,6 +9,7 @@ import LogoutButton from './LogoutButton.jsx';
 import { Link } from "react-router-dom";
 import ListItem from "material-ui/es/List/ListItem";
 import ListItemText from "material-ui/es/List/ListItemText";
+import {menuLinkStyle} from "../styles/";
 
 class LeftDrawer extends React.Component {
     constructor(props) {
@@ -22,23 +23,40 @@ class LeftDrawer extends React.Component {
     render() {
         const {opened, theme, paper, userLoggedIn} = this.props;
 
-        let menuItems = (<div>
-                <Link to="/organizations-register/" style={{textDecoration: 'none'}}>
+        const menuItems = (<div>
+                <ListItem>
+                    {userLoggedIn ? <LogoutButton/> : <LoginFormDialog/>}
+                </ListItem>
+
+                <Link to="/organizations-register/" style={menuLinkStyle}>
                     <ListItem button>
                         <ListItemText primary={'На главную'}/>
                     </ListItem>
                 </Link>
 
-                <Link to="/organizations-register/financial-statistics" style={{textDecoration: 'none'}}>
+                <Link to="/organizations-register/financial-statistics" style={menuLinkStyle}>
                     <ListItem button>
                         <ListItemText primary={'Финансовые показатели'}/>
                     </ListItem>
                 </Link>
 
-                <ListItem>
-                    {userLoggedIn ? <LogoutButton/> : <LoginFormDialog/>}
-                </ListItem>
+                <Link to="/organizations-register/banks" style={menuLinkStyle}>
+                    <ListItem button>
+                        <ListItemText primary={'Банки'}/>
+                    </ListItem>
+                </Link>
 
+                <Link to="/organizations-register/taxes-committees" style={menuLinkStyle}>
+                    <ListItem button>
+                        <ListItemText primary={'Налоговые комитеты'}/>
+                    </ListItem>
+                </Link>
+
+                <Link to="/organizations-register/economic-activities" style={menuLinkStyle}>
+                    <ListItem button>
+                        <ListItemText primary={'Хозяйственные деятельности'}/>
+                    </ListItem>
+                </Link>
             </div>
         );
 

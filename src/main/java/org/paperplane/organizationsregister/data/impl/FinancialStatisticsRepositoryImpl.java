@@ -1,8 +1,10 @@
 package org.paperplane.organizationsregister.data.impl;
 
+import com.google.common.collect.Iterables;
 import org.paperplane.organizationsregister.data.custom.FinancialStatisticsCustomQueriesCaller;
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
+import org.paperplane.organizationsregister.domain.search.FinancialStatisticsSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +12,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -52,5 +58,46 @@ public class FinancialStatisticsRepositoryImpl implements FinancialStatisticsCus
                 .setParameter("organizationBIN", organization.getBin())
                 .setParameter("year", year);
         return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public List<FinancialStatisticsByQuarter> findByCriteria(FinancialStatisticsSearchCriteria searchCriteria) {
+        CriteriaBuilder criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
+        CriteriaQuery<FinancialStatisticsByQuarter> criteriaQuery = criteriaBuilder.createQuery(FinancialStatisticsByQuarter.class);
+        Root<FinancialStatisticsByQuarter> root = criteriaQuery.from(FinancialStatisticsByQuarter.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (searchCriteria.getId() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("id"), searchCriteria.getId()));
+        }
+
+        if (searchCriteria.getAttribute() != null && !searchCriteria.getAttribute().isEmpty()) {
+            predicates.add(criteriaBuilder.equal(root.get("attribute"), searchCriteria.getAttribute()));
+        }
+
+        if (searchCriteria.getFinancialAccount() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("financialAccount"), searchCriteria.getFinancialAccount()));
+        }
+
+        if (searchCriteria.getOrganization() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("organization"), searchCriteria.getOrganization()));
+        }
+
+        if (searchCriteria.getMinSum() != null) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("sum"), searchCriteria.getMinSum()));
+        }
+
+        if (searchCriteria.getMaxSum() != null) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("sum"), searchCriteria.getMaxSum()));
+        }
+
+        if (searchCriteria.getQuarter() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("quarter"), searchCriteria.getQuarter()));
+        }
+
+        criteriaQuery.where(Iterables.toArray(predicates, Predicate.class));
+
+        return entityManagerFactory.createEntityManager().createQuery(criteriaQuery).getResultList();
     }
 }

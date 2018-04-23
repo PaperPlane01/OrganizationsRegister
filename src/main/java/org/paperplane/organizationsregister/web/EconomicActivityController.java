@@ -1,8 +1,11 @@
 package org.paperplane.organizationsregister.web;
 
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
+import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
 import org.paperplane.organizationsregister.domain.EconomicActivity;
+import org.paperplane.organizationsregister.domain.search.EconomicActivitySearchCriteria;
 import org.paperplane.organizationsregister.service.EconomicActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,8 +31,9 @@ public class EconomicActivityController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @AssertEntityExists
     @ResponseBody
-    public EconomicActivity findById(@PathVariable("id") int id) {
+    public EconomicActivity findById(@PathVariable("id") @EntityIdentifier(entityClass = EconomicActivity.class) int id) {
         return economicActivityService.findById(id);
     }
 
@@ -39,5 +43,11 @@ public class EconomicActivityController {
     public void save(@RequestBody EconomicActivity economicActivity,
                      @RequestHeader(value = "token", required = false) String tokenValue) {
         economicActivityService.save(economicActivity);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = {"/search"})
+    @ResponseBody
+    public List<EconomicActivity> findByCriteria(@RequestBody EconomicActivitySearchCriteria searchCriteria) {
+        return  economicActivityService.findByCriteria(searchCriteria);
     }
 }

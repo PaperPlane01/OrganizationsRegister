@@ -1,6 +1,7 @@
 package org.paperplane.organizationsregister.service.impl;
 
 import org.paperplane.organizationsregister.data.TaxesCommitteeRepository;
+import org.paperplane.organizationsregister.domain.search.TaxesCommitteeSearchCriteria;
 import org.paperplane.organizationsregister.domain.TaxesCommittee;
 import org.paperplane.organizationsregister.service.TaxesCommitteeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,16 @@ public class TaxesCommitteeServiceImpl implements TaxesCommitteeService{
     @Override
     public boolean existsById(Integer id) {
         return taxesCommitteeRepository.existsById(id);
+    }
+
+    @Override
+    public List<TaxesCommittee> findByCriteria(TaxesCommitteeSearchCriteria searchCriteria) {
+        return taxesCommitteeRepository.findByCriteria(searchCriteria);
+    }
+
+    @Override
+    public TaxesCommittee update(TaxesCommittee taxesCommittee) {
+        taxesCommitteeRepository.update(taxesCommittee);
+        return taxesCommitteeRepository.findById(taxesCommittee.getId());
     }
 }

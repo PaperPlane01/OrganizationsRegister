@@ -1,7 +1,6 @@
 import React from 'react';
 import FinancialStatisticsSearchForm from '../components/forms/FinancialStatisticsSearchForm.jsx';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
 import FinancialStatisticsTable from "../components/tables/FinancialStatisticsTable.jsx";
 import {loadFinancialStatistics} from "../actions/financial-statistics-actions";
 import {connect} from 'react-redux';

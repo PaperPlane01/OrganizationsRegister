@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from "material-ui/es/Typography/Typography";
 
 class PageNotFoundErrorPage extends React.Component {
     constructor(props) {
@@ -6,7 +7,7 @@ class PageNotFoundErrorPage extends React.Component {
     }
 
     render() {
-        return <div>Page not found!</div>
+        return <Typography variant="headline">Страница не найдена.</Typography>
     }
 }
 

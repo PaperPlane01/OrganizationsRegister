@@ -20,6 +20,11 @@ import {withRouter} from 'react-router-dom';
 import PageNotFoundErrorPage from './pages/PageNotFoundErrorPage.jsx';
 import OrganizationPage from "./pages/OrganizationPage.jsx";
 import OrganizationAddingPage from "./pages/OrganizationAddingPage.jsx";
+import BanksSearchPage from "./pages/BanksSearchPage.jsx";
+import BankPage from "./pages/BankPage.jsx";
+import TaxesCommitteeSearchPage from './pages/TaxesCommitteesSearchPage.jsx';
+import TaxesCommitteePage from './pages/TaxesCommitteePage.jsx';
+import EconomicActivitiesSearchPage from './pages/EconomicActivitiesSearchPage.jsx';
 
 const theme = createMuiTheme({
     palette: {
@@ -122,6 +127,11 @@ class Content extends React.Component {
     render() { return <Switch>
         <Route exact path="/organizations-register/" component={OrganizationsSearchPage}/>
         <Route path="/organizations-register/financial-statistics/" component={FinancialStatisticsSearchPage}/>
+        <Route exact path="/organizations-register/banks" component={BanksSearchPage}/>
+        <Route path="/organizations-register/banks/:id" component={BankPage}/>
+        <Route exact path="/organizations-register/taxes-committees" component={TaxesCommitteeSearchPage}/>
+        <Route path="/organizations-register/taxes-committees/:id" component={TaxesCommitteePage}/>
+        <Route exact path="/organizations-register/economic-activities" component={EconomicActivitiesSearchPage}/>
         <Route exact path='/organizations-register/organizations/add-organization' component={OrganizationAddingPage}/>
         <Route path="/organizations-register/organizations/:bin" component={OrganizationPage}/>
         <Route component={PageNotFoundErrorPage}/>

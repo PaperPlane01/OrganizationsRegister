@@ -3,6 +3,7 @@ package org.paperplane.organizationsregister.service.impl;
 import org.paperplane.organizationsregister.data.FinancialStatisticsRepository;
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
+import org.paperplane.organizationsregister.domain.search.FinancialStatisticsSearchCriteria;
 import org.paperplane.organizationsregister.service.FinancialStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,5 +80,10 @@ public class FinancialStatisticsServiceImpl implements FinancialStatisticsServic
     @Override
     public List<Integer> findYearsOfFinancialStatisticsOfOrganization(long organizationBin) {
         return financialStatisticsRepository.findYearsOfFinancialStatisticsOfOrganization(organizationBin);
+    }
+
+    @Override
+    public List<FinancialStatisticsByQuarter> findByCriteria(FinancialStatisticsSearchCriteria searchCriteria) {
+        return financialStatisticsRepository.findByCriteria(searchCriteria);
     }
 }

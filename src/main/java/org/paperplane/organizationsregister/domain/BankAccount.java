@@ -1,6 +1,7 @@
 package org.paperplane.organizationsregister.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "OrganizationsAndBanks")
@@ -49,5 +50,20 @@ public class BankAccount {
 
     public void setBank(Bank bank) {
         this.bank = bank;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankAccount that = (BankAccount) o;
+        return id == that.id &&
+                Objects.equals(organization, that.organization) &&
+                Objects.equals(bank, that.bank);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, organization, bank);
     }
 }

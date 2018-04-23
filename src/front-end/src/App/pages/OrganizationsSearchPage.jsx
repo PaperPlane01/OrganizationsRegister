@@ -3,12 +3,16 @@ import OrganizationsTable from '../components/tables/OrganizationsTable.jsx';
 import OrganizationsSearchForm from '../components/forms/OrganizationsSearchForm.jsx';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {searchOrganizationsByCriteria} from "../actions/organizations-actions";
+import {clearOrganizationsSearchPageState, searchOrganizationsByCriteria} from "../actions/organizations-actions";
 import Typography from "material-ui/es/Typography/Typography";
 
 class OrganizationsSearchPage extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    componentWillUnmount() {
+
     }
 
     render() {
@@ -27,7 +31,8 @@ class OrganizationsSearchPage extends React.Component {
 
 OrganizationsSearchPage.propTypes = {
     handleSearchRequest: PropTypes.func,
-    searchResults: PropTypes.array
+    searchResults: PropTypes.array,
+    clearState: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
@@ -40,7 +45,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return  {
-        handleSearchRequest: (searchCriteria) => dispatch(searchOrganizationsByCriteria(searchCriteria))
+        handleSearchRequest: (searchCriteria) => dispatch(searchOrganizationsByCriteria(searchCriteria)),
+        clearState: () => dispatch(clearOrganizationsSearchPageState())
     }
 };
 

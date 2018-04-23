@@ -92,6 +92,8 @@ export const organizationSearchReducer = (state = {
                         organizationsSearchResults: action.organizations
                     }, error: null}
             };
+        case organizationsActionConstants.CLEAR_ORGANIZATIONS_SEARCH_PAGE_STATE:
+            return {...state, payload: {data: {}}, pending: false, error: null}
         default:
             return state;
     }
@@ -133,6 +135,47 @@ export const organizationAddingPageReducer = (state ={
         case organizationsActionConstants.ORGANIZATION_ADDING_SUCCESS:
             return {...state, pending: false, addedOrganizationBin: action.addedOrganizationBin};
         case organizationsActionConstants.ORGANIZATION_ADDING_FAILURE:
+            return {...state, pending: false, error: action.exception};
+        default:
+            return state;
+    }
+};
+
+export const organizationUpdateReducer = (state = {
+    pending: false,
+    organization: null,
+    error: null
+}, action) => {
+    switch (action.type) {
+        case organizationsActionConstants.ORGANIZATION_UPDATE_INITIALIZED:
+            return {...state, pending: false, error: null, organization: action.initialOrganization};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_FULL_NAME:
+            return {...state, organization: {...state.organization, fullName: action.updatedFullName}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_SHORT_NAME:
+            return {...state, organization: {...state.organization, shortName: action.updatedShortName}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_NUMBER_OF_EMPLOYEES:
+            return {...state, organization: {...state.organization, numberOfEmployees: action.updatedNumberOfEmployees}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_FOUNDER:
+            return {...state, organization: {...state.organization, founder: action.updatedFounder}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_PERMITTED_ECONOMIC_ACTIVITIES:
+            return {...state, organization: {...state.organization, permittedEconomicActivities: action.updatedPermittedEconomicActivities}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_PRIMARY_ECONOMIC_ACTIVITY:
+            return {...state, organization: {...state.organization, primaryEconomicActivity: action.updatedPrimaryEconomicActivity}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_TAXES_COMMITTEE:
+            return {...state, organization: {...state.organization, taxesCommittee: action.updatedTaxesCommittee}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_ORGANIZATION_TYPE:
+            return {...state, organization: {...state.organization, organizationType: action.updatedOrganizationType}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_PHONE_NUMBER:
+            return {...state, organization: {...state.organization, phoneNumber: action.updatedPhoneNumber}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_ADDRESS:
+            return {...state, organization: {...state.organization, address: action.updatedAddress}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION_REGISTRATION_DATE:
+            return {...state, organization: {...state.organization, registrationDate: action.updatedRegistrationDate}};
+        case organizationsActionConstants.UPDATE_ORGANIZATION:
+            return {...state, pending: true, error: null};
+        case organizationsActionConstants.ORGANIZATION_UPDATE_SUCCESS:
+            return {...state, pending: false, error: null, updatedOrganization: action.updatedOrganization};
+        case organizationsActionConstants.ORGANIZATION_UPDATE_FAILURE:
             return {...state, pending: false, error: action.exception};
         default:
             return state;
