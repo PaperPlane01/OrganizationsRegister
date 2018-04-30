@@ -97,7 +97,7 @@ export const taxesCommitteeNotFound = (exception) => {
 
 export const fetchTaxesCommitteeById = (id) => {
     return (dispatch) => {
-        axios.get(API_URL.concat(TAXES_COMMITTEES).concat(id))
+        axios.get(API_URL.concat(TAXES_COMMITTEES).concat('/').concat(id))
             .then(response => {
                 dispatch(taxesCommitteeFetched(response.data))
             })

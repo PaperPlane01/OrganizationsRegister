@@ -106,7 +106,7 @@ export const initializePermittedEconomicActivitiesSelect = (selectedOptions) => 
     }
 };
 
-export const economicActivtiesSearchResultsReceived = (searchResults) => {
+export const economicActivitiesSearchResultsReceived = (searchResults) => {
     return {
         type: economicActivitiesActionsConstants.ECONOMIC_ACTIVITIES_SEARCH_SUCCESS,
         economicActivities: searchResults
@@ -127,7 +127,7 @@ export const searchEconomicActivitiesByCriteria = (searchCriteria) => {
                 'Content-type': 'application/json'
             }
         }).then(response => {
-            dispatch(economicActivtiesSearchResultsReceived(response.data))
+            dispatch(economicActivitiesSearchResultsReceived(response.data))
         }).catch(error => {
             const response = error.response;
             if (response.data.exception != undefined) {

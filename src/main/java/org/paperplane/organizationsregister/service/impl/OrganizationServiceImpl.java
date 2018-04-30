@@ -4,6 +4,7 @@ import org.paperplane.organizationsregister.domain.search.OrganizationSearchCrit
 import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
+import org.paperplane.organizationsregister.domain.search.OrganizationTypeSearchCriteria;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.OrganizationNotFoundException;
 import org.paperplane.organizationsregister.service.OrganizationService;
 import org.paperplane.organizationsregister.data.*;
@@ -94,6 +95,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public List<OrganizationType> findAllOrganizationTypes() {
         return organizationTypeRepository.findAll();
+    }
+
+    @Override
+    public List<OrganizationType> findOrganizationTypesByCriteria(OrganizationTypeSearchCriteria searchCriteria) {
+        return organizationTypeRepository.findByCriteria(searchCriteria);
     }
 
     @Override

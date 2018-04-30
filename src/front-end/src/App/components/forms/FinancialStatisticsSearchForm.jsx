@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import OrganizationSelect from '../selects/OrganizationSelect.jsx'
+import {OrganizationSelect, QuarterSelect, AttributeSelect} from '../selects'
 import {fetchOrganizationsByName, handleOrganizationSelect} from "../../actions/organizations-actions";
-import YearSelect from "../selects/YearSelect.jsx";
-import QuarterSelect from "../selects/QuarterSelect.jsx";
 import {
-    clearQuarterSelection, clearYearSelection, fetchYearsOfFinancialStatistics,
-    handleQuarterSelect, handleYearSelect,
+    clearMaxYearSelection,
+    clearMinYearSelection,
+    clearQuarterSelection, fetchYearsOfFinancialStatistics, handleAttributeSelect,
+    handleMaxYearSelection,
+    handleMinYearSelection,
+    handleQuarterSelect, setDefaultMinAndMaxYears, validateFinancialStatisticsMaxSum, validateFinancialStatisticsMinSum,
 } from "../../actions/financial-statistics-actions";
 import Button from 'material-ui/Button';
 import compose from 'recompose/compose';
 import {withStyles} from 'material-ui';
-import {formStyle} from "../../styles/index";
+import {errorLabelStyle, formStyle} from "../../styles";
 import Typography from "material-ui/es/Typography/Typography";
 import ValidationResult from "../../validation/ValidationResult";
+import {YearSelectionDialog} from '../dialogs';
+import Input from "material-ui/es/Input/Input";
 
 const styles = theme => formStyle(theme);
 
@@ -23,53 +27,77 @@ class FinancialStatisticsSearchForm extends React.Component {
         super(props);
 
         this.state = {
-            formValidationResult: new ValidationResult(true, ''),
+            minSum: null,
+            maxSum: null,
+            formValidationResult: new ValidationResult(true, '')
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.selectedOrganizationOption != undefined && nextProps.years == undefined) {
-            this.props.fetchFinancialStatisticsYears(nextProps.selectedOrganizationOption.value.bin);
-        }
+       if (nextProps.selectedOrganizationOption == undefined) {
+          this.props.setDefaultMinAndMaxYears();
+          return;
+       }
+
+       if (nextProps.selectedOrganizationOption !== this.props.selectedOrganizationOption) {
+           this.props.fetchFinancialStatisticsYears(nextProps.selectedOrganizationOption.value.bin);
+       }
     }
 
     clearState = () => {
-        this.props.clearYearSelection();
+        this.props.clearMinYearSelection();
+        this.props.clearMaxYearSelection();
         this.props.clearQuarterSelection();
     };
 
     handleSearchRequest = () => {
-        const {selectedOrganizationOption, selectedYearOption, selectedQuarterOption} = this.props;
+        const {selectedOrganizationOption, selectedQuarterOption, selectedAttributeOption,
+            selectedMinYear, selectedMaxYear} = this.props;
+        const {minSum, maxSum} = this.state;
 
-        if (selectedOrganizationOption == undefined) {
-            this.setState({formValidationResult: new ValidationResult(false, 'Вы не выбрали организацию.')});
-            return;
-        }
+        this.assertAllFieldsAreValid().then(() => {
+            const quarter = selectedQuarterOption == undefined ? null : selectedQuarterOption.value;
+            const organization = selectedOrganizationOption == undefined ? null : selectedOrganizationOption.value;
+            const attribute = selectedAttributeOption == undefined ? null : selectedAttributeOption.value;
 
-        if (selectedYearOption == undefined && selectedQuarterOption != undefined) {
-            this.setState({formValidationResult: new ValidationResult(false, 'Вы не выбрали год.')});
-            return;
-        }
-
-        const year = selectedYearOption == undefined ? null : selectedYearOption.value;
-        const quarter = selectedQuarterOption == undefined ? null : selectedQuarterOption.value;
-
-        this.setState({formValidationResult: new ValidationResult(true, '')}, () => {
-            this.props.onFormSubmitted(selectedOrganizationOption.value.bin, year, quarter);
+            this.props.onFormSubmitted({organization, minYear: selectedMinYear, maxYear: selectedMaxYear,
+                quarter, attribute, minSum, maxSum});
         });
+
     };
 
-    handleOrganizationSelect = (option) => {
-        if (option == undefined) {
-            this.clearState();
-        };
+    async assertAllFieldsAreValid() {
+        const {minSum, maxSum} = this.state;
+        const {validateMinSum, validateMaxSum, minSumValidationResult, maxSumValidationResult} = this.props;
 
+        validateMinSum(minSum, true);
+        validateMaxSum(maxSum, true);
+
+        if (minSumValidationResult.isSuccessful() && maxSumValidationResult.isSuccessful()) {
+            this.setState({formValidationResult: new ValidationResult(true, '')});
+        } else {
+            this.setState({formValidationResult: new ValidationResult(false, 'Некоторые поля заполнены неверно.')})
+        }
+    }
+
+    handleOrganizationSelect = (option) => {
         this.props.handleOrganizationSelect(option);
     };
 
+    handleMinSum = (minSum) => {
+        this.setState({minSum}, () => this.props.validateMinSum(this.state.minSum, true));
+    };
+
+    handleMaxSum = (maxSum) => {
+        this.setState({maxSum}, () => this.props.validateMaxSum(this.state.maxSum, true));
+    };
+
     render() {
-        const {classes, fetchOrganizations, selectedOrganizationOption, handleYearSelect, handleQuarterSelect,
-            years, selectedYearOption, quarters, selectedQuarterOption, fetchedOrganizations} = this.props;
+        const {classes, fetchOrganizations, selectedOrganizationOption, handleQuarterSelect, quarters,
+            selectedQuarterOption, fetchedOrganizations, minYear, maxYear, selectedMinYear, selectedMaxYear,
+            handleMinYearSelect, handleMaxYearSelect, selectedAttributeOption, handleAttributeSelect, attributes,
+            minSumValidationResult, maxSumValidationResult} = this.props;
+        const {formValidationResult} = this.state;
 
         return <div>
             <Typography variant="headline">Поиск финансовой статистики</Typography>
@@ -82,11 +110,24 @@ class FinancialStatisticsSearchForm extends React.Component {
                                 classes={classes}
             />
 
-            <Typography variant="body1">Год:</Typography>
-            <YearSelect years={years}
-                        selectedOption={selectedYearOption}
-                        onSelect={(option) => handleYearSelect(option)}
-                        classes={classes}
+            <Typography variant="body1">Минимальный год:</Typography>
+            <YearSelectionDialog onSelect={(year) => handleMinYearSelect(year)}
+                                 classes={classes}
+                                 minYear={minYear}
+                                 maxYear={maxYear + 1}
+                                 selectedYear={selectedMinYear}
+                                 disablePast={false}
+                                 disableFuture={true}
+            />
+
+            <Typography variant="body1">Максимальный год:</Typography>
+            <YearSelectionDialog onSelect={(year) => handleMaxYearSelect(year)}
+                                 classes={classes}
+                                 minYear={minYear}
+                                 maxYear={maxYear + 1}
+                                 selectedYear={selectedMaxYear}
+                                 disablePast={false}
+                                 disableFuture={true}
             />
 
             <Typography variant="body1">Квартал:</Typography>
@@ -96,10 +137,39 @@ class FinancialStatisticsSearchForm extends React.Component {
                            classes={classes}
             />
 
-            {!this.state.formValidationResult.isSuccessful()
-                ? <Typography variant="body1" style={{'color': 'red'}}>{this.state.formValidationResult.getMessage()}</Typography>
-                : ''
-            }
+            {minSumValidationResult.isSuccessful()
+                ? ''
+                : <Typography variant={'body1'} style={errorLabelStyle}>
+                    {minSumValidationResult.getMessage()}
+                </Typography>}
+            <Typography variant="body1">Минимальная сумма:</Typography>
+            <Input placeholder={'Введите минимальную сумму'}
+                   fullWidth={true}
+                   onChange={(event) => this.handleMinSum(event.target.value)}
+            />
+
+            {maxSumValidationResult.isSuccessful()
+                ? ''
+                : <Typography variant="body1" style={errorLabelStyle}>
+                    {maxSumValidationResult.getMessage()}
+                </Typography>}
+            <Typography variant="body1">Максимальная сумма:</Typography>
+            <Input placeholder={'Введите максимальную сумму'}
+                   fullWidth={true}
+                   onChange={(event) => this.handleMaxSum(event.target.value)}
+            />
+
+            <Typography variant="body1">Признак:</Typography>
+            <AttributeSelect onSelect={(option) => handleAttributeSelect(option)}
+                             selectedOption={selectedAttributeOption}
+                             attributes={attributes}
+            />
+
+            {formValidationResult.isSuccessful()
+                ? ''
+                : <Typography variant="body1" style={errorLabelStyle}>
+                    {formValidationResult.getMessage()}
+                </Typography>}
             <Button color={'primary'} variant={'raised'}
                     onClick={() => this.handleSearchRequest()}>
                 Поиск
@@ -114,28 +184,49 @@ FinancialStatisticsSearchForm.propTypes = {
     fetchedOrganizations: PropTypes.array,
     handleOrganizationSelect: PropTypes.func,
     selectedOrganizationOption: PropTypes.object,
-    years: PropTypes.array,
     quarters: PropTypes.array,
     selectedQuarterOption: PropTypes.object,
     selectedYearOption: PropTypes.object,
-    handleYearSelect: PropTypes.func,
+    selectedMinYear: PropTypes.number,
+    selectedMaxYear: PropTypes.number,
+    minYear: PropTypes.number,
+    maxYear: PropTypes.number,
+    handleMinYearSelect: PropTypes.func,
+    handleMaxYearSelect: PropTypes.func,
     handleQuarterSelect: PropTypes.func,
     onFormSubmitted: PropTypes.func,
     clearYearSelection: PropTypes.func,
-    clearQuarterSelection: PropTypes.func
+    clearMinYearSelection: PropTypes.func,
+    clearMaxYearSelection: PropTypes.func,
+    clearQuarterSelection: PropTypes.func,
+    setDefaultMinAndMaxYears: PropTypes.func,
+    selectedAttributeOption: PropTypes.object,
+    handleAttributeSelect: PropTypes.func,
+    validateMinSum: PropTypes.func,
+    minSumValidationResult: PropTypes.object,
+    validateMaxSum: PropTypes.func,
+    maxSumValidationResult: PropTypes.object,
+    attributes: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
     const financialStatisticsSearch = state.financialStatisticsSearch;
-    const {organizationSelect, yearSelect, quarterSelect} = financialStatisticsSearch;
+    const {organizationSelect, quarterSelect, minYearDialog, maxYearDialog, attributeSelect, validation}
+    = financialStatisticsSearch;
     return {
         fetchedOrganizations: organizationSelect.data.dataSource,
         selectedOrganizationOption: organizationSelect.data.selectedOption,
-        years: yearSelect.data.dataSource,
+        minYear: minYearDialog.minYear,
+        maxYear: minYearDialog.maxYear,
+        selectedMinYear: minYearDialog.selectedYear,
+        selectedMaxYear: maxYearDialog.selectedYear,
         quarters: quarterSelect.data.dataSource,
         loadedFinancialStatistics: financialStatisticsSearch.financialStatistics.data.searchResults,
-        selectedYearOption: yearSelect.data.selectedOption,
         selectedQuarterOption: quarterSelect.data.selectedOption,
+        selectedAttributeOption: attributeSelect.selectedAttributeOption,
+        attributes: attributeSelect.attributes,
+        minSumValidationResult: validation.minSumValidationResult,
+        maxSumValidationResult: validation.maxSumValidationResult
     }
 };
 
@@ -145,9 +236,15 @@ const mapDispatchToProps = (dispatch) => {
          fetchFinancialStatisticsYears: (organizationBIN) => dispatch(fetchYearsOfFinancialStatistics(organizationBIN)),
          handleOrganizationSelect: (option) => dispatch(handleOrganizationSelect(option)),
          handleQuarterSelect: (option) => dispatch(handleQuarterSelect(option)),
-         handleYearSelect: (option) => dispatch(handleYearSelect(option)),
-         clearYearSelection: () => dispatch(clearYearSelection()),
-         clearQuarterSelection: () => dispatch(clearQuarterSelection())
+         handleMinYearSelect: (minYear) => dispatch(handleMinYearSelection(minYear)),
+         handleMaxYearSelect: (maxYear) => dispatch(handleMaxYearSelection(maxYear)),
+         clearMinYearSelection: () => dispatch(clearMinYearSelection()),
+         clearMaxYearSelection: () => dispatch(clearMaxYearSelection()),
+         setDefaultMinAndMaxYears: () => dispatch(setDefaultMinAndMaxYears()),
+         clearQuarterSelection: () => dispatch(clearQuarterSelection()),
+         handleAttributeSelect: (option) => dispatch(handleAttributeSelect(option)),
+         validateMinSum: (sum, acceptEmpty) => dispatch(validateFinancialStatisticsMinSum(sum, acceptEmpty)),
+         validateMaxSum: (sum, acceptEmpty) => dispatch(validateFinancialStatisticsMaxSum(sum, acceptEmpty))
      }
  };
 

@@ -9,22 +9,16 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import LeftDrawer from './components/LeftDrawer.jsx'
-import FinancialStatisticsSearchPage from './pages/FinancialStatisticsSearchPage.jsx'
 import withTheme from "material-ui/es/styles/withTheme";
 import withStyles from "material-ui/es/styles/withStyles";
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import ruLocale from 'date-fns/locale/ru';
-import OrganizationsSearchPage from "./pages/OrganizationsSearchPage.jsx";
 import {withRouter} from 'react-router-dom';
-import PageNotFoundErrorPage from './pages/PageNotFoundErrorPage.jsx';
-import OrganizationPage from "./pages/OrganizationPage.jsx";
-import OrganizationAddingPage from "./pages/OrganizationAddingPage.jsx";
-import BanksSearchPage from "./pages/BanksSearchPage.jsx";
-import BankPage from "./pages/BankPage.jsx";
 import TaxesCommitteeSearchPage from './pages/TaxesCommitteesSearchPage.jsx';
-import TaxesCommitteePage from './pages/TaxesCommitteePage.jsx';
-import EconomicActivitiesSearchPage from './pages/EconomicActivitiesSearchPage.jsx';
+import {BankPage, BanksSearchPage, EconomicActivitiesSearchPage, FinancialStatisticsSearchPage, OrganizationPage,
+    OrganizationAddingPage, OrganizationsSearchPage, OrganizationTypesSearchPage,
+    PageNotFoundErrorPage, TaxesCommitteePage, TaxesCommitteesSearchPage} from './pages';
 
 const theme = createMuiTheme({
     palette: {
@@ -134,6 +128,8 @@ class Content extends React.Component {
         <Route exact path="/organizations-register/economic-activities" component={EconomicActivitiesSearchPage}/>
         <Route exact path='/organizations-register/organizations/add-organization' component={OrganizationAddingPage}/>
         <Route path="/organizations-register/organizations/:bin" component={OrganizationPage}/>
+        <Route exact path='/organizations-register/organization-types' component={OrganizationTypesSearchPage}/>
+        <Route exact path='/organizations-register/taxes-committees' component={TaxesCommitteesSearchPage}/>
         <Route component={PageNotFoundErrorPage}/>
     </Switch>
     }

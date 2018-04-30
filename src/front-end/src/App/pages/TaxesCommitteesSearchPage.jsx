@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import TaxesCommitteesSearchForm from '../components/forms/TaxesCommitteesSearchForm.jsx';
+import {TaxesCommitteesSearchForm} from '../components/forms';
 import Typography from "material-ui/es/Typography/Typography";
 import Card from "material-ui/es/Card/Card";
 import CardContent from "material-ui/es/Card/CardContent";
-import TaxesCommitteesTable from '../components/tables/TaxesCommitteeTable.jsx';
+import {TaxesCommitteesTable} from '../components/tables';
 import {searchTaxesCommitteesByCriteria} from "../actions/taxes-committees-actions";
 
 class TaxesCommitteesSearchPage extends React.Component {

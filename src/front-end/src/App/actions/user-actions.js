@@ -1,6 +1,7 @@
 import {API_URL, TOKENS, USER} from "../constants/api-constants";
 import {userActionsConstants} from "../constants/action-constants";
 import axios from 'axios';
+import {exceptions} from "../constants/exception-constants";
 
 export const loginSuccess = (userID, username, token) => (
     {
@@ -62,7 +63,16 @@ export const doLogin = (username, password) => {
             localStorage.setItem("token", response.data.token);
             dispatch(loginSuccess(response.data.userID, response.data.username, response.data.token));
         }).catch(error => {
-            dispatch(loginFailure(error.response.data.exception));
+            if (error.response.data.exception != undefined) {
+                dispatch(loginFailure({
+                    status: error.response.status,
+                    exception: error.response.data.exception}));
+            } else {
+                dispatch(loginFailure({
+                    status: error.response.status,
+                    exception: exceptions.SERVER_ERROR
+                }))
+            }
         })
     }
 };

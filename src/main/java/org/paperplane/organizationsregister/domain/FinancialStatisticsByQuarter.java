@@ -23,7 +23,7 @@ public class FinancialStatisticsByQuarter {
     @NotNull
     @Min(1)
     @Max(4)
-    private byte quarter;
+    private int quarter;
 
     @ManyToOne
     @NotNull
@@ -32,7 +32,6 @@ public class FinancialStatisticsByQuarter {
 
     @NotNull
     @Min(1900)
-    @Max(2050)
     private int year;
 
     @NotNull
@@ -53,11 +52,11 @@ public class FinancialStatisticsByQuarter {
         this.organization = organization;
     }
 
-    public byte getQuarter() {
+    public int getQuarter() {
         return quarter;
     }
 
-    public void setQuarter(byte quarter) {
+    public void setQuarter(int quarter) {
         this.quarter = quarter;
     }
 

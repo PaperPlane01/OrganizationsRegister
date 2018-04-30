@@ -11,8 +11,9 @@ public class FinancialStatisticsSearchCriteria {
     private Organization organization;
     private FinancialAccount financialAccount;
     private String attribute;
-    private int year;
-    private Byte quarter;
+    private Integer minYear;
+    private Integer maxYear;
+    private Integer quarter;
     private BigDecimal minSum;
     private BigDecimal maxSum;
 
@@ -51,19 +52,27 @@ public class FinancialStatisticsSearchCriteria {
         this.attribute = attribute;
     }
 
-    public int getYear() {
-        return year;
+    public Integer getMinYear() {
+        return minYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setMinYear(Integer minYear) {
+        this.minYear = minYear;
     }
 
-    public Byte getQuarter() {
+    public Integer getMaxYear() {
+        return maxYear;
+    }
+
+    public void setMaxYear(Integer maxYear) {
+        this.maxYear = maxYear;
+    }
+
+    public Integer getQuarter() {
         return quarter;
     }
 
-    public void setQuarter(byte quarter) {
+    public void setQuarter(Integer quarter) {
         this.quarter = quarter;
     }
 

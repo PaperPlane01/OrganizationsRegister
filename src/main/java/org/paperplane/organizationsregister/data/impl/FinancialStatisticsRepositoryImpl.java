@@ -96,6 +96,18 @@ public class FinancialStatisticsRepositoryImpl implements FinancialStatisticsCus
             predicates.add(criteriaBuilder.equal(root.get("quarter"), searchCriteria.getQuarter()));
         }
 
+        if (searchCriteria.getMinYear() != null) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("year"), searchCriteria.getMinYear()));
+        }
+
+        if (searchCriteria.getMaxYear() != null) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("year"), searchCriteria.getMaxYear()));
+        }
+
+        if (searchCriteria.getAttribute() != null && !searchCriteria.getAttribute().isEmpty()) {
+            predicates.add(criteriaBuilder.equal(root.get("attribute"), searchCriteria.getAttribute()));
+        }
+
         criteriaQuery.where(Iterables.toArray(predicates, Predicate.class));
 
         return entityManagerFactory.createEntityManager().createQuery(criteriaQuery).getResultList();

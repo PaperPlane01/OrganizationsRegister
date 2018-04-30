@@ -1,0 +1,11 @@
+export {default as BankPage} from './BankPage.jsx';
+export {default as BanksSearchPage} from './BanksSearchPage.jsx';
+export {default as EconomicActivitiesSearchPage} from './EconomicActivitiesSearchPage.jsx';
+export {default as FinancialStatisticsSearchPage} from './FinancialStatisticsSearchPage.jsx';
+export {default as OrganizationAddingPage} from './OrganizationAddingPage.jsx';
+export {default as OrganizationPage} from './OrganizationPage.jsx';
+export {default as OrganizationsSearchPage} from './OrganizationsSearchPage.jsx';
+export {default as OrganizationTypesSearchPage} from './OrganizationTypesSearchPage.jsx';
+export {default as PageNotFoundErrorPage} from './PageNotFoundErrorPage.jsx';
+export {default as TaxesCommitteePage} from './TaxesCommitteePage.jsx';
+export {default as TaxesCommitteesSearchPage} from './TaxesCommitteesSearchPage.jsx';

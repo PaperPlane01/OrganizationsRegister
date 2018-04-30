@@ -8,6 +8,7 @@ import org.paperplane.organizationsregister.domain.search.OrganizationSearchCrit
 import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
+import org.paperplane.organizationsregister.domain.search.OrganizationTypeSearchCriteria;
 import org.paperplane.organizationsregister.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -117,5 +118,11 @@ public class OrganizationController {
     public List<BankAccount> findBankAccountsOfOrganization(
             @PathVariable("bin") @EntityIdentifier(entityClass = Organization.class) long bin) {
         return organizationService.findBankAccountsOfOrganization(new Organization(bin));
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value="/organization-types/search")
+    @ResponseBody
+    public List<OrganizationType> findOrganizationTypesByCriteria(OrganizationTypeSearchCriteria searchCriteria) {
+        return organizationService.findOrganizationTypesByCriteria(searchCriteria);
     }
 }

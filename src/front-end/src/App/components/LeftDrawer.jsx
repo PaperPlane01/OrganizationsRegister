@@ -4,12 +4,12 @@ import Drawer from 'material-ui/Drawer';
 import Hidden from 'material-ui/Hidden';
 import Divider from 'material-ui/Divider';
 import {connect} from 'react-redux';
-import LoginFormDialog from './LoginFormDialog.jsx';
+import {LoginDialog} from './dialogs';
 import LogoutButton from './LogoutButton.jsx';
 import { Link } from "react-router-dom";
 import ListItem from "material-ui/es/List/ListItem";
 import ListItemText from "material-ui/es/List/ListItemText";
-import {menuLinkStyle} from "../styles/";
+import {menuLinkStyle} from "../styles";
 
 class LeftDrawer extends React.Component {
     constructor(props) {
@@ -25,12 +25,18 @@ class LeftDrawer extends React.Component {
 
         const menuItems = (<div>
                 <ListItem>
-                    {userLoggedIn ? <LogoutButton/> : <LoginFormDialog/>}
+                    {userLoggedIn ? <LogoutButton/> : <LoginDialog/>}
                 </ListItem>
 
                 <Link to="/organizations-register/" style={menuLinkStyle}>
                     <ListItem button>
                         <ListItemText primary={'На главную'}/>
+                    </ListItem>
+                </Link>
+
+                <Link to="/organizations-register/organization-types" style={menuLinkStyle}>
+                    <ListItem button>
+                        <ListItemText primary={'Типы предприятий'}/>
                     </ListItem>
                 </Link>
 

@@ -8,7 +8,10 @@ import {
     taxesCommitteesSearchRecuder, taxesCommitteesSelectReducer,
     taxesCommitteesValidationReducer
 } from "./taxes-committees-reducer";
-import {organizationTypeSelectReducer} from "./organizations-types-reducers";
+import {
+    organizationTypeSelectReducer, organizationTypesSearchReducer,
+    organizationTypeValidationReducer
+} from "./organizations-types-reducers";
 import {organizationSearchReducer, organizationValidationReducer} from "./organizations-reducers.js";
 import {currentUserReducer} from "./user-reducer";
 import {routerReducer} from 'react-router-redux';
@@ -16,8 +19,10 @@ import {
     organizationAddingPageReducer, organizationPageReducer, organizationSelectReducer, organizationUpdateReducer
 } from "./organizations-reducers";
 import {
-    financialStatisticsSearchReducer, quarterSelectReducer,
-    yearSelectReducer
+    attributeSelectReducer,
+    financialStatisticsSearchReducer, financialStatisticsValidationReducer, maxYearDialogReducer, minYearDialogReducer,
+    quarterSelectReducer,
+    yearDialogReducer
 } from "./financial-statistics-reducers";
 import {bankPageReducer, bankSelectReducer, banksSearchReducer, bankValidationReducer} from "./banks-reducers";
 
@@ -48,8 +53,11 @@ export default combineReducers({
     financialStatisticsSearch: combineReducers({
        organizationSelect: organizationSelectReducer,
        financialStatistics: financialStatisticsSearchReducer,
-       yearSelect: yearSelectReducer,
-       quarterSelect: quarterSelectReducer
+       attributeSelect: attributeSelectReducer,
+       minYearDialog: minYearDialogReducer,
+       maxYearDialog: maxYearDialogReducer,
+       quarterSelect: quarterSelectReducer,
+       validation: financialStatisticsValidationReducer
     }),
     organizationPage: combineReducers({
        organizationData: organizationPageReducer,
@@ -70,6 +78,10 @@ export default combineReducers({
     economicActivitiesSearchPage: combineReducers({
         economicActivitiesSearch: economicActivitiesSearchReducer,
         validation: economicActivityValidationReducer
+    }),
+    organizationTypesSearchPage: combineReducers({
+        organizationTypesSearch: organizationTypesSearchReducer,
+        validation: organizationTypeValidationReducer
     }),
     bankPage: bankPageReducer,
     routing: routerReducer,

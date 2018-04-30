@@ -1,10 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import BanksSearchForm from '../components/forms/BanksSearchForm.jsx';
+import {BanksSearchForm} from '../components/forms';
 import {searchBanksByCriteria} from "../actions/bank-actions";
 import Typography from "material-ui/es/Typography/Typography";
-import BanksTable from "../components/tables/BanksTable.jsx";
+import {BanksTable} from "../components/tables";
 import Card from "material-ui/es/Card/Card";
 import CardContent from "material-ui/es/Card/CardContent";
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import FinancialStatisticsSearchForm from '../components/forms/FinancialStatisticsSearchForm.jsx';
+import {FinancialStatisticsSearchForm} from '../components/forms';
 import PropTypes from 'prop-types';
-import FinancialStatisticsTable from "../components/tables/FinancialStatisticsTable.jsx";
-import {loadFinancialStatistics} from "../actions/financial-statistics-actions";
+import {FinancialStatisticsTable} from "../components/tables";
+import {loadFinancialStatistics, searchFinancialStatisticsByCriteria} from "../actions/financial-statistics-actions";
 import {connect} from 'react-redux';
 import Typography from "material-ui/es/Typography/Typography";
 
@@ -12,7 +12,7 @@ class FinancialStatisticsSearchPage extends React.Component {
     }
 
     render() { return <div>
-        <FinancialStatisticsSearchForm onFormSubmitted={(bin, year, quarter) => this.props.handleSearchRequest(bin, year, quarter)}/>
+        <FinancialStatisticsSearchForm onFormSubmitted={(searchCriteria) => this.props.handleSearchRequest(searchCriteria)}/>
 
         {this.props.searchResults == undefined || this.props.searchResults.length === 0
             ? <Typography variant="body1" >Поиск не дал результатов</Typography>
@@ -37,7 +37,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleSearchRequest: (bin, year, quarter) => dispatch(loadFinancialStatistics(bin, year, quarter))
+        handleSearchRequest: (searchCriteria) => dispatch(searchFinancialStatisticsByCriteria(searchCriteria))
     }
 };
 

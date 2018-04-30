@@ -2,11 +2,8 @@ import 'babel-polyfill';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Input, withStyles} from 'material-ui';
-import OrganizationTypeSelect from '../selects/OrganizationTypeSelect.jsx';
-import EconomicActivitySelect from '../selects/EconomicActivitySelect.jsx';
-import TaxesCommitteeSelect from '../selects/TaxesCommitteeSelect.jsx';
 import PropTypes from 'prop-types';
-import ValidationResult from '../../validation/ValidationResult.js';
+import ValidationResult from '../../validation/ValidationResult';
 import Button from 'material-ui/Button';
 import { DatePicker } from 'material-ui-pickers';
 import {
@@ -26,6 +23,7 @@ import compose from 'recompose/compose';
 import {errorLabelStyle, formStyle} from "../../styles/";
 import Typography from "material-ui/es/Typography/Typography";
 import {Link} from "react-router-dom";
+import {OrganizationTypeSelect, TaxesCommitteeSelect, EconomicActivitySelect} from "../selects/";
 
 const styles = theme => formStyle(theme);
 

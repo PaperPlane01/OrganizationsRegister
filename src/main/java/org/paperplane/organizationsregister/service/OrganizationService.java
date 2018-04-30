@@ -4,6 +4,7 @@ import org.paperplane.organizationsregister.domain.search.OrganizationSearchCrit
 import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
+import org.paperplane.organizationsregister.domain.search.OrganizationTypeSearchCriteria;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
@@ -21,6 +22,7 @@ public interface OrganizationService {
     List<OrganizationType> findOrganizationTypesWithNameContains(String nameContains);
     void saveOrganizationType(OrganizationType organizationType);
     List<OrganizationType> findAllOrganizationTypes();
+    List<OrganizationType> findOrganizationTypesByCriteria(OrganizationTypeSearchCriteria searchCriteria);
     List<Organization> findOrganizationsByCriteria(OrganizationSearchCriteria organizationSearchCriteria);
     Organization update(Organization organization);
     void assertOrganizationExistByBin(long bin);

@@ -199,7 +199,7 @@ export const handleOrganizationSelect = (option) => {
 
 export const findOrganizationByBin = (bin) => {
     return (dispatch) => {
-        axios.get(API_URL.concat(ORGANIZATIONS).concat(bin))
+        axios.get(API_URL.concat(ORGANIZATIONS).concat('/').concat(bin))
             .then(response => {
                 dispatch(organizationFoundByBin(response.data))})
             .catch(error => {
@@ -216,7 +216,7 @@ export const findOrganizationByBin = (bin) => {
 
 export const fetchNumberOfYearsSinceRegistration = (bin) => {
     return (dispatch) => {
-        axios.get(API_URL.concat(ORGANIZATIONS).concat(bin), {params: {
+        axios.get(API_URL.concat(ORGANIZATIONS).concat('/').concat(bin), {params: {
             action: 'getNumberOfYearsSinceOrganizationHasBeenRegistered'
         }}).then(response => {
             dispatch(numberOfYearsSinceRegistrationFetched(response.data));

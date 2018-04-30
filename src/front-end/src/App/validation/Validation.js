@@ -1,4 +1,4 @@
-import ValidationResult from './ValidationResult.js';
+import ValidationResult from './ValidationResult';
 
 const Constraints = {
     ORGANIZATION_BIN_LENGTH: 12,
@@ -25,7 +25,9 @@ const Constraints = {
     TAXES_COMMITTEE_NAME_MIN_LENGTH: 1,
     TAXES_COMMITTEE_NAME_MAX_LENGTH: 80,
     TAXES_COMMITTEE_ADDRESS_MIN_LENGTH: 1,
-    TAXES_COMMITTEE_ADDRESS_MAX_LENGTH: 80
+    TAXES_COMMITTEE_ADDRESS_MAX_LENGTH: 80,
+    FINANCIAL_STATISTICS_SUM_REGEX: /^-?\d*\.{0,1}\d+$/
+
 };
 
 class Validation {
@@ -179,9 +181,14 @@ class Validation {
         return new ValidationResult(true, '');
     }
 
-    static validateOrganizationTypeName(organizationTypeName) {
+    static validateOrganizationTypeName(organizationTypeName, acceptEmpty) {
         if (organizationTypeName == undefined || organizationTypeName === '') {
-            return new ValidationResult(false, 'Название типа организации не может быть пустым.');
+
+            if (acceptEmpty === true) {
+                return new ValidationResult(true, '');
+            } else {
+                return new ValidationResult(false, 'Название типа организации не может быть пустым.');
+            }
         }
 
         if (organizationTypeName.length > Constraints.ORGANIZATION_TYPE_NAME_MAX_LENGTH) {
@@ -193,7 +200,7 @@ class Validation {
 
     static validateTaxesCommitteeName(taxesCommitteeName, acceptEmpty) {
         if (taxesCommitteeName == undefined || taxesCommitteeName === '') {
-            if (acceptEmpty == false) {
+            if (acceptEmpty === false) {
                 return new ValidationResult(false, 'Название налогового комитета не может быть пустым.');
             } else {
                 return new ValidationResult(true, '');
@@ -221,6 +228,25 @@ class Validation {
         }
 
         return new ValidationResult(true, '');
+    }
+
+    static validateFinancialStatisticsSum = (sum, acceptEmpty) => {
+        if (sum == undefined || sum === '') {
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Сумма не может быть пустой.');
+            } else {
+                return new ValidationResult(true, '');
+            }
+        }
+
+        sum = ''.concat(sum);
+
+        if (!sum.match(Constraints.FINANCIAL_STATISTICS_SUM_REGEX)) {
+            return new ValidationResult(false, 'Сумма должна быть выражена положительным или отрицательным числом. ' +
+                ' В качестве разделителя следует использовать точку.')
+        } else {
+            return new ValidationResult(true, '');
+        }
     }
 }
 

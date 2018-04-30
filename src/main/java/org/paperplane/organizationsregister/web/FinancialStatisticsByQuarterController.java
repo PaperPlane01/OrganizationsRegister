@@ -6,6 +6,8 @@ import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
+import org.paperplane.organizationsregister.domain.search.FinancialAccountSearchCriteria;
+import org.paperplane.organizationsregister.domain.search.FinancialStatisticsSearchCriteria;
 import org.paperplane.organizationsregister.service.FinancialStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -99,5 +101,11 @@ public class FinancialStatisticsByQuarterController {
             @RequestParam("bin")
             @EntityIdentifier(entityClass = Organization.class) long organizationBin) {
         return financialStatisticsService.findYearsOfFinancialStatisticsOfOrganization(organizationBin);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @ResponseBody
+    public List<FinancialStatisticsByQuarter> findByCriteria(@RequestBody FinancialStatisticsSearchCriteria searchCriteria) {
+        return  financialStatisticsService.findByCriteria(searchCriteria);
     }
 }

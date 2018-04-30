@@ -1,18 +1,14 @@
 import React from 'react';
-import OrganizationsTable from '../components/tables/OrganizationsTable.jsx';
-import OrganizationsSearchForm from '../components/forms/OrganizationsSearchForm.jsx';
+import {OrganizationsTable} from '../components/tables';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {clearOrganizationsSearchPageState, searchOrganizationsByCriteria} from "../actions/organizations-actions";
 import Typography from "material-ui/es/Typography/Typography";
+import {OrganizationsSearchForm} from '../components/forms';
 
 class OrganizationsSearchPage extends React.Component {
     constructor(props) {
         super(props);
-    }
-
-    componentWillUnmount() {
-
     }
 
     render() {
