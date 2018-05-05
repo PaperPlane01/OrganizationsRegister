@@ -6,6 +6,7 @@ import Table, {
     TableCell,
     TableRow,
 } from 'material-ui/Table';
+import sort from 'fast-sort';
 
 class OrganizationTypesTable extends React.Component {
     constructor(props) {
@@ -24,36 +25,21 @@ class OrganizationTypesTable extends React.Component {
     }
 
     handleSortRequest = (event, property) => {
-        handleSortRequest = (event, property) => {
-            const orderBy = property;
-            let order = 'desc';
+        const orderBy = property;
+        let order = 'desc';
 
-            if (this.state.orderBy === property && this.state.order === 'desc') {
-                order = 'asc';
-            }
+        if (this.state.orderBy === property && this.state.order === 'desc') {
+            order = 'asc';
+        }
 
-            let dataSource = this.state.dataSource;
+        let dataSource = this.state.dataSource;
 
-            if (order === 'desc') {
-                dataSource = this.state.dataSource.sort((a, b) => {
-                    if (typeof a[orderBy] === 'string') {
-                        return a[orderBy].localeCompare(b[orderBy]) * (-1);
-                    } else {
-                        return b[orderBy] < a[orderBy] ? -1 : 1
-                    }
-                })
-            } else {
-                dataSource = this.state.dataSource.sort((a, b) => {
-                    if (typeof a[orderBy] === 'string') {
-                        return a[orderBy].localeCompare(b[orderBy]);
-                    } else {
-                        return a[orderBy] < b[orderBy] ? -1 : 1
-                    }
-                })
-            }
+        dataSource =
+            order === 'desc'
+                ? sort(dataSource).desc(organizationType => organizationType[orderBy])
+                : sort(dataSource).asc(organizationType => organizationType[orderBy]);
 
-            this.setState({dataSource: dataSource});
-        };
+        this.setState({dataSource, order, orderBy});
     };
 
     render() {
@@ -64,6 +50,7 @@ class OrganizationTypesTable extends React.Component {
                 <TableHeaderWithSorting order={order}
                                         orderBy={orderBy}
                                         columnData={columnData}
+                                        onRequestSort={this.handleSortRequest}
                 />
                 <TableBody>
                     {dataSource.map(organizationType => (<TableRow key={organizationType.id}>

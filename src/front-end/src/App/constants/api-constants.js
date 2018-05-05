@@ -10,3 +10,4 @@ export const SEARCH = "/search";
 export const TOKENS = "/tokens";
 export const USER = "/user";
 export const BANK_ACCOUNTS = "/bank-accounts";
+export const FINANCIAL_ACCOUNTS = "/financial-accounts";

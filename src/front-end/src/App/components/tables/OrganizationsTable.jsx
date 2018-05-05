@@ -8,6 +8,7 @@ import Table, {
 import Paper from 'material-ui/Paper';
 import TableHeaderWithSorting from './TableHeaderWithSorting.jsx';
 import {Link} from "react-router-dom";
+import sort from 'fast-sort';
 
 class OrganizationsTable extends React.Component {
 
@@ -46,25 +47,32 @@ class OrganizationsTable extends React.Component {
 
         let dataSource = this.state.dataSource;
 
-        if (order === 'desc') {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]) * (-1);
-                } else {
-                    return b[orderBy] < a[orderBy] ? -1 : 1
-                }
-            })
-        } else {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]);
-                } else {
-                    return a[orderBy] < b[orderBy] ? -1 : 1
-                }
-            })
+        switch (orderBy) {
+            case 'primaryEconomicActivity':
+                order === 'desc'
+                    ? dataSource = sort(dataSource).desc(organization => organization.primaryEconomicActivity.name)
+                    : dataSource = sort(dataSource).asc(organization => organization.primaryEconomicActivity.name);
+                this.setState({dataSource, order, orderBy});
+                return;
+            case 'organizationType':
+                order === 'desc'
+                    ? dataSource = sort(dataSource).desc(organization => organization.organizationType.name)
+                    : dataSource = sort(dataSource).asc(organization => organization.organizationType.name);
+                this.setState({dataSource, order, orderBy});
+                return;
+            case 'taxesCommittee':
+                order === 'desc'
+                    ? dataSource = sort(dataSource).desc(organization => organization.taxesCommittee.name)
+                    : dataSource = sort(dataSource).asc(organization => organization.taxesCommittee.mame);
+                this.setState({dataSource, order, orderBy});
+                return;
+            default:
+                order === 'desc'
+                    ? dataSource = sort(dataSource).desc(organization => organization[orderBy])
+                    : dataSource = sort(dataSource).asc(organization => organization[orderBy]);
+                this.setState({dataSource, order, orderBy});
+                return;
         }
-
-        this.setState({ dataSource, order, orderBy });
     };
 
     render() {

@@ -42,11 +42,11 @@ public class BankRepositoryImpl implements BankCustomQueriesCaller {
         List<Predicate> predicates = new ArrayList<>();
 
         if (searchCriteria.getName() != null && !searchCriteria.getName().isEmpty()) {
-            predicates.add(criteriaBuilder.equal(root.get("name"), "%".concat(searchCriteria.getName()).concat("%")));
+            predicates.add(criteriaBuilder.like(root.get("name"), "%".concat(searchCriteria.getName()).concat("%")));
         }
 
         if (searchCriteria.getAddress() != null && !searchCriteria.getAddress().isEmpty()) {
-            predicates.add(criteriaBuilder.equal(root.get("address"), "%".concat(searchCriteria.getAddress()).concat("%")));
+            predicates.add(criteriaBuilder.like(root.get("address"), "%".concat(searchCriteria.getAddress()).concat("%")));
         }
 
         criteriaQuery.where(Iterables.toArray(predicates, Predicate.class));

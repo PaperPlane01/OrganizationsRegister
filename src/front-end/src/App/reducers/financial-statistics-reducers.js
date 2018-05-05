@@ -120,7 +120,7 @@ export const financialStatisticsSearchReducer = (state = {
 };
 
 export const attributeSelectReducer = (state = {
-    attributes: ['debit', 'credit'],
+    attributeOptions: [{label: 'Дебит', value: 'debit'}, {label: 'Кредит', value: 'credit'}],
     selectedOption: null
 }, action) => {
     switch (action.type) {
@@ -143,6 +143,23 @@ export const financialStatisticsValidationReducer = (state = {
             return {...state, minSumValidationResult: action.minSumValidationResult};
         case financialStatisticsConstants.FINANCIAL_STATISTICS_MAX_SUM_VALIDATED:
             return {...state, maxSumValidationResult: action.maxSumValidationResult};
+        default:
+            return state;
+    }
+};
+
+export const financialStatisticsAddingReducer = (state = {
+    pending: false,
+    error: null,
+    addedFinancialStatistics: null
+}, action) => {
+    switch (action.type) {
+        case financialStatisticsConstants.ADD_FINANCIAL_STATISTICS:
+            return {...state, pending: true, addedFinancialStatistics: null};
+        case financialStatisticsConstants.FINANCIAL_STATISTICS_ADDING_SUCCESS:
+            return {...state, pending: false, addedFinancialStatistics: action.addedFinancialStatistics, error: null};
+        case financialStatisticsConstants.FINANCIAL_STATISTICS_ADDING_FAILURE:
+            return {...state, pending: false, error: action.error};
         default:
             return state;
     }

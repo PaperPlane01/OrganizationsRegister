@@ -39,7 +39,7 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public Bank update(Bank bank) {
-        return bankRepository.update(bank);
+        return bankRepository.save(bank);
     }
 
     @Override

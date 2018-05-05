@@ -5,3 +5,6 @@ export {default as FinancialStatisticsSearchForm} from './FinancialStatisticsSea
 export {default as OrganizationAddingForm} from './OrganizationAddingForm.jsx';
 export {default as OrganizationTypesSearchForm} from './OrganizationTypesSearchForm.jsx';
 export {default as TaxesCommitteesSearchForm} from './TaxesCommitteesSearchForm.jsx';
+export {default as BankAddingForm} from './BankAddingForm.jsx';
+export {default as BankAccountsSearchForm} from './BankAccountsSearchForm.jsx';
+export {default as FinancialStatisticsAddingForm} from './FinancialStatisticsAddingForm.jsx';

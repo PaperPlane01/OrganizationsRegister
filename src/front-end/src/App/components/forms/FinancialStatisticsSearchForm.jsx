@@ -19,6 +19,8 @@ import Typography from "material-ui/es/Typography/Typography";
 import ValidationResult from "../../validation/ValidationResult";
 import {YearSelectionDialog} from '../dialogs';
 import Input from "material-ui/es/Input/Input";
+import {FinancialAccountSelect} from "../selects";
+import {fetchFinancialAccountsByName, handleFinancialAccountSelect} from "../../actions/financial-accounts-actions";
 
 const styles = theme => formStyle(theme);
 
@@ -52,16 +54,17 @@ class FinancialStatisticsSearchForm extends React.Component {
 
     handleSearchRequest = () => {
         const {selectedOrganizationOption, selectedQuarterOption, selectedAttributeOption,
-            selectedMinYear, selectedMaxYear} = this.props;
+            selectedMinYear, selectedMaxYear, selectedFinancialAccountOption} = this.props;
         const {minSum, maxSum} = this.state;
 
         this.assertAllFieldsAreValid().then(() => {
             const quarter = selectedQuarterOption == undefined ? null : selectedQuarterOption.value;
             const organization = selectedOrganizationOption == undefined ? null : selectedOrganizationOption.value;
             const attribute = selectedAttributeOption == undefined ? null : selectedAttributeOption.value;
+            const financialAccount = selectedFinancialAccountOption == undefined ? null : selectedFinancialAccountOption.value;
 
             this.props.onFormSubmitted({organization, minYear: selectedMinYear, maxYear: selectedMaxYear,
-                quarter, attribute, minSum, maxSum});
+                quarter, attribute, minSum, maxSum, financialAccount});
         });
 
     };
@@ -96,18 +99,27 @@ class FinancialStatisticsSearchForm extends React.Component {
         const {classes, fetchOrganizations, selectedOrganizationOption, handleQuarterSelect, quarters,
             selectedQuarterOption, fetchedOrganizations, minYear, maxYear, selectedMinYear, selectedMaxYear,
             handleMinYearSelect, handleMaxYearSelect, selectedAttributeOption, handleAttributeSelect, attributes,
-            minSumValidationResult, maxSumValidationResult} = this.props;
+            minSumValidationResult, maxSumValidationResult, financialAccounts, fetchFinancialAccounts,
+            selectedFinancialAccountOption, handleFinancialAccountSelect} = this.props;
         const {formValidationResult} = this.state;
 
         return <div>
-            <Typography variant="headline">Поиск финансовой статистики</Typography>
+            <Typography variant="headline">Поиск финансовых показателей</Typography>
 
-            <Typography variant="body1">Организация:</Typography>
+            <Typography variant="body1">Предприятие:</Typography>
             <OrganizationSelect onInput={(nameContains) => fetchOrganizations(nameContains)}
                                 organizations={fetchedOrganizations}
                                 onSelect={(option) => this.handleOrganizationSelect(option)}
                                 selectedOption={selectedOrganizationOption}
                                 classes={classes}
+            />
+
+            <Typography variant="body1">Бухгалтерский счёт:</Typography>
+            <FinancialAccountSelect financialAccounts={financialAccounts}
+                                    onInput={(nameContains) => fetchFinancialAccounts(nameContains)}
+                                    selectedOption={selectedFinancialAccountOption}
+                                    classes={classes}
+                                    onSelect={(option) => handleFinancialAccountSelect(option)}
             />
 
             <Typography variant="body1">Минимальный год:</Typography>
@@ -206,12 +218,19 @@ FinancialStatisticsSearchForm.propTypes = {
     minSumValidationResult: PropTypes.object,
     validateMaxSum: PropTypes.func,
     maxSumValidationResult: PropTypes.object,
-    attributes: PropTypes.array
+    attributes: PropTypes.array,
+    financialAccounts: PropTypes.array,
+    selectedFinancialAccountOption: PropTypes.object,
+    handleFinancialAccountSelect: PropTypes.func,
+    fetchFinancialAccounts: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
+    console.log(state);
+
     const financialStatisticsSearch = state.financialStatisticsSearch;
-    const {organizationSelect, quarterSelect, minYearDialog, maxYearDialog, attributeSelect, validation}
+    const {organizationSelect, quarterSelect, minYearDialog, maxYearDialog, attributeSelect, validation,
+        financialAccountSelect}
     = financialStatisticsSearch;
     return {
         fetchedOrganizations: organizationSelect.data.dataSource,
@@ -223,10 +242,12 @@ const mapStateToProps = (state) => {
         quarters: quarterSelect.data.dataSource,
         loadedFinancialStatistics: financialStatisticsSearch.financialStatistics.data.searchResults,
         selectedQuarterOption: quarterSelect.data.selectedOption,
-        selectedAttributeOption: attributeSelect.selectedAttributeOption,
-        attributes: attributeSelect.attributes,
+        selectedAttributeOption: attributeSelect.selectedOption,
+        attributes: attributeSelect.attributeOptions,
         minSumValidationResult: validation.minSumValidationResult,
-        maxSumValidationResult: validation.maxSumValidationResult
+        maxSumValidationResult: validation.maxSumValidationResult,
+        selectedFinancialAccountOption: financialAccountSelect.selectedOption,
+        financialAccounts: financialAccountSelect.dataSource,
     }
 };
 
@@ -244,7 +265,9 @@ const mapDispatchToProps = (dispatch) => {
          clearQuarterSelection: () => dispatch(clearQuarterSelection()),
          handleAttributeSelect: (option) => dispatch(handleAttributeSelect(option)),
          validateMinSum: (sum, acceptEmpty) => dispatch(validateFinancialStatisticsMinSum(sum, acceptEmpty)),
-         validateMaxSum: (sum, acceptEmpty) => dispatch(validateFinancialStatisticsMaxSum(sum, acceptEmpty))
+         validateMaxSum: (sum, acceptEmpty) => dispatch(validateFinancialStatisticsMaxSum(sum, acceptEmpty)),
+         fetchFinancialAccounts: (nameContains) => dispatch(fetchFinancialAccountsByName(nameContains)),
+         handleFinancialAccountSelect: (option) => dispatch(handleFinancialAccountSelect(option))
      }
  };
 

@@ -17,6 +17,8 @@ public class EntityNotFoundExceptionFactory {
                 .put(OrganizationType.class, new OrganizationTypeNotFoundException())
                 .put(Bank.class, new BankNotFoundException())
                 .put(TaxesCommittee.class, new TaxesCommitteeNotFoundException())
+                .put(FinancialAccount.class, new FinancialAccountNotFoundException())
+                .put(FinancialStatisticsByQuarter.class, new FinancialStatisticsNotFoundException())
                 .build();
     }
 

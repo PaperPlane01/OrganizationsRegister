@@ -5,6 +5,7 @@ import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
 import org.paperplane.organizationsregister.domain.search.OrganizationTypeSearchCriteria;
+import org.paperplane.organizationsregister.exception.OrganizationAlreadyExistsException;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.OrganizationNotFoundException;
 import org.paperplane.organizationsregister.service.OrganizationService;
 import org.paperplane.organizationsregister.data.*;
@@ -32,6 +33,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization save(Organization organization) {
+        if (organizationRepository.existsById(organization.getBin())) {
+            throw new OrganizationAlreadyExistsException();
+        }
+
         if (!organization.getPermittedEconomicActivities().contains(organization.getPrimaryEconomicActivity())) {
             organization.getPermittedEconomicActivities().add(organization.getPrimaryEconomicActivity());
         }

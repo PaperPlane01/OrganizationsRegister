@@ -43,6 +43,7 @@ class OrganizationTypesSearchForm extends React.Component {
 
     render() {
         return <div>
+            <Typography variant="headline">Поиск типов предприятий</Typography>
             <Typography variant='body1'>
                 Название типа предприятия
             </Typography>

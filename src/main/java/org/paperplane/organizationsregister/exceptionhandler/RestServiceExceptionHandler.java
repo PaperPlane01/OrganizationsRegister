@@ -88,6 +88,22 @@ public class RestServiceExceptionHandler extends ResponseEntityExceptionHandler 
                 HttpStatus.NOT_FOUND, webRequest);
     }
 
+    @ExceptionHandler(value = BankAccountAlreadyExistsException.class)
+    public ResponseEntity<Object> handleBankAccountAlreadyExistsException(RuntimeException exception, WebRequest webRequest) {
+        return handleExceptionInternal(exception,
+                createExceptionResponseMap(BankAccountAlreadyExistsException.class, "Bank account with such id already exists"),
+                new HttpHeaders(),
+                HttpStatus.CONFLICT, webRequest);
+    }
+
+    @ExceptionHandler(value = OrganizationAlreadyExistsException.class)
+    public ResponseEntity<Object> handleOrganizationAlreadyExistsException(RuntimeException exception, WebRequest webRequest) {
+        return handleExceptionInternal(exception,
+                createExceptionResponseMap(OrganizationAlreadyExistsException.class, "Organization with such BIN already exists"),
+                new HttpHeaders(),
+                HttpStatus.CONFLICT, webRequest);
+    }
+
     private Map<String, String> createExceptionResponseMap(Class exceptionClass, String message) {
         return ImmutableMap
                 .<String, String>builder()

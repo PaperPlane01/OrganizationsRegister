@@ -10,9 +10,10 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface FinancialStatisticsRepository extends JpaRepository<FinancialStatisticsByQuarter, Long>,
+public interface FinancialStatisticsRepository extends JpaRepository<FinancialStatisticsByQuarter, Integer>,
         FinancialStatisticsCustomQueriesCaller {
     FinancialStatisticsByQuarter save(FinancialStatisticsByQuarter financialStatisticsByQuarter);
+    FinancialStatisticsByQuarter findById(int id);
     List<FinancialStatisticsByQuarter> findAllByOrganizationAndYear(Organization organization, int year);
     List<FinancialStatisticsByQuarter> findAllDebit();
     FinancialStatisticsByQuarter findByOrganizationAndYearAndQuarter(Organization organization, int year, byte quarter);

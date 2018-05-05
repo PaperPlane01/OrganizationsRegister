@@ -30,7 +30,7 @@ export const taxesCommitteesSearchRecuder = (state = {
 }, action) => {
     switch (action.type) {
         case taxesCommitteesActionsConstants.TAXES_COMMITTEES_SEARCH_SUCCESS:
-            return {...state, searchResults: action.taxesCommittees}
+            return {...state, searchResults: action.taxesCommittees};
         default: return state;
     }
 };
@@ -44,6 +44,9 @@ export const taxesCommitteesValidationReducer = (state = {
             return {...state, nameValidationResult: action.nameValidationResult};
         case taxesCommitteesActionsConstants.TAXES_COMMITTEE_ADDRESS_VALIDATED:
             return {...state, addressValidationResult: action.addressValidationResult};
+        case taxesCommitteesActionsConstants.CLEAR_TAXES_COMMITTEE_VALIDATION_STATE:
+            return {...state, addressValidationResult: new ValidationResult(true, ''),
+                nameValidationResult: new ValidationResult(true, '')};
         default: return state;
     }
 };
@@ -57,6 +60,31 @@ export const taxesCommitteePageReducer = (state = {
             return {...state, taxesCommittee: action.taxesCommittee, error: null};
         case taxesCommitteesActionsConstants.TAXES_COMMITTEE_NOT_FOUND:
             return {...state, taxesCommittee: null, error: action.exception};
+        default:
+            return state;
+    }
+};
+
+export const taxesCommitteeUpdateReducer = (state = {
+    pending: false,
+    initialTaxesCommittee: null,
+    updatedTaxesCommittee: null,
+    updateSuccess: false,
+    error: null
+}, action) => {
+    switch (action.type) {
+        case taxesCommitteesActionsConstants.UPDATE_TAXES_COMMITTEE:
+            return {...state, pending: true};
+        case taxesCommitteesActionsConstants.TAXES_COMMITTEE_UPDATE_SUCCESS:
+            return {...state, pending: false, updatedTaxesCommittee: action.updatedTaxesCommittee, updateSuccess: true,
+                error: null};
+        case taxesCommitteesActionsConstants.TAXES_COMMITTEE_UPDATE_FAILURE:
+            return {...state, pending: false, updatedTaxesCommittee: null, updateSuccess: false, error: action.error};
+        case taxesCommitteesActionsConstants.TAXES_COMMITTEE_FETCHED:
+            return {...state, pending: false, initialTaxesCommittee: action.taxesCommittee, error: null};
+        case taxesCommitteesActionsConstants.CLEAR_TAXES_COMMITTEE_UPDATE_DIALOG:
+            return {...state, pending: false, initialTaxesCommittee: null, updatedTaxesCommittee: null, error: null,
+                updateSuccess: false};
         default:
             return state;
     }

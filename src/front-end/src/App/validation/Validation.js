@@ -3,6 +3,8 @@ import ValidationResult from './ValidationResult';
 const Constraints = {
     ORGANIZATION_BIN_LENGTH: 12,
     ORGANIZATION_BIN_REGEX: /^\d+$/,
+    BANK_ACCOUNT_ID_REGEX: /^\d+$/,
+    BANK_ACCOUNT_ID_LENGTH: 10,
     ORGANIZATION_FULL_NAME_MIN_LENGTH: 1,
     ORGANIZATION_FULL_NAME_MAX_LENGTH: 80,
     ORGANIZATION_SHORT_NAME_MIN_LENGTH: 1,
@@ -26,8 +28,9 @@ const Constraints = {
     TAXES_COMMITTEE_NAME_MAX_LENGTH: 80,
     TAXES_COMMITTEE_ADDRESS_MIN_LENGTH: 1,
     TAXES_COMMITTEE_ADDRESS_MAX_LENGTH: 80,
-    FINANCIAL_STATISTICS_SUM_REGEX: /^-?\d*\.{0,1}\d+$/
-
+    FINANCIAL_STATISTICS_SUM_REGEX: /^-?\d*\.{0,1}\d+$/,
+    FINANCIAL_ACCOUNT_NAME_MIN_LENGTH: 1,
+    FINANCIAL_ACCOUNT_NAME_MAX_LENGTH: 80
 };
 
 class Validation {
@@ -247,6 +250,44 @@ class Validation {
         } else {
             return new ValidationResult(true, '');
         }
+    };
+
+    static validateFinancialAccountName = (name, acceptEmpty) => {
+        if (name == undefined || name == '') {
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Имя бухгалтерского счёта не может быть пустым.')
+            } else {
+                return new ValidationResult(true, '');
+            }
+        }
+
+        if (name.length > Constraints.FINANCIAL_ACCOUNT_NAME_MAX_LENGTH) {
+            return new ValidationResult(false, 'Имя бухгалтерского счёта не может содержать более 80 символов.');
+        } else {
+            return new ValidationResult(true, '');
+        }
+    };
+
+    static validateBankAccountId = (id, acceptEmpty) => {
+        if (id == undefined || id === '') {
+            if (acceptEmpty === false) {
+                return new ValidationResult(false, 'Код банковского счёта не может быть пустым.');
+            } else {
+                return new ValidationResult(true, '');
+            }
+        }
+
+        id = ''.concat(id);
+
+        if (!id.match(Constraints.BANK_ACCOUNT_ID_REGEX)) {
+            return new ValidationResult(false, 'Код банковского счёта может состоять только из цифр.');
+        }
+
+        if (id.length !== Constraints.BANK_ACCOUNT_ID_LENGTH) {
+            return new ValidationResult(false, 'Код банковского счёта должен состоять из 10 символов.');
+        }
+
+        return new ValidationResult(true, '');
     }
 }
 

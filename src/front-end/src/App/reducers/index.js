@@ -6,7 +6,7 @@ import {
 import {
     taxesCommitteePageReducer,
     taxesCommitteesSearchRecuder, taxesCommitteesSelectReducer,
-    taxesCommitteesValidationReducer
+    taxesCommitteesValidationReducer, taxesCommitteeUpdateReducer
 } from "./taxes-committees-reducer";
 import {
     organizationTypeSelectReducer, organizationTypesSearchReducer,
@@ -19,12 +19,20 @@ import {
     organizationAddingPageReducer, organizationPageReducer, organizationSelectReducer, organizationUpdateReducer
 } from "./organizations-reducers";
 import {
-    attributeSelectReducer,
+    attributeSelectReducer, financialStatisticsAddingReducer,
     financialStatisticsSearchReducer, financialStatisticsValidationReducer, maxYearDialogReducer, minYearDialogReducer,
     quarterSelectReducer,
     yearDialogReducer
 } from "./financial-statistics-reducers";
-import {bankPageReducer, bankSelectReducer, banksSearchReducer, bankValidationReducer} from "./banks-reducers";
+import {
+    bankAddingReducer, bankPageReducer, bankSelectReducer, banksSearchReducer, bankUpdateReducer,
+    bankValidationReducer
+} from "./banks-reducers";
+import {
+    bankAccountSavingReducer, bankAccountsSearchReducer,
+    bankAccountValidationReducer
+} from "./bank-accounts-reducers";
+import {financialAccountSelectReducer} from "./financial-accounts-reducers";
 
 export default combineReducers({
     organizationsSearch: combineReducers({
@@ -57,14 +65,26 @@ export default combineReducers({
        minYearDialog: minYearDialogReducer,
        maxYearDialog: maxYearDialogReducer,
        quarterSelect: quarterSelectReducer,
+       financialAccountSelect: financialAccountSelectReducer,
        validation: financialStatisticsValidationReducer
+    }),
+    financialStatisticsAdding: combineReducers({
+        organizationSelect: organizationSelectReducer,
+        attributeSelect: attributeSelectReducer,
+        yearDialog: yearDialogReducer,
+        quarterSelect: quarterSelectReducer,
+        validation: financialStatisticsValidationReducer,
+        financialAccountSelect: financialAccountSelectReducer,
+        financialStatisticsAddingInfo: financialStatisticsAddingReducer
     }),
     organizationPage: combineReducers({
        organizationData: organizationPageReducer,
     }),
     bankAccountsSearchPage: combineReducers({
        organizationSelect: organizationSelectReducer,
-       bankSelect: bankSelectReducer 
+       bankSelect: bankSelectReducer,
+       validation: bankAccountValidationReducer,
+       bankAccountsSearch: bankAccountsSearchReducer
     }),
     taxesCommitteesSearchPage: combineReducers({
        taxesCommitteesSearch: taxesCommitteesSearchRecuder,
@@ -75,6 +95,18 @@ export default combineReducers({
         banksSearch: banksSearchReducer,
         validation: bankValidationReducer
     }),
+    bankAddingPage: combineReducers({
+        bankAddingInfo: bankAddingReducer,
+        validation: bankValidationReducer
+    }),
+    bankUpdate: combineReducers({
+        bankUpdateInfo: bankUpdateReducer,
+        validation: bankValidationReducer
+    }),
+    taxesCommitteeUpdate: combineReducers({
+        taxesCommitteeUpdateInfo: taxesCommitteeUpdateReducer,
+        validation: taxesCommitteesValidationReducer
+    }),
     economicActivitiesSearchPage: combineReducers({
         economicActivitiesSearch: economicActivitiesSearchReducer,
         validation: economicActivityValidationReducer
@@ -82,6 +114,12 @@ export default combineReducers({
     organizationTypesSearchPage: combineReducers({
         organizationTypesSearch: organizationTypesSearchReducer,
         validation: organizationTypeValidationReducer
+    }),
+    bankAccountSavingPage: combineReducers({
+        bankAccountSavingInfo: bankAccountSavingReducer,
+        organizationSelect: organizationSelectReducer,
+        bankSelect: bankSelectReducer,
+        validation: bankAccountValidationReducer
     }),
     bankPage: bankPageReducer,
     routing: routerReducer,

@@ -33,16 +33,14 @@ export const banksSearchReducer = (state = {
 };
 
 export const bankValidationReducer = (state = {
-    validationResults: {
-        nameValidationResult: new ValidationResult(true, ''),
-        addressValidationResult: new ValidationResult(true, '')
-    }
+    nameValidationResult: new ValidationResult(true, ''),
+    addressValidationResult: new ValidationResult(true, '')
 }, action) => {
     switch (action.type) {
         case banksActionsConstants.BANK_NAME_VALIDATED:
-            return {...state, validationResults: {...state.validationResults, nameValidationResult: action.nameValidationResult}};
+            return {...state, nameValidationResult: action.nameValidationResult};
         case banksActionsConstants.BANK_ADDRESS_VALIDATED:
-            return {...state, validationResults: {...state.validationResults, addressValidationResult: action.addressValidationResult}};
+            return {...state, addressValidationResult: action.addressValidationResult};
         default:
             return state;
     }
@@ -60,6 +58,48 @@ export const bankPageReducer = (state = {
             return {...state, pending: false, error: null, bank: action.bank};
         case banksActionsConstants.BANK_NOT_FOUND:
             return {...state, pending: false, error: action.error};
+        default:
+            return state;
+    }
+};
+
+export const bankAddingReducer = (state = {
+    addedBank: null,
+    error: null,
+    pending: false
+}, action) => {
+    switch (action.type) {
+        case banksActionsConstants.ADD_BANK:
+            return {...state, pending: true};
+        case banksActionsConstants.BANK_ADDING_SUCCESS:
+            return {...state, pending: false, error: null, addedBank: action.addedBank};
+        case banksActionsConstants.BANK_ADDING_FAILURE:
+            return {...state, pending: false, error: action.error, addedBank: null};
+        case banksActionsConstants.CLEAR_BANK_ADDING_PAGE_STATE:
+            return {...state, pending: false, error: null, addedBank: null};
+        default:
+            return state;
+    }
+};
+
+export const bankUpdateReducer = (state = {
+    initialBank: null,
+    updatedBank: null,
+    updateSuccess: false,
+    error: null,
+    pending: false
+}, action) => {
+    switch (action.type) {
+        case banksActionsConstants.BANK_FETCHED:
+            return {...state, initialBank: action.bank, updatedBank: null,  error: null, pending: false};
+        case banksActionsConstants.UPDATE_BANK:
+            return {...state, pending: true};
+        case banksActionsConstants.BANK_UPDATE_SUCCESS:
+            return {...state, updatedBank: action.updatedBank, error: null, pending: false, updateSuccess: true};
+        case banksActionsConstants.BANK_UPDATE_FAILURE:
+            return {...state, updatedBank: null, error: action.error, pending: false, updateSuccess: false};
+        case banksActionsConstants.CLEAR_BANK_UPDATE_DIALOG_STATE:
+            return {...state, updatedBank: null, error: null, initialBank: null, pending: false, updateSuccess: false};
         default:
             return state;
     }

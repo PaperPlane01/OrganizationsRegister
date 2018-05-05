@@ -161,6 +161,18 @@ export const addTaxesCommittee = (taxesCommittee) => {
     }
 };
 
+export const clearTaxesCommitteeValidationState = () => {
+    return {
+        type: taxesCommitteesActionsConstants.CLEAR_TAXES_COMMITTEE_VALIDATION_STATE
+    }
+};
+
+export const clearTaxesCommitteeUpdateDialog = () => {
+    return {
+        type: taxesCommitteesActionsConstants.CLEAR_TAXES_COMMITTEE_UPDATE_DIALOG
+    }
+};
+
 export const taxesCommitteeUpdated = (updatedTaxesCommittee) => {
     return {
         type: taxesCommitteesActionsConstants.TAXES_COMMITTEE_UPDATE_SUCCESS,

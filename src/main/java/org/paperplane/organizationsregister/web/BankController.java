@@ -37,10 +37,9 @@ public class BankController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public ResponseEntity<Object> save(@RequestBody Bank bank,
+    public Bank save(@RequestBody Bank bank,
                                        @RequestHeader(value = "token", required = false) String tokenValue) {
-        bankService.save(bank);
-        return ResponseEntity.ok().build();
+        return bankService.save(bank);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/organizations")
@@ -60,6 +59,7 @@ public class BankController {
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"nameContains"})
+    @ResponseBody
     public List<Bank> findBanksWithNameContains(@RequestParam("nameContains") String nameContains) {
         return bankService.findBanksWithNameContains(nameContains);
     }
@@ -68,5 +68,14 @@ public class BankController {
     @ResponseBody
     public List<Bank> findBanksByCriteria(@RequestBody BankSearchCriteria searchCriteria) {
         return bankService.findBanksByCriteria(searchCriteria);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @RequiresToken
+    @RequiresRole(anyOf = {"admin"})
+    @ResponseBody
+    public Bank updateBank(@RequestBody Bank bank,
+                           @RequestHeader(value = "token", required = false) String tokenValue) {
+        return bankService.update(bank);
     }
 }

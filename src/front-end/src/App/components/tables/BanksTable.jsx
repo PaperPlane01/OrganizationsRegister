@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TableHeaderWithSorting from './TableHeaderWithSorting.jsx';
+import {BankUpdateDialog} from "../dialogs/";
 import Table, {
     TableBody,
     TableCell,
     TableRow,
 } from 'material-ui/Table';
 import {Link} from "react-router-dom";
+import sort from 'fast-sort';
 
 class BanksTable extends React.Component {
     constructor(props) {
@@ -36,29 +38,28 @@ class BanksTable extends React.Component {
 
         let dataSource = this.state.dataSource;
 
-        if (order === 'desc') {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]) * (-1);
-                } else {
-                    return b[orderBy] < a[orderBy] ? -1 : 1
-                }
-            })
-        } else {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]);
-                } else {
-                    return a[orderBy] < b[orderBy] ? -1 : 1
-                }
-            })
-        }
+        dataSource =
+            order === 'desc'
+                ? sort(dataSource).desc(bank => bank[orderBy])
+                : sort(dataSource).asc(bank => bank[orderBy]);
 
-        this.setState({dataSource: dataSource});
+        this.setState({dataSource, order, orderBy});
+    };
+
+    replaceBank = (updatedBank) => {
+        console.log('replacing bank!');
+        console.log(updatedBank);
+        let dataSource = this.state.dataSource
+            .map(bank => (bank.id === updatedBank.id
+                ? updatedBank
+                : bank));
+
+        this.setState({dataSource});
     };
 
     render() {
         const {dataSource, order, orderBy, columnData} = this.state;
+        const {displayUpdateDialog} = this.props;
 
         return <div>
             <Table>
@@ -76,6 +77,12 @@ class BanksTable extends React.Component {
                                 </Link>
                             </TableCell>
                             <TableCell>{bank.address}</TableCell>
+                            {displayUpdateDialog
+                                ? <BankUpdateDialog bankID={bank.id}
+                                                    onUpdate={(bank) => this.replaceBank(bank)}
+                                                    clearStateAfterClosing={true}
+                                />
+                                : '' }
                         </TableRow>
                     })}
                 </TableBody>
@@ -85,7 +92,8 @@ class BanksTable extends React.Component {
 }
 
 BanksTable.propTypes = {
-    dataSource: PropTypes.array
+    dataSource: PropTypes.array,
+    displayUpdateDialog: PropTypes.bool
 };
 
 export default BanksTable;

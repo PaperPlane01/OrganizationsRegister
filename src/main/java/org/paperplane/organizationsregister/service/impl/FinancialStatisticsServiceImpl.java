@@ -28,6 +28,16 @@ public class FinancialStatisticsServiceImpl implements FinancialStatisticsServic
     }
 
     @Override
+    public FinancialStatisticsByQuarter update(FinancialStatisticsByQuarter financialStatisticsByQuarter) {
+        return financialStatisticsRepository.save(financialStatisticsByQuarter);
+    }
+
+    @Override
+    public FinancialStatisticsByQuarter findById(int id) {
+        return financialStatisticsRepository.findById(id);
+    }
+
+    @Override
     public List<FinancialStatisticsByQuarter> findAllByOrganizationAndYear(Organization organization, int year) {
         return financialStatisticsRepository.findAllByOrganizationAndYear(organization, year);
     }

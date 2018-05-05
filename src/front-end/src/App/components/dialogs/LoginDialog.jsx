@@ -69,22 +69,22 @@ class LoginDialog extends React.Component {
         return <div>
             <Button variant={'raised'}
                     color={'primary'}
-                    onClick={this.handleClickOpen}>
+                    onClick={() => this.handleClickOpen()}>
                 Войти
             </Button>
             <Dialog open={this.state.opened} onClose={this.handleClickClose}>
                 <DialogTitle>Войти</DialogTitle>
                 <DialogContent>
-                    <TextField id={'usernameInput'}
-                           label={'Имя пользователя'}
-                           fullWidth={true}
-                           onChange={(event) => this.handleUsernameChange(event.target.value)}
+                    <TextField label={'Имя пользователя'}
+                               margin="normal"
+                               fullWidth={true}
+                               onChange={(event) => this.handleUsernameChange(event.target.value)}
                     />
-                    <TextField id={'passwordInput'}
-                           label={'Пароль'}
-                           fullWidth={true}
-                           onChange={(event) => this.handlePasswordChange(event.target.value)}
-                           type={'password'}
+                    <TextField label={'Пароль'}
+                               fullWidth={true}
+                               margin="normal"
+                               onChange={(event) => this.handlePasswordChange(event.target.value)}
+                               type={'password'}
                     />
                     {errorMessage !== ''
                         ? <Typography variant="body1" style={errorLabelStyle}>{errorMessage}</Typography>
@@ -92,8 +92,8 @@ class LoginDialog extends React.Component {
                     }
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleClickClose} variant={'raised'} color={'primary'}>Отмена</Button>
-                    <Button onClick={this.handleLoginRequest} variant={'raised'} color={'primary'}>Войти</Button>
+                    <Button onClick={() => this.handleClickClose()} variant={'raised'} color={'primary'}>Отмена</Button>
+                    <Button onClick={() => this.handleLoginRequest()} variant={'raised'} color={'primary'}>Войти</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -103,7 +103,7 @@ class LoginDialog extends React.Component {
 LoginDialog.propTypes = {
     doLogin: PropTypes.func,
     loginError: PropTypes.object,
-    opened: PropTypes.bool
+    opened: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

@@ -7,8 +7,7 @@ import ValidationResult from '../../validation/ValidationResult';
 import Button from 'material-ui/Button';
 import { DatePicker } from 'material-ui-pickers';
 import {
-    fetchEconomicActivitiesByName,
-    handleEconomicActivitiesSelect,
+    fetchEconomicActivitiesByName, handlePermittedEconomicActivitiesSelect,
 } from "../../actions/economic-activites-actions";
 import {
     fetchTaxesCommitteesByName, handleTaxesCommitteeSelect,
@@ -341,7 +340,7 @@ const mapDispatchToProps = (dispatch) => {
 
     return {
         fetchEconomicActivities: (nameContains) => dispatch(fetchEconomicActivitiesByName(nameContains)),
-        handleEconomicActivitiesSelect: (options) => dispatch(handleEconomicActivitiesSelect(options)),
+        handleEconomicActivitiesSelect: (options) => dispatch(handlePermittedEconomicActivitiesSelect(options)),
         fetchTaxesCommittees: (nameContains) => dispatch(fetchTaxesCommitteesByName(nameContains)),
         handleTaxesCommitteeSelect: (option) => dispatch(handleTaxesCommitteeSelect(option)),
         fetchOrganizationsTypes: () => dispatch(fetchOrganizationTypes()),

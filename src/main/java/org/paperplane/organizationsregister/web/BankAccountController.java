@@ -2,17 +2,18 @@ package org.paperplane.organizationsregister.web;
 
 import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
+import org.paperplane.organizationsregister.annotation.RequiresRole;
+import org.paperplane.organizationsregister.annotation.RequiresToken;
 import org.paperplane.organizationsregister.domain.Bank;
 import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
+import org.paperplane.organizationsregister.domain.search.BankAccountSearchCriteria;
 import org.paperplane.organizationsregister.service.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.HeaderParam;
 import java.util.List;
 
 @Controller
@@ -43,5 +44,29 @@ public class BankAccountController {
             @RequestParam("organizationBIN") @EntityIdentifier(entityClass = Organization.class) long organizationBIN,
             @RequestParam("bankID") @EntityIdentifier(entityClass = Bank.class) int bankID) {
         return bankAccountService.findByOrganizationAndBank(new Organization(organizationBIN), new Bank(bankID));
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @RequiresToken
+    @RequiresRole(anyOf = {"admin"})
+    @ResponseBody
+    public BankAccount save(@RequestBody BankAccount bankAccount,
+                            @RequestHeader(value = "token", required = false) String tokenValue) {
+        return bankAccountService.save(bankAccount);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @RequiresToken
+    @RequiresRole(anyOf = {"admin"})
+    @ResponseBody
+    public BankAccount update(@RequestBody BankAccount bankAccount,
+                              @RequestHeader(value = "token", required = false) String tokenValue) {
+        return bankAccountService.update(bankAccount);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    @ResponseBody
+    public List<BankAccount> findByCriteria(@RequestBody BankAccountSearchCriteria searchCriteria) {
+        return bankAccountService.findByCriteria(searchCriteria);
     }
 }

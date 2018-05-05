@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface FinancialStatisticsService {
     FinancialStatisticsByQuarter save(FinancialStatisticsByQuarter financialStatisticsByQuarter);
+    FinancialStatisticsByQuarter update(FinancialStatisticsByQuarter financialStatisticsByQuarter);
+    FinancialStatisticsByQuarter findById(int id);
     List<FinancialStatisticsByQuarter> findAllByOrganizationAndYear(Organization organization, int year);
     List<FinancialStatisticsByQuarter> findAllDebit();
     FinancialStatisticsByQuarter findByOrganizationAndYearAndQuarter(Organization organization, int year, byte quarter);

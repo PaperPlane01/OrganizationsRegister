@@ -9,3 +9,6 @@ export {default as OrganizationTypesSearchPage} from './OrganizationTypesSearchP
 export {default as PageNotFoundErrorPage} from './PageNotFoundErrorPage.jsx';
 export {default as TaxesCommitteePage} from './TaxesCommitteePage.jsx';
 export {default as TaxesCommitteesSearchPage} from './TaxesCommitteesSearchPage.jsx';
+export {default as BankAddingPage} from './BankAddingPage.jsx';
+export {default as BankAccountsSearchPage} from './BankAccountsSearchPage.jsx';
+export {default as FinancialStatisticsAddingPage} from './FinancialStatisticsAddingPage.jsx';

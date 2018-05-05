@@ -18,11 +18,12 @@ class AttributeSelect extends React.Component {
                           onChange: onSelect,
                           simpleValue: false,
                           options: attributes != undefined
-                              ? attributes.map(attribute => ({label: attribute, value: attribute}))
+                              ? attributes.map(attribute => ({label: attribute.label, value: attribute.value}))
                               : [],
                           placeholder: 'Выберите признак',
                           value: selectedOption
-                      }}/>
+                      }}
+        />
     }
 };
 

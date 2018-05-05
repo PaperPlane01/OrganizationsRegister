@@ -21,13 +21,13 @@ class BanksSearchForm extends React.Component {
 
     handleName = (name) => {
         this.setState({name: name}, () => {
-            this.props.validateAddress(this.state.name, false)
+            this.props.validateAddress(this.state.name, true)
         })
     };
 
     handleAddress = (address) => {
         this.setState({address: address}, () => {
-            this.props.validateAddress(this.state.address, false)
+            this.props.validateAddress(this.state.address, true)
         })
     };
 
@@ -40,6 +40,9 @@ class BanksSearchForm extends React.Component {
     };
 
     async assertAllFieldsAreValid() {
+        this.props.validateName(this.state.name, true);
+        this.props.validateAddress(this.state.address, true);
+
         if (!this.props.nameValidationResult.isSuccessful() || !this.props.addressValidationResult.isSuccessful()) {
             this.setState({formValidationResult: new ValidationResult(false, 'Некоторые поля заполнены неверно.')})
         } else {
@@ -50,6 +53,7 @@ class BanksSearchForm extends React.Component {
     render() {
         const {nameValidationResult, addressValidationResult} = this.props;
         return <div>
+            <Typography variant="headline">Поиск банков</Typography>
             <Typography variant="body1">Название банка:</Typography>
             {!nameValidationResult.isSuccessful()
                 ? <Typography variant="body1" style={errorLabelStyle}>
@@ -95,11 +99,11 @@ BanksSearchForm.propTypes = {
 
 const mapStateToProps = (state) => {
     const {banksSearchPage} = state;
-    const {validationResults} = banksSearchPage.validation;
+    const {validation} = banksSearchPage;
 
     return {
-        nameValidationResult: validationResults.nameValidationResult,
-        addressValidationResult: validationResults.addressValidationResult
+        nameValidationResult: validation.nameValidationResult,
+        addressValidationResult: validation.addressValidationResult
     }
 };
 

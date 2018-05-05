@@ -5,6 +5,8 @@ import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from "material-ui/es/Typography/Typography";
 import {fetchTaxesCommitteeById} from "../actions/taxes-committees-actions";
 import {exceptions} from "../constants/exception-constants";
+import {fetchCurrentUser} from "../actions/user-actions";
+import {TaxesCommitteeUpdateDialog} from "../components/dialogs";
 
 class TaxesCommitteePage extends React.Component {
     constructor(props) {
@@ -16,7 +18,18 @@ class TaxesCommitteePage extends React.Component {
     }
 
     render() {
-        const {taxesCommittee, error} = this.props;
+        const {taxesCommittee, error, currentUser, userLoggedIn} = this.props;
+
+        let displayTaxesCommitteeUpdateDialog = false;
+
+        if (userLoggedIn) {
+            if (currentUser != undefined) {
+                if (currentUser.roles.map(role => (role.name)).includes('admin')) {
+                    console.log('admin!');
+                    displayTaxesCommitteeUpdateDialog = true;
+                }
+            }
+        }
 
         if (error != undefined) {
             if (error === exceptions.TAXES_COMMITTEE_NOT_FOUND) {
@@ -36,6 +49,11 @@ class TaxesCommitteePage extends React.Component {
                 <CardContent>
                     <Typography variant="body1">Название: {taxesCommittee.name}</Typography>
                     <Typography variant="body1">Адрес: {taxesCommittee.address}</Typography>
+                    {displayTaxesCommitteeUpdateDialog === true
+                        ? <TaxesCommitteeUpdateDialog onUpdate={(taxesCommittee) => this.props.fetchTaxesCommittee(taxesCommittee.id)}
+                                            taxesCommitteeId={taxesCommittee.id}
+                        />
+                        : ''}
                 </CardContent>
             </Card>
         </div>
@@ -45,21 +63,27 @@ class TaxesCommitteePage extends React.Component {
 TaxesCommitteePage.propTypes = {
     fetchTaxesCommittee: PropTypes.func,
     taxesCommittee: PropTypes.object,
-    error: PropTypes.string
+    error: PropTypes.string,
+    fetchCurrentUser: PropTypes.func,
+    currentUser: PropTypes.object,
+    userLoggedIn: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
-    const {taxesCommitteePage} = state;
+    const {taxesCommitteePage, userData} = state;
 
     return {
         taxesCommittee: taxesCommitteePage.taxesCommittee,
-        error: taxesCommitteePage.error
+        error: taxesCommitteePage.error,
+        currentUser: userData.currentUser,
+        userLoggedIn: userData.loggedIn
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchTaxesCommittee: (id) => dispatch(fetchTaxesCommitteeById(id))
+        fetchTaxesCommittee: (id) => dispatch(fetchTaxesCommitteeById(id)),
+        fetchCurrentUser: () => dispatch(fetchCurrentUser())
     }
 };
 

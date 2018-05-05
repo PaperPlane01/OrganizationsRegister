@@ -20,8 +20,8 @@ class OrganizationSelect extends React.Component {
             inputProps={{
                 classes,
                 onChange: (option) => onSelect(option),
-                placeholder: 'Название организации',
-                label: 'Название организации',
+                placeholder: 'Название предприятия',
+                label: 'Название предприятия',
                 simpleValue: false,
                 value: selectedOption,
                 options: organizations != undefined

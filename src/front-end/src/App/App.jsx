@@ -8,8 +8,6 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
-import LeftDrawer from './components/LeftDrawer.jsx'
-import withTheme from "material-ui/es/styles/withTheme";
 import withStyles from "material-ui/es/styles/withStyles";
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
@@ -18,7 +16,13 @@ import {withRouter} from 'react-router-dom';
 import TaxesCommitteeSearchPage from './pages/TaxesCommitteesSearchPage.jsx';
 import {BankPage, BanksSearchPage, EconomicActivitiesSearchPage, FinancialStatisticsSearchPage, OrganizationPage,
     OrganizationAddingPage, OrganizationsSearchPage, OrganizationTypesSearchPage,
-    PageNotFoundErrorPage, TaxesCommitteePage, TaxesCommitteesSearchPage} from './pages';
+    PageNotFoundErrorPage, TaxesCommitteePage, TaxesCommitteesSearchPage, BankAddingPage,
+    BankAccountsSearchPage, FinancialStatisticsAddingPage} from './pages';
+import withWidth from "material-ui/es/utils/withWidth";
+import compose from 'recompose/compose';
+import {Hidden} from "material-ui/es/index";
+import Drawer from "material-ui/es/Drawer/Drawer";
+import DrawerItems from "./components/DrawerItems.jsx";
 
 const theme = createMuiTheme({
     palette: {
@@ -26,47 +30,51 @@ const theme = createMuiTheme({
     },
 });
 
-
 const drawerWidth = 240;
 
 const styles = theme => ({
     root: {
         flexGrow: 1,
+        height: "100%",
         zIndex: 1,
-        overflow: 'auto',
         position: 'relative',
-        width: '100%',
-        height: '100%',
-        marginLeft: drawerWidth,
-        [theme.breakpoints.down('sm')]: {
-           marginLeft: 0,
+        display: 'flex',
+        [theme.breakpoints.down('md')]: {
+            marginLeft: 0,
         },
-        [theme.breakpoints.up('md')]: {
-            width: `calc(100% - ${drawerWidth}px) !important`
-        }
+        [theme.breakpoints.up('lg')]: {
+            marginLeft: drawerWidth
+        },
+        overflowX: 'hidden'
     },
     appBar: {
-        position: 'relative',
-        [theme.breakpoints.down('sm')]: {
-            marginLeft:0,
-            position: 'fixed'
+        position: 'fixed',
+        marginLeft: drawerWidth,
+        [theme.breakpoints.up('lg')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
         },
     },
     navIconHide: {
-        [theme.breakpoints.up('md')]: {
-            display: 'none !important',
+        [theme.breakpoints.up('lg')]: {
+            display: 'none',
         },
     },
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
         width: drawerWidth,
+        [theme.breakpoints.up('lg')]: {
+            position: 'fixed',
+        },
     },
     content: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
+        marginTop: 35,
+        overflowX: 'auto',
     },
 });
+
 
 class App extends React.Component {
     constructor(props) {
@@ -81,18 +89,25 @@ class App extends React.Component {
         this.setState({drawerIsOpened: !this.state.drawerIsOpened});
     };
 
+    closeDrawer = () => {
+        this.setState({drawerIsOpened: false});
+    };
+
+    openDrawer = () => {
+        this.setState({drawerIsOpened: true});
+    };
+
     render() {
         let classes = this.props.classes;
         return <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ruLocale}>
-            <div className={classes.root}>
                 <MuiThemeProvider theme={theme}>
-                    <div>
+                    <div className={classes.root}>
                         <AppBar className={classes.appBar}>
                             <Toolbar>
                                 <IconButton
                                     color="inherit"
                                     aria-label="open drawer"
-                                    onClick={this.handleDrawerToggle}
+                                    onClick={() => this.openDrawer()}
                                     className={classes.navIconHide}
                                 >
                                     <MenuIcon />
@@ -102,17 +117,38 @@ class App extends React.Component {
                                 </Typography>
                             </Toolbar>
                         </AppBar>
-                        <LeftDrawer opened={this.state.drawerIsOpened}
-                                    theme={theme}
-                                    onClose={this.handleDrawerToggle}
-                                    paper={classes.drawerPaper}/>
+                        <Hidden lgUp>
+                            <Drawer
+                                variant="temporary"
+                                anchor={'left'}
+                                open={this.state.drawerIsOpened}
+                                onClose={() => this.closeDrawer()}
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                                ModalProps={{
+                                    disableEnforceFocus:true
+                                }}
+                            >
+                                <DrawerItems/>
+                            </Drawer>
+                        </Hidden>
+                        <Hidden mdDown>
+                            <Drawer
+                                variant="permanent"
+                                open
+                                classes={{
+                                    paper: classes.drawerPaper,
+                                }}
+                            >
+                                <DrawerItems/>
+                            </Drawer>
+                        </Hidden>
                         <main className={classes.content}>
-                            <div className={classes.toolbar}/>
                             <Content/>
                         </main>
                     </div>
                 </MuiThemeProvider>
-            </div>
         </MuiPickersUtilsProvider>
     }
 }
@@ -120,8 +156,11 @@ class App extends React.Component {
 class Content extends React.Component {
     render() { return <Switch>
         <Route exact path="/organizations-register/" component={OrganizationsSearchPage}/>
-        <Route path="/organizations-register/financial-statistics/" component={FinancialStatisticsSearchPage}/>
+        <Route exact path='/organizations-register/financial-statistics/add-financial-statistics'
+               component={FinancialStatisticsAddingPage}/>
+        <Route exact path="/organizations-register/financial-statistics/" component={FinancialStatisticsSearchPage}/>
         <Route exact path="/organizations-register/banks" component={BanksSearchPage}/>
+        <Route exact path='/organizations-register/banks/add-bank' component={BankAddingPage}/>
         <Route path="/organizations-register/banks/:id" component={BankPage}/>
         <Route exact path="/organizations-register/taxes-committees" component={TaxesCommitteeSearchPage}/>
         <Route path="/organizations-register/taxes-committees/:id" component={TaxesCommitteePage}/>
@@ -130,6 +169,7 @@ class Content extends React.Component {
         <Route path="/organizations-register/organizations/:bin" component={OrganizationPage}/>
         <Route exact path='/organizations-register/organization-types' component={OrganizationTypesSearchPage}/>
         <Route exact path='/organizations-register/taxes-committees' component={TaxesCommitteesSearchPage}/>
+        <Route exact path='/organizations-register/bank-accounts' component={BankAccountsSearchPage}/>
         <Route component={PageNotFoundErrorPage}/>
     </Switch>
     }
@@ -137,4 +177,4 @@ class Content extends React.Component {
 
 Content = withRouter(Content);
 
-export default (withStyles(styles, withTheme({theme})))(App)
+export default compose(withStyles(styles, {withTheme: true}), withWidth())(App);

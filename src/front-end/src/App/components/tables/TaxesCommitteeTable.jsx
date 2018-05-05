@@ -7,6 +7,7 @@ import Table, {
     TableRow,
 } from 'material-ui/Table';
 import {Link} from "react-router-dom";
+import sort from 'fast-sort';
 
 class TaxesCommitteeTable extends React.Component {
     constructor(props) {
@@ -36,25 +37,12 @@ class TaxesCommitteeTable extends React.Component {
 
         let dataSource = this.state.dataSource;
 
-        if (order === 'desc') {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]) * (-1);
-                } else {
-                    return b[orderBy] < a[orderBy] ? -1 : 1
-                }
-            })
-        } else {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]);
-                } else {
-                    return a[orderBy] < b[orderBy] ? -1 : 1
-                }
-            })
-        }
+        dataSource =
+            order === 'desc'
+                ? sort(dataSource).desc(taxesCommittee => taxesCommittee[orderBy])
+                : sort(dataSource).asc(taxesCommittee => taxesCommittee[orderBy]);
 
-        this.setState({dataSource: dataSource});
+        this.setState({dataSource, order, orderBy});
     };
 
     render() {

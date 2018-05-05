@@ -4,21 +4,28 @@ var path = require('path');
 var BUILD_DIR = path.resolve(__dirname, '../main/webapp/resources/js');
 var APP_DIR = path.resolve(__dirname, 'src/App');
 
+process.env.NODE_ENV = 'development';
+
 var config = {
     entry: ['babel-polyfill', APP_DIR + '/index.jsx'],
     output: {
         path: BUILD_DIR,
         filename: 'bundle.js'
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"development"',
+        })
+    ],
     module : {
         rules : [
             {
                 test : /\.jsx?/,
                 include : APP_DIR,
+                exclude: /node_modules/,
                 loader : 'babel-loader'
             }
         ]
     }
 };
-
 module.exports = config;

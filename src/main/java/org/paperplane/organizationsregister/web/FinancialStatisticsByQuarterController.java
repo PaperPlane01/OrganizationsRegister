@@ -1,5 +1,6 @@
 package org.paperplane.organizationsregister.web;
 
+import org.jboss.logging.Param;
 import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
@@ -88,10 +89,9 @@ public class FinancialStatisticsByQuarterController {
     @RequestMapping(method = RequestMethod.POST, headers = {"token"})
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
-    public ResponseEntity save(@RequestBody FinancialStatisticsByQuarter financialStatisticsByQuarter,
+    public FinancialStatisticsByQuarter save(@RequestBody FinancialStatisticsByQuarter financialStatisticsByQuarter,
                                @RequestHeader(value = "token", required = false) String tokenValue) {
-        financialStatisticsService.save(financialStatisticsByQuarter);
-        return ResponseEntity.ok().build();
+        return financialStatisticsService.save(financialStatisticsByQuarter);
     }
 
     @AssertEntityExists
@@ -107,5 +107,12 @@ public class FinancialStatisticsByQuarterController {
     @ResponseBody
     public List<FinancialStatisticsByQuarter> findByCriteria(@RequestBody FinancialStatisticsSearchCriteria searchCriteria) {
         return  financialStatisticsService.findByCriteria(searchCriteria);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public FinancialStatisticsByQuarter findById(@EntityIdentifier(entityClass = FinancialStatisticsByQuarter.class)
+                                                 @PathVariable("id") int id) {
+        return financialStatisticsService.findById(id);
     }
 }

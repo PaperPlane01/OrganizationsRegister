@@ -2,16 +2,13 @@ import React from 'react';
 import Table, {
     TableBody,
     TableCell,
-    TableFooter,
-    TableHead,
-    TablePagination,
     TableRow,
-    TableSortLabel,
 } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import TableHeaderWithSorting from "./TableHeaderWithSorting.jsx";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
+import sort from 'fast-sort';
 
 class FinancialStatisticsTable extends React.Component {
     constructor(props) {
@@ -20,7 +17,8 @@ class FinancialStatisticsTable extends React.Component {
         this.state = {
             dataSource: this.props.dataSource,
             columnData: [
-                {id: 'organizationName', numeric: false, disablePadding: false, label: 'Название организации'},
+                {id: 'organization', numeric: false, disablePadding: false, label: 'Предприятие'},
+                {id: 'financialAccount', numeric: false, disablePadding: false, label: 'Бухгалтеркский счёт'},
                 {id: 'year', numeric: true, disablePadding: false, label: 'Год'},
                 {id: 'quarter', numeric: true, disablePadding: false, label: 'Квартал'},
                 {id: 'sum', numeric: true, disablePadding: false, label: 'Сумма'},
@@ -43,33 +41,45 @@ class FinancialStatisticsTable extends React.Component {
             order = 'asc';
         }
 
-        if (orderBy === 'year') {
-            let dataSource = this.state.dataSource.sort((a, b) => {
-                if (a.year === b.year) {
-                    if (order === 'desc') {
-                        return (a.quarter > b.quarter ? 1 : -1);
-                    } else {
-                        return (a.quarter > b.quarter ? -1 : 1);
-                    }
-                } else {
-                    if (order === 'desc') {
-                        return (a.year > b.year ? 1 : -1);
-                    } else {
-                        return (a.year > b.year ? -1 : 1);
-                    }
-                }
-            });
+        let dataSource = this.state.dataSource;
 
-            this.setState({dataSource, order, orderBy});
-            return;
+        switch (orderBy) {
+            case 'year':
+                dataSource =
+                    order === 'desc'
+                        ? sort(dataSource).desc([
+                            financialStatistics => financialStatistics.year,
+                            financialStatistics => financialStatistics.quarter,
+                            financialStatistics => financialStatistics.organization.fullName
+                        ])
+                        : sort(dataSource).asc([
+                            financialStatistics => financialStatistics.year,
+                            financialStatistics => financialStatistics.quarter,
+                            financialStatistics => financialStatistics.organization.fullName
+                        ]);
+                this.setState({dataSource, order, orderBy});
+                return;
+            case 'organization':
+                dataSource =
+                    order === 'desc'
+                        ? sort(dataSource).desc(financialStatistics => financialStatistics.organization.fullName)
+                        : sort(dataSource).asc(financialStatistics => financialStatistics.organization.fullName);
+                this.setState({dataSource, order, orderBy});
+                return;
+            case financialAccount:
+                dataSouce =
+                    order === 'desc'
+                        ? sort(dataSource).desc(financialStatistics => financialStatistics.financialAccount.name)
+                        : sort(dataSource).asc(financialStatistics => financialStatistics.financialAccount.name);
+                this.setState({dataSource, order, orderBy});
+                return;
+            default:
+                dataSource =
+                    order === 'desc'
+                        ? sort(dataSource).desc(financialStatistics => financialStatistics[orderBy])
+                        : sort(dataSource).asc(financialStatistics => financialStatistics[orderBy]);
+                this.setState({dataSource, order, orderBy});
         }
-
-        const dataSource =
-            order === 'desc'
-                ? this.state.dataSource.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-                : this.state.dataSource.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
-
-        this.setState({ dataSource, order, orderBy });
     };
 
     render() {
@@ -91,10 +101,12 @@ class FinancialStatisticsTable extends React.Component {
                         return (
                             <TableRow key={financialStatistics.id}>
                                 <TableCell>
-                                    <Link to={"/organizations-register/organizations/".concat(financialStatistics.organization.bin)}>
+                                    <Link to={"/organizations-register/organizations/"
+                                        .concat(financialStatistics.organization.bin)}>
                                         {financialStatistics.organization.fullName}
                                     </Link>
                                 </TableCell>
+                                <TableCell>{financialStatistics.financialAccount.name}</TableCell>
                                 <TableCell numeric>{financialStatistics.year}</TableCell>
                                 <TableCell numeric>{financialStatistics.quarter}</TableCell>
                                 <TableCell numeric>{financialStatistics.sum}</TableCell>

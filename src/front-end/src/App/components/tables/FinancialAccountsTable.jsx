@@ -6,7 +6,8 @@ import Table, {
     TableCell,
     TableRow,
 } from 'material-ui/Table';
-import Link from "material-ui-icons/es/Link";
+import sort from 'fast-sort';
+import {Link} from "react-router-dom";
 
 class FinancialAccountsTable extends React.Component {
     constructor(props) {
@@ -36,25 +37,12 @@ class FinancialAccountsTable extends React.Component {
 
         let dataSource = this.state.dataSource;
 
-        if (order === 'desc') {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]) * (-1);
-                } else {
-                    return b[orderBy] < a[orderBy] ? -1 : 1
-                }
-            })
-        } else {
-            dataSource = this.state.dataSource.sort((a, b) => {
-                if (typeof a[orderBy] === 'string') {
-                    return a[orderBy].localeCompare(b[orderBy]);
-                } else {
-                    return a[orderBy] < b[orderBy] ? -1 : 1
-                }
-            })
-        }
+        dataSource =
+            order === 'desc'
+                ? sort(dataSource).desc(financialAccount => financialAccount[orderBy])
+                : sort(dataSource).asc(financialAccount => financialAccount[orderBy]);
 
-        this.setState({dataSource: dataSource});
+        this.setState({dataSource, order, orderBy});
     };
 
     render() {

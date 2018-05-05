@@ -226,3 +226,38 @@ export const validateFinancialStatisticsMaxSum = (maxSum, acceptEmpty) => {
         dispatch(financialStatisticsMaxSumValidated(Validation.validateFinancialStatisticsSum(maxSum, acceptEmpty)));
     }
 };
+
+export const financialStatisticsAddingSuccess = (addedFinancialStatistics) => {
+    return {
+        type: financialStatisticsConstants.FINANCIAL_STATISTICS_ADDING_SUCCESS,
+        addedFinancialStatistics
+    }
+};
+
+export const financialStatisticsAddingFailure = (error) => {
+    return {
+        type: financialStatisticsConstants.FINANCIAL_STATISTICS_ADDING_FAILURE,
+        error
+    }
+};
+
+export const addFinancialStatistics = (financialStatistics) => {
+    return (dispatch) => {
+        axios.post(API_URL.concat(FINANCIAL_STATISTICS), JSON.stringify(financialStatistics), {
+            headers: {
+                'Content-Type': 'application/json',
+                token: localStorage.getItem('token')
+            }
+        }).then(response => {
+            dispatch(financialStatisticsAddingSuccess(response.data));
+        }).catch(error => {
+            const response = error.response;
+
+            if (response.data.exception != undefined) {
+                dispatch(financialStatisticsAddingFailure({status: response.status, exception: response.data.exception}));
+            } else {
+                dispatch(financialStatisticsAddingFailure({status: response.status, exception: exceptions.SERVER_ERROR}));
+            }
+        })
+    }
+};

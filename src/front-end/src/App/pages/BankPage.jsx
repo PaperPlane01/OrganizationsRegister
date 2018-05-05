@@ -5,6 +5,8 @@ import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Typography from "material-ui/es/Typography/Typography";
 import {fetchBankById} from "../actions/bank-actions";
 import {exceptions} from "../constants/exception-constants";
+import {fetchCurrentUser} from "../actions/user-actions";
+import {BankUpdateDialog} from "../components/dialogs/index";
 
 class BankPage extends React.Component {
     constructor(props) {
@@ -16,7 +18,16 @@ class BankPage extends React.Component {
     }
 
     render() {
-        const {bank, error} = this.props;
+        const {bank, error, currentUser, userLoggedIn} = this.props;
+        let displayBankUpdateDialog = false;
+
+        if (userLoggedIn) {
+            if (currentUser != undefined) {
+                if (currentUser.roles.map(role => (role.name)).includes('admin')) {
+                    displayBankUpdateDialog = true;
+                }
+            }
+        }
 
         if (error != undefined) {
             if (error === exceptions.BANK_NOT_FOUND) {
@@ -36,6 +47,10 @@ class BankPage extends React.Component {
                 <CardContent>
                     <Typography variant="body1">Название: {bank.name}</Typography>
                     <Typography variant="body1">Адрес: {bank.address}</Typography>
+                    {displayBankUpdateDialog === true
+                        ? <BankUpdateDialog onUpdate={(bank) => this.props.fetchBank(bank.id)}
+                                            bankID={bank.id}/>
+                        : ''}
                 </CardContent>
             </Card>
         </div>
@@ -45,22 +60,28 @@ class BankPage extends React.Component {
 BankPage.propTypes = {
     bank: PropTypes.object,
     fetchBank: PropTypes.func,
-    error: PropTypes.string
+    error: PropTypes.string,
+    fetchCurrentUser: PropTypes.func,
+    currentUser: PropTypes.object,
+    userLoggedIn: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
     const bankPage = state.bankPage;
-    console.log(state);
+    const {userData} = state;
 
     return {
         bank: bankPage.bank,
-        error: bankPage.error
+        error: bankPage.error,
+        currentUser: userData.currentUser,
+        userLoggedIn: userData.loggedIn
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchBank: (id) => dispatch(fetchBankById(id))
+        fetchBank: (id) => dispatch(fetchBankById(id)),
+        fetchCurrentUser: () => dispatch(fetchCurrentUser())
     }
 };
 

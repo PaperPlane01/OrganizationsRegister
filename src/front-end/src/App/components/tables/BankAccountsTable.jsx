@@ -7,6 +7,7 @@ import Table, {
     TableRow,
 } from 'material-ui/Table';
 import {Link} from "react-router-dom";
+import sort from 'fast-sort';
 
 class BankAccountsTable extends React.Component {
     constructor(props) {
@@ -15,8 +16,8 @@ class BankAccountsTable extends React.Component {
         this.state = {
             dataSource: this.props.dataSource,
             columnData: [{id: 'bankAccountID', numeric: true, disablePadding: false, label: 'Код банковского счёта'},
-                {id: 'bankName', numeric: false, disablePadding: false, label: 'Банк'},
-                {id: 'organizationName', numeric: false, disablePadding: false, label: 'Название организации'}
+                {id: 'bank', numeric: false, disablePadding: false, label: 'Банк'},
+                {id: 'organization', numeric: false, disablePadding: false, label: 'Организация'}
             ],
             order: 'asc',
             orderBy: 'bankAccountID'
@@ -35,12 +36,34 @@ class BankAccountsTable extends React.Component {
             order = 'asc';
         }
 
-        const dataSource =
-            order === 'desc'
-                ? this.state.dataSource.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-                : this.state.dataSource.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
+        let dataSource = this.state.dataSource;
 
-        this.setState({ dataSource, order, orderBy });
+        switch (orderBy) {
+            case 'bank':
+                dataSource =
+                    order === 'desc'
+                        ? sort(dataSource).desc([(bankAccount) => bankAccount.bank.name])
+                        : sort(dataSource).asc([(bankAccount) => bankAccount.bank.name]);
+
+                this.setState({dataSource, order, orderBy});
+                return;
+            case 'organization':
+                dataSource =
+                    order === 'desc'
+                        ? sort(dataSource).desc([(bankAccount) => bankAccount.organization.fullName])
+                        : sort(dataSource).asc([(bankAccount) => bankAccount.organization.fullName]);
+
+                this.setState({dataSource, order, orderBy});
+                return;
+            default:
+                dataSource =
+                    order === 'desc'
+                        ? sort(dataSource).desc([(bankAccount) => bankAccount.id])
+                        : sort(dataSource).asc([(bankAccount) => bankAccount.id]);
+
+                this.setState({dataSource, order, orderBy});
+                return;
+        }
     };
 
     render() {
