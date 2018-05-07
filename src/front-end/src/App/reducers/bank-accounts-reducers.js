@@ -37,16 +37,16 @@ export const bankAccountPageReducer = (state = {
 
 export const bankAccountSavingReducer = (state = {
     pending: false,
-    savedBankAccount: null,
+    addedBankAccount: null,
     error: null
 }, action) => {
     switch (action.type) {
-        case bankAccountsActionsConstants.SAVE_BANK_ACCOUNT:
+        case bankAccountsActionsConstants.ADD_BANK_ACCOUNT:
             return {...state, pending: true};
-        case bankAccountsActionsConstants.BANK_ACCOUNT_SAVING_SUCCESS:
-            return {...state, pending: false, savedBankAccount: action.savedBankAccount, error: null};
-        case bankAccountsActionsConstants.BANK_ACCOUNT_SAVING_FAILURE:
-            return {...state, pending: false, error: action.error, savedBankAccount: null};
+        case bankAccountsActionsConstants.BANK_ACCOUNT_ADDING_SUCCESS:
+            return {...state, pending: false, addedBankAccount: action.addedBankAccount, error: null};
+        case bankAccountsActionsConstants.BANK_ACCOUNT_ADDING_FAILURE:
+            return {...state, pending: false, error: action.error, addedBankAccount: null};
         default:
             return state;
     }

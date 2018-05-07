@@ -7,7 +7,7 @@ import {exceptions} from "../constants/exception-constants";
 export const banksFetched = (banks) => {
     return {
         type: banksActionsConstants.BANKS_FETCHED,
-        banks: banks
+        banks
     }
 };
 
@@ -28,10 +28,10 @@ export const fetchBanksByName = (nameContains) => {
     }
 };
 
-export const bankSelected = (selectedOption) => {
+export const bankSelected = (selectedBankOption) => {
     return {
         type: banksActionsConstants.BANK_SELECTED,
-        selectedOption: selectedOption
+        selectedBankOption
     }
 };
 
@@ -44,7 +44,7 @@ export const handleBankSelect = (selectedOption) => {
 export const banksSearchResultsReceived = (banks) => {
     return {
         type: banksActionsConstants.BANKS_SEARCH_SUCCESS,
-        banks: banks
+        banks
     }
 };
 
@@ -193,5 +193,11 @@ export const clearBankAddingPageState = () => {
 export const clearBankUpdateDialogState = () => {
     return {
         type: banksActionsConstants.CLEAR_BANK_UPDATE_DIALOG_STATE
+    }
+};
+
+export const clearBankSelectState = () => {
+    return {
+        type: banksActionsConstants.CLEAR_BANK_SELECT_STATE
     }
 };

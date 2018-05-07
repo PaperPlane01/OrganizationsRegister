@@ -12,3 +12,5 @@ export {default as TaxesCommitteesSearchPage} from './TaxesCommitteesSearchPage.
 export {default as BankAddingPage} from './BankAddingPage.jsx';
 export {default as BankAccountsSearchPage} from './BankAccountsSearchPage.jsx';
 export {default as FinancialStatisticsAddingPage} from './FinancialStatisticsAddingPage.jsx';
+export {default as BankAccountAddingPage} from './BankAccountAddingPage.jsx';
+export {default as OverallSumSearchPage} from './OverallSumSearchPage.jsx';

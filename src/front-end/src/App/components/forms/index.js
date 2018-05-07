@@ -8,3 +8,5 @@ export {default as TaxesCommitteesSearchForm} from './TaxesCommitteesSearchForm.
 export {default as BankAddingForm} from './BankAddingForm.jsx';
 export {default as BankAccountsSearchForm} from './BankAccountsSearchForm.jsx';
 export {default as FinancialStatisticsAddingForm} from './FinancialStatisticsAddingForm.jsx';
+export {default as BankAccountAddingForm} from './BankAccountAddingForm.jsx';
+export {default as OverallSumSearchForm} from './OverallSumSearchForm.jsx';

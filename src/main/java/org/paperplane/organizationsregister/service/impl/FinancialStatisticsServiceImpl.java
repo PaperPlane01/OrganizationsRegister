@@ -1,6 +1,7 @@
 package org.paperplane.organizationsregister.service.impl;
 
 import org.paperplane.organizationsregister.data.FinancialStatisticsRepository;
+import org.paperplane.organizationsregister.domain.FinancialAccount;
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.search.FinancialStatisticsSearchCriteria;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Service
@@ -48,7 +50,7 @@ public class FinancialStatisticsServiceImpl implements FinancialStatisticsServic
     }
 
     @Override
-    public FinancialStatisticsByQuarter findByOrganizationAndYearAndQuarter(Organization organization, int year, byte quarter) {
+    public FinancialStatisticsByQuarter findByOrganizationAndYearAndQuarter(Organization organization, int year, int quarter) {
         return financialStatisticsRepository.findByOrganizationAndYearAndQuarter(organization, year, quarter);
     }
 
@@ -95,5 +97,15 @@ public class FinancialStatisticsServiceImpl implements FinancialStatisticsServic
     @Override
     public List<FinancialStatisticsByQuarter> findByCriteria(FinancialStatisticsSearchCriteria searchCriteria) {
         return financialStatisticsRepository.findByCriteria(searchCriteria);
+    }
+
+    @Override
+    public List<Map<FinancialAccount, BigDecimal>> getOverallSumOfFinancialStatisticsForEachFinancialAccount() {
+        return financialStatisticsRepository.getOverallSumOfFinancialStatisticsForEachFinancialAccount();
+    }
+
+    @Override
+    public List<Map<FinancialAccount, BigDecimal>> getOverallSumOfFinancialStatisticsOfFinancialAccount(int financialAccountID) {
+        return financialStatisticsRepository.getOverallSumOfFinancialStatisticsOfFinancialAccount(financialAccountID);
     }
 }

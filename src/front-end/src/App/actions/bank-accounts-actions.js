@@ -108,21 +108,21 @@ export const searchBankAccountsByCriteria = (searchCriteria) => {
     }
 };
 
-export const bankAccountSavingSuccess = (savedBankAccount) => {
+export const bankAccountAddingSuccess = (addedBankAccount) => {
     return {
-        type: bankAccountsActionsConstants.BANK_ACCOUNT_SAVING_SUCCESS,
-        savedBankAccount
+        type: bankAccountsActionsConstants.BANK_ACCOUNT_ADDING_SUCCESS,
+        addedBankAccount
     }
 };
 
-export const bankAccountSavingFailure = (error) => {
+export const bankAccountAddingFailure = (error) => {
     return {
-        type: bankAccountsActionsConstants.BANK_ACCOUNT_SAVING_FAILURE,
+        type: bankAccountsActionsConstants.BANK_ACCOUNT_ADDING_FAILURE,
         error
     }
 };
 
-export const saveBankAccount = (bankAccount) => {
+export const addBankAccount = (bankAccount) => {
     return (dispatch) => {
         axios.post(API_URL.concat(BANK_ACCOUNTS), JSON.stringify(bankAccount), {
             headers: {
@@ -130,14 +130,14 @@ export const saveBankAccount = (bankAccount) => {
                 token: localStorage.getItem('token')
             }
         }).then(response => {
-            dispatch(bankAccountSavingSuccess(response.data));
+            dispatch(bankAccountAddingSuccess(response.data));
         }).catch(error => {
             const response = error.response;
 
             if (response.data.exception != undefined) {
-                dispatch(bankAccountSavingFailure({status: response.status, exception: response.data.exception}));
+                dispatch(bankAccountAddingFailure({status: response.status, exception: response.data.exception}));
             } else {
-                dispatch(bankAccountSavingFailure({status: response.status, exception: exceptions.SERVER_ERROR}));
+                dispatch(bankAccountAddingFailure({status: response.status, exception: exceptions.SERVER_ERROR}));
             }
         })
     }

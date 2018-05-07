@@ -2,6 +2,7 @@ package org.paperplane.organizationsregister.data.impl;
 
 import com.google.common.collect.Iterables;
 import org.paperplane.organizationsregister.data.custom.FinancialStatisticsCustomQueriesCaller;
+import org.paperplane.organizationsregister.domain.FinancialAccount;
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.search.FinancialStatisticsSearchCriteria;
@@ -19,6 +20,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Repository
@@ -39,7 +41,7 @@ public class FinancialStatisticsRepositoryImpl implements FinancialStatisticsCus
     }
 
     @Override
-    public List<FinancialStatisticsByQuarter> findAllByOrganizationAndQuarter(Organization organization, byte quarter) {
+    public List<FinancialStatisticsByQuarter> findAllByOrganizationAndQuarter(Organization organization, int quarter) {
         StoredProcedureQuery query = entityManagerFactory.createEntityManager()
                 .createStoredProcedureQuery("findFinancialStatisticsByOrganizationAndQuarter")
                 .setParameter("organizationBIN", organization.getBin())
@@ -58,6 +60,28 @@ public class FinancialStatisticsRepositoryImpl implements FinancialStatisticsCus
                 .setParameter("organizationBIN", organization.getBin())
                 .setParameter("year", year);
         return (BigDecimal) query.getSingleResult();
+    }
+
+    @Override
+    public List<Map<FinancialAccount, BigDecimal>> getOverallSumOfFinancialStatisticsForEachFinancialAccount() {
+        Query query = entityManagerFactory.createEntityManager()
+                .createQuery("select new map(financialStatisticsByQuarter.financialAccount as financialAccount, " +
+                "sum(financialStatisticsByQuarter.sum) as overallSum) " +
+                "from FinancialStatisticsByQuarter financialStatisticsByQuarter " +
+                "group by financialStatisticsByQuarter.financialAccount");
+        return (List<Map<FinancialAccount, BigDecimal>>) query.getResultList();
+    }
+
+    @Override
+    public List<Map<FinancialAccount, BigDecimal>> getOverallSumOfFinancialStatisticsOfFinancialAccount(int financialAccountID) {
+        Query query = entityManagerFactory.createEntityManager()
+                .createQuery("select new map(financialStatisticsByQuarter.financialAccount as financialAccount, " +
+                        "sum(financialStatisticsByQuarter.sum) as overallSum) " +
+                        "from FinancialStatisticsByQuarter financialStatisticsByQuarter " +
+                        "where financialStatisticsByQuarter.financialAccount.id = :financialAccountID " +
+                        "group by financialStatisticsByQuarter.financialAccount")
+                .setParameter("financialAccountID", financialAccountID);
+        return (List<Map<FinancialAccount, BigDecimal>>) query.getResultList();
     }
 
     @Override

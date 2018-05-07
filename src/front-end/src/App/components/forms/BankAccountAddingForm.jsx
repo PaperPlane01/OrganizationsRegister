@@ -12,10 +12,11 @@ import Typography from "material-ui/es/Typography/Typography";
 import {errorLabelStyle, formStyle} from "../../styles";
 import compose from 'recompose/compose';
 import withStyles from "material-ui/es/styles/withStyles";
+import {fetchCurrentUser} from "../../actions/user-actions";
 
 const styles = theme => formStyle(theme);
 
-class BankAccountsSearchForm extends React.Component {
+class BankAccountAddingForm extends React.Component {
     constructor(props) {
         super(props);
 
@@ -25,35 +26,45 @@ class BankAccountsSearchForm extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.fetchedBanks);
+    }
+
     handleId = (id) => {
-        this.setState({id}, () => this.props.validateId(this.state.id, true));
+        this.setState({id}, () => this.props.validateId(id, false));
     };
 
-    handleSearchRequest = () => {
+    handleAddBankAccountRequest = () => {
         this.assertAllFieldsAreValid().then(() => {
             if (this.state.formValidationResult.isSuccessful()) {
-                const {id} = this.state;
                 const {selectedOrganizationOption, selectedBankOption} = this.props;
+                const {id} = this.state;
 
-                const organization = selectedOrganizationOption == undefined ? null : selectedOrganizationOption.value;
-                const bank = selectedBankOption == undefined ? null : selectedBankOption.value;
+                const bank = selectedBankOption.value;
+                const organization = selectedOrganizationOption.value;
 
-                this.props.onFormSubmitted({id, organization, bank});
+                this.props.onFormSubmitted({id, bank, organization});
             }
         })
     };
 
     async assertAllFieldsAreValid() {
+        const {selectedOrganizationOption, selectedBankOption, validateId, idValidationResult} = this.props;
         const {id} = this.state;
-        const {validateId, idValidationResult} = this.props;
 
-        validateId(id, true);
+        validateId(id, false);
 
-        if (idValidationResult.isSuccessful()) {
-            this.setState({formValidationResult: new ValidationResult(true, '')});
-        } else {
+        if (!idValidationResult.isSuccessful()) {
             this.setState({formValidationResult: new ValidationResult(false, 'Некоторые поля заполнены неверно.')});
+            return;
         }
+
+        if (selectedOrganizationOption == undefined || selectedBankOption == undefined) {
+            this.setState({formValidationResult: new ValidationResult(false, 'Некоторые обязательные поля не заполнены')});
+            return;
+        }
+
+        this.setState({formValidationResult: new ValidationResult(true, '')});
     }
 
     render() {
@@ -63,19 +74,19 @@ class BankAccountsSearchForm extends React.Component {
         const {formValidationResult} = this.state;
 
         return <div>
-            <Typography variant="headline">Поиск банковских счетов</Typography>
+            <Typography variant="headline">Добавление банковского счёта</Typography>
             {!idValidationResult.isSuccessful()
                 ? <Typography variant="body1" style={errorLabelStyle}>
                     {idValidationResult.getMessage()}
                 </Typography>
                 : ''}
-            <Typography variant="body1">Код банковского счёта:</Typography>
+            <Typography variant="body1">Код банковского счёта (обязательно):</Typography>
             <Input fullWidth={true}
                    onChange={(event) => this.handleId(event.target.value)}
                    placeholder={'Введите код банковского счёта'}
             />
 
-            <Typography variant="body1">Предприятие:</Typography>
+            <Typography variant="body1">Предприятие (обязательно):</Typography>
             <OrganizationSelect selectedOption={selectedOrganizationOption}
                                 onInput={(nameContains) => fetchOrganizations(nameContains)}
                                 organizations={fetchedOrganizations}
@@ -83,7 +94,7 @@ class BankAccountsSearchForm extends React.Component {
                                 classes={classes}
             />
 
-            <Typography variant="body1">Банк:</Typography>
+            <Typography variant="body1">Банк (обязательно):</Typography>
             <BankSelect selectedOption={selectedBankOption}
                         onInput={(nameContains) => fetchBanks(nameContains)}
                         banks={fetchedBanks}
@@ -96,46 +107,54 @@ class BankAccountsSearchForm extends React.Component {
                     {formValidationResult.getMessage()}
                 </Typography>
                 : ''}
-            <Button variant={'raised'} color={'primary'} onClick={() => this.handleSearchRequest()}>Поиск</Button>
+            <Button variant={'raised'} color={'primary'} onClick={() => this.handleAddBankAccountRequest()}>
+                Добавить банковский счёт
+            </Button>
         </div>
     }
 }
 
-BankAccountsSearchForm.propTypes = {
+BankAccountAddingForm.propTypes = {
     fetchOrganizations: PropTypes.func,
     fetchedOrganizations: PropTypes.func,
     selectedOrganizationOption: PropTypes.object,
     handleOrganizationSelect: PropTypes.func,
     fetchBanks: PropTypes.func,
-    fetchedBanks: PropTypes.func,
+    fetchedBanks: PropTypes.array,
     selectedBankOption: PropTypes.object,
     handleBankSelect: PropTypes.func,
     onFormSubmitted: PropTypes.func,
     validateId: PropTypes.func,
-    idValidationResult: PropTypes.object
+    idValidationResult: PropTypes.object,
+    userLoggedIn: PropTypes.bool,
+    currentUser: PropTypes.object,
+    fetchCurrentUser: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
-    const {bankAccountsSearchPage} = state;
-    const {validation, organizationSelect, bankSelect} = bankAccountsSearchPage;
+    const {bankAccountAddingPage, userData} = state;
+    const {bankSelect, organizationSelect, validation} = bankAccountAddingPage;
 
     return {
-        fetchedOrganizations: organizationSelect.data.dataSource,
-        selectedOrganizationOption: organizationSelect.data.selectedOption,
         fetchedBanks: bankSelect.data.dataSource,
         selectedBankOption: bankSelect.data.selectedOption,
-        idValidationResult: validation.idValidationResult
+        fetchedOrganizations: organizationSelect.data.dataSource,
+        selectedOrganizationOption: organizationSelect.data.selectedOption,
+        idValidationResult: validation.idValidationResult,
+        userLoggedIn: userData.loggedIn,
+        currentUser: userData.currentUser
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        validateId: (id, acceptEmpty) => dispatch(validateBankAccountId(id, acceptEmpty)),
-        fetchOrganizations: (name) => dispatch(fetchOrganizationsByName(name)),
-        fetchBanks: (name) => dispatch(fetchBanksByName(name)),
+        fetchOrganizations: (nameContains) => dispatch(fetchOrganizationsByName(nameContains)),
         handleOrganizationSelect: (option) => dispatch(handleOrganizationSelect(option)),
-        handleBankSelect: (option) => dispatch(handleBankSelect(option))
+        fetchBanks: (nameContains) => dispatch(fetchBanksByName(nameContains)),
+        handleBankSelect: (option) => dispatch(handleBankSelect(option)),
+        validateId: (id, acceptEmpty) => dispatch(validateBankAccountId(id, acceptEmpty)),
+        fetchCurrentUser: () => dispatch(fetchCurrentUser())
     }
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), withStyles(styles))(BankAccountsSearchForm);
+export default compose(connect(mapStateToProps, mapDispatchToProps), withStyles(styles))(BankAccountAddingForm);

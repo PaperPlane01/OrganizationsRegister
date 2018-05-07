@@ -17,7 +17,7 @@ import TaxesCommitteeSearchPage from './pages/TaxesCommitteesSearchPage.jsx';
 import {BankPage, BanksSearchPage, EconomicActivitiesSearchPage, FinancialStatisticsSearchPage, OrganizationPage,
     OrganizationAddingPage, OrganizationsSearchPage, OrganizationTypesSearchPage,
     PageNotFoundErrorPage, TaxesCommitteePage, TaxesCommitteesSearchPage, BankAddingPage,
-    BankAccountsSearchPage, FinancialStatisticsAddingPage} from './pages';
+    BankAccountsSearchPage, FinancialStatisticsAddingPage, BankAccountAddingPage, OverallSumSearchPage} from './pages';
 import withWidth from "material-ui/es/utils/withWidth";
 import compose from 'recompose/compose';
 import {Hidden} from "material-ui/es/index";
@@ -158,6 +158,7 @@ class Content extends React.Component {
         <Route exact path="/organizations-register/" component={OrganizationsSearchPage}/>
         <Route exact path='/organizations-register/financial-statistics/add-financial-statistics'
                component={FinancialStatisticsAddingPage}/>
+        <Route exact path='/organizations-register/financial-statistics/overall-sum' component={OverallSumSearchPage}/>
         <Route exact path="/organizations-register/financial-statistics/" component={FinancialStatisticsSearchPage}/>
         <Route exact path="/organizations-register/banks" component={BanksSearchPage}/>
         <Route exact path='/organizations-register/banks/add-bank' component={BankAddingPage}/>
@@ -170,6 +171,7 @@ class Content extends React.Component {
         <Route exact path='/organizations-register/organization-types' component={OrganizationTypesSearchPage}/>
         <Route exact path='/organizations-register/taxes-committees' component={TaxesCommitteesSearchPage}/>
         <Route exact path='/organizations-register/bank-accounts' component={BankAccountsSearchPage}/>
+        <Route exact path='/organizations-register/bank-accounts/add-bank-account' component={BankAccountAddingPage}/>
         <Route component={PageNotFoundErrorPage}/>
     </Switch>
     }

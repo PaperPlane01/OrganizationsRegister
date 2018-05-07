@@ -5,6 +5,7 @@ import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
+import org.paperplane.organizationsregister.domain.FinancialAccount;
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.search.FinancialAccountSearchCriteria;
@@ -15,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/api/financial-statistics-by-quarters")
@@ -114,5 +117,18 @@ public class FinancialStatisticsByQuarterController {
     public FinancialStatisticsByQuarter findById(@EntityIdentifier(entityClass = FinancialStatisticsByQuarter.class)
                                                  @PathVariable("id") int id) {
         return financialStatisticsService.findById(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/overall-sum-by-financial-accounts")
+    @ResponseBody
+    public List<Map<FinancialAccount, BigDecimal>> getOverallSumOfFinancialStatisticsForEachFinancialAccount() {
+        return financialStatisticsService.getOverallSumOfFinancialStatisticsForEachFinancialAccount();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/overall-sum-by-financial-accounts", params = {"financialAccountID"})
+    @ResponseBody
+    public List<Map<FinancialAccount, BigDecimal>> getOverallSumOfFinancialStatisticsByFinancialAccount(
+            @RequestParam("financialAccountID") int financialAccountID) {
+        return financialStatisticsService.getOverallSumOfFinancialStatisticsOfFinancialAccount(financialAccountID);
     }
 }

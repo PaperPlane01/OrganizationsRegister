@@ -9,7 +9,6 @@ public class BankAccount {
 
     @Id
     @Column(name = "bankAccountID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

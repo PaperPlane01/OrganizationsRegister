@@ -18,13 +18,14 @@ class BankSelect extends React.Component {
                           classes,
                           onChange: onSelect,
                           simpleValue: false,
-                          option: banks != undefined
+                          options: banks != undefined
                               ? banks.map(bank => ({label: bank.name, value: bank}))
                               : [],
                           onInputChange: _.debounce(onInput, 150),
                           placeholder: 'Выберите банк (начните печатать)',
                           value: selectedOption
-                      }}/>
+                      }}
+        />
     }
 }
 

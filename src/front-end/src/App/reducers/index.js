@@ -21,6 +21,7 @@ import {
 import {
     attributeSelectReducer, financialStatisticsAddingReducer,
     financialStatisticsSearchReducer, financialStatisticsValidationReducer, maxYearDialogReducer, minYearDialogReducer,
+    overallFinancialStatisticsSumReducer,
     quarterSelectReducer,
     yearDialogReducer
 } from "./financial-statistics-reducers";
@@ -115,11 +116,15 @@ export default combineReducers({
         organizationTypesSearch: organizationTypesSearchReducer,
         validation: organizationTypeValidationReducer
     }),
-    bankAccountSavingPage: combineReducers({
-        bankAccountSavingInfo: bankAccountSavingReducer,
+    bankAccountAddingPage: combineReducers({
+        bankAccountAddingInfo: bankAccountSavingReducer,
         organizationSelect: organizationSelectReducer,
         bankSelect: bankSelectReducer,
         validation: bankAccountValidationReducer
+    }),
+    overallSumSearchPage: combineReducers({
+       overallSumSearchInfo: overallFinancialStatisticsSumReducer,
+       financialAccountSelect: financialAccountSelectReducer
     }),
     bankPage: bankPageReducer,
     routing: routerReducer,

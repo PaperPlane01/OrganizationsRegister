@@ -164,3 +164,20 @@ export const financialStatisticsAddingReducer = (state = {
             return state;
     }
 };
+
+export const overallFinancialStatisticsSumReducer = (state = {
+    pending: false,
+    error: null,
+    searchResults: null
+}, action) => {
+    switch (action.type) {
+        case financialStatisticsConstants.FETCH_OVERALL_SUM_BY_FINANCIAL_ACCOUNT:
+            return {...state, pending: true, error: null};
+        case financialStatisticsConstants.OVERALL_SUM_FETCH_SUCCESS:
+            return {...state, pending: false, error: null, searchResults: action.searchResults};
+        case financialStatisticsConstants.OVERALL_SUM_FETCH_FAILURE:
+            return {...state, pending: false, searchResults: null, error: action.error};
+        default:
+            return state;
+    }
+}

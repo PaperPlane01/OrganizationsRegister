@@ -11,3 +11,5 @@ export const TOKENS = "/tokens";
 export const USER = "/user";
 export const BANK_ACCOUNTS = "/bank-accounts";
 export const FINANCIAL_ACCOUNTS = "/financial-accounts";
+export const NUMBER_OF_YEARS_SINCE_REGISTRATION = "/number-of-years-since-registration";
+export const OVERALL_SUM = "/overall-sum-by-financial-accounts";

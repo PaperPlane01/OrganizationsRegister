@@ -16,6 +16,8 @@ export const bankSelectReducer = (state = {
             return {...state, data: {...state.data, dataSource: action.banks}};
         case banksActionsConstants.BANK_SELECTED:
             return {...state, data: {...state.data, selectedOption: action.selectedBankOption}};
+        case banksActionsConstants.CLEAR_BANK_SELECT_STATE:
+            return {...state, data: {selectedOption: null, dataSource: null}};
         default:
             return state;
     }

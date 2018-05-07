@@ -16,7 +16,7 @@ public interface FinancialStatisticsRepository extends JpaRepository<FinancialSt
     FinancialStatisticsByQuarter findById(int id);
     List<FinancialStatisticsByQuarter> findAllByOrganizationAndYear(Organization organization, int year);
     List<FinancialStatisticsByQuarter> findAllDebit();
-    FinancialStatisticsByQuarter findByOrganizationAndYearAndQuarter(Organization organization, int year, byte quarter);
+    FinancialStatisticsByQuarter findByOrganizationAndYearAndQuarter(Organization organization, int year, int quarter);
     BigDecimal sumFinancesOfOrganizationWithinYear(Organization organization, int year);
     List<FinancialStatisticsByQuarter> findAllByOrganization(Organization organization);
     boolean existsById(Integer id);

@@ -7,7 +7,6 @@ import {searchBankAccountsByCriteria} from "../actions/bank-accounts-actions";
 import Typography from "material-ui/es/Typography/Typography";
 import {errorLabelStyle} from "../styles";
 
-
 class BankAccountsSearchPage extends React.Component {
     constructor(props) {
         super(props);

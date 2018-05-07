@@ -104,8 +104,7 @@ public class OrganizationController {
     }
 
     @AssertEntityExists
-    @RequestMapping(value = "/{bin}", method = RequestMethod.GET,
-            params = {"action=getNumberOfYearsSinceOrganizationHasBeenRegistered"})
+    @RequestMapping(value = "/{bin}/number-of-years-since-registration", method = RequestMethod.GET)
     @ResponseBody
     public int findNumberOfYearsSinceOrganizationHasBeenRegistered(
             @PathVariable("bin") @EntityIdentifier(entityClass = Organization.class) long bin) {

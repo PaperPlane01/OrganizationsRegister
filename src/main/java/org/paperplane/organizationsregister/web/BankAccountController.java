@@ -52,6 +52,7 @@ public class BankAccountController {
     @ResponseBody
     public BankAccount save(@RequestBody BankAccount bankAccount,
                             @RequestHeader(value = "token", required = false) String tokenValue) {
+        System.out.println(bankAccount.getId());
         return bankAccountService.save(bankAccount);
     }
 

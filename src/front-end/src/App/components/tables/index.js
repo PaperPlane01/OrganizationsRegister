@@ -6,3 +6,4 @@ export {default as OrganizationsTable} from './OrganizationsTable.jsx';
 export {default as OrganizationTypesTable} from './OrganizationTypesTable.jsx';
 export {default as TaxesCommitteesTable} from './TaxesCommitteeTable.jsx';
 export {default as FinancialStatisticsTable} from './FinancialStatisticsTable.jsx';
+export {default as OverallSumTable} from './OverallSumTable.jsx';

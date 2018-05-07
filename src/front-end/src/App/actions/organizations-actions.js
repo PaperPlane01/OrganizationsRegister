@@ -1,4 +1,7 @@
-import {API_URL, BANK_ACCOUNTS, ORGANIZATIONS, SEARCH} from "../constants/api-constants";
+import {
+    API_URL, BANK_ACCOUNTS, NUMBER_OF_YEARS_SINCE_REGISTRATION, ORGANIZATIONS,
+    SEARCH
+} from "../constants/api-constants";
 import {organizationsActionConstants} from "../constants/action-constants";
 import Validation from '../validation/Validation.js';
 import axios from 'axios';
@@ -216,11 +219,10 @@ export const findOrganizationByBin = (bin) => {
 
 export const fetchNumberOfYearsSinceRegistration = (bin) => {
     return (dispatch) => {
-        axios.get(API_URL.concat(ORGANIZATIONS).concat('/').concat(bin), {params: {
-            action: 'getNumberOfYearsSinceOrganizationHasBeenRegistered'
-        }}).then(response => {
-            dispatch(numberOfYearsSinceRegistrationFetched(response.data));
-        })
+        axios.get(API_URL.concat(ORGANIZATIONS).concat('/').concat(bin).concat(NUMBER_OF_YEARS_SINCE_REGISTRATION))
+            .then(response => {
+                dispatch(numberOfYearsSinceRegistrationFetched(response.data));
+            });
     }
 };
 

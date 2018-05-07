@@ -1,5 +1,5 @@
 import {financialStatisticsConstants} from "../constants/action-constants";
-import {API_URL, FINANCIAL_STATISTICS, SEARCH, YEARS} from "../constants/api-constants";
+import {API_URL, FINANCIAL_STATISTICS, OVERALL_SUM, SEARCH, YEARS} from "../constants/api-constants";
 import axios from 'axios';
 import {exceptions} from "../constants/exception-constants";
 import Validation from "../validation/Validation";
@@ -260,4 +260,52 @@ export const addFinancialStatistics = (financialStatistics) => {
             }
         })
     }
+};
+
+export const overallSumFetched = (searchResults) => {
+    return {
+        type: financialStatisticsConstants.OVERALL_SUM_FETCH_SUCCESS,
+        searchResults
+    }
+};
+
+export const overallSumFetchFailure = (error) => {
+    return {
+        type: financialStatisticsConstants.OVERALL_SUM_FETCH_FAILURE,
+        error
+    }
+};
+
+export const fetchOverallSumOfFinancialAccounts = (financialAccount) => {
+    const url = API_URL.concat(FINANCIAL_STATISTICS).concat(OVERALL_SUM);
+
+    return (dispatch) => {
+        if (financialAccount == undefined) {
+            axios.get(url).then(response => {
+                dispatch(overallSumFetched(response.data))
+            }).catch(error => {
+                const response = error.response;
+
+                if (response.data.exception != undefined) {
+                    dispatch(overallSumFetchFailure({status: error.status, exception: response.data.exception}));
+                } else {
+                    dispatch(overallSumFetchFailure({status: error.status, exception: exceptions.SERVER_ERROR}));
+                }
+            })
+        } else {
+            axios.get(url, {params: {
+                financialAccountID: financialAccount.id
+            }}).then(response => {
+                dispatch(overallSumFetched(response.data))
+            }).catch(error => {
+                const response = error.response;
+
+                if (response.data.exception != undefined) {
+                    dispatch(overallSumFetchFailure({status: error.status, exception: response.data.exception}));
+                } else {
+                    dispatch(overallSumFetchFailure({status: error.status, exception: exceptions.SERVER_ERROR}));
+                }
+            })
+        }
+    };
 };
