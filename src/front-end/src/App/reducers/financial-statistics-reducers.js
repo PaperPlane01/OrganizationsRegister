@@ -91,7 +91,6 @@ export const quarterSelectReducer = (state = {
         case financialStatisticsConstants.QUARTER_SELECTED:
             return {...state, data: {...state.data, selectedOption: action.selectedOption}};
         case financialStatisticsConstants.CLEAR_QUARTER_SELECTION:
-            console.log('clearing quarter selection');
             return {...state, data: {...state.data, selectedOption: null}};
         default:
             return state;
@@ -126,6 +125,8 @@ export const attributeSelectReducer = (state = {
     switch (action.type) {
         case financialStatisticsConstants.ATTRIBUTE_SELECTED:
             return {...state, selectedOption: action.selectedAttributeOption};
+        case financialStatisticsConstants.CLEAR_ATTRIBUTE_SELECT:
+            return {...state, selectedOption: null};
         default:
             return state;
     }
@@ -143,6 +144,10 @@ export const financialStatisticsValidationReducer = (state = {
             return {...state, minSumValidationResult: action.minSumValidationResult};
         case financialStatisticsConstants.FINANCIAL_STATISTICS_MAX_SUM_VALIDATED:
             return {...state, maxSumValidationResult: action.maxSumValidationResult};
+        case financialStatisticsConstants.CLEAR_FINANCIAL_STATISTICS_VALIDATION_STATE:
+            return {...state, maxSumValidationResult: new ValidationResult(true, ''),
+                minSumValidationResult: new ValidationResult(true, ''),
+                sumValidationResult: new ValidationResult(true, '')};
         default:
             return state;
     }
@@ -180,4 +185,30 @@ export const overallFinancialStatisticsSumReducer = (state = {
         default:
             return state;
     }
-}
+};
+
+export const financialStatisticsUpdateReducer = (state = {
+    pending: false,
+    initialFinancialStatistics: null,
+    updatedFinancialStatistics: null,
+    error: null,
+    updateSuccess: false
+}, action) => {
+    switch (action.type) {
+        case financialStatisticsConstants.UPDATE_FINANCIAL_STATISTICS:
+            return {...state, pending: true, updatedFinancialStatistics: null, error: null, updateSuccess: false};
+        case financialStatisticsConstants.FINANCIAL_STATISTICS_UPDATE_SUCCESS:
+            return {...state, pending: false, updatedFinancialStatistics: action.updatedFinancialStatistics, error: null,
+                updateSuccess: true};
+        case financialStatisticsConstants.FINANCIAL_STATISTICS_UPDATE_FAILURE:
+            return {...state, pending: false, updatedFinancialStatistics: null, error: action.error, updateSuccess: false};
+        case financialStatisticsConstants.SINGLE_FINANCIAL_STATISTICS_FETCH_SUCCESS:
+            return {...state, pending: false, initialFinancialStatistics: action.financialStatistics, error: null,
+                updateSuccess: false, updatedFinancialStatistics: null};
+        case financialStatisticsConstants.CLEAR_FINANCIAL_STATISTICS_UPDATE_DIALOG_STATE:
+            return {...state, pending: false, updatedFinancialStatistics: null, initialFinancialStatistics: null,
+                error: null, updateSuccess: false};
+        default:
+            return state;
+    }
+};

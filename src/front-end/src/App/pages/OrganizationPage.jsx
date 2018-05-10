@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
-import Typography from "material-ui/es/Typography/Typography";
+import Card, { CardContent } from 'material-ui/Card';
+import Typography from "material-ui/Typography";
 import {
     clearOrganizationPageState, fetchBankAccounts, fetchNumberOfYearsSinceRegistration,
     findOrganizationByBin, initializeOrganizationUpdate
 } from "../actions/organizations-actions";
 import {exceptions} from "../constants/exception-constants";
-import BankAccountsTable from "../components/tables/BankAccountsTable.jsx";
+import {BankAccountsTable} from "../components/tables";
 import {fetchCurrentUser} from "../actions/user-actions";
 import OrganizationUpdateDialog from "../components/dialogs/OrganizationUpdateDialog.jsx";
 import {

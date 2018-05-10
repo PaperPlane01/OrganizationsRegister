@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import WrappedSelect from './WrappedSelect.jsx';
-import Input from "material-ui/es/Input/Input";
+import Input from "material-ui/Input";
 
 
 class YearSelect extends React.Component {

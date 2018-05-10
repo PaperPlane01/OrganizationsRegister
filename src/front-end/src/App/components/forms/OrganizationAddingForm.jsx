@@ -17,9 +17,9 @@ import {Input, withStyles} from 'material-ui';
 import OrganizationTypeSelect from '../selects/OrganizationTypeSelect.jsx';
 import EconomicActivitySelect from '../selects/EconomicActivitySelect.jsx';
 import TaxesCommitteeSelect from '../selects/TaxesCommitteeSelect.jsx';
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {DatePicker} from "material-ui-pickers";
-import Button from "material-ui/es/Button/Button";
+import Button from "material-ui/Button";
 
 const styles = theme => formStyle(theme);
 

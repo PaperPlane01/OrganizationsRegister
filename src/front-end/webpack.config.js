@@ -7,7 +7,7 @@ var APP_DIR = path.resolve(__dirname, 'src/App');
 process.env.NODE_ENV = 'development';
 
 var config = {
-    entry: ['babel-polyfill', APP_DIR + '/index.jsx'],
+    entry: [APP_DIR + '/index.jsx'],
     output: {
         path: BUILD_DIR,
         filename: 'bundle.js'

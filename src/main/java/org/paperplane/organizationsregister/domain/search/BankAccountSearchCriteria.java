@@ -34,5 +34,4 @@ public class BankAccountSearchCriteria {
     public void setBank(Bank bank) {
         this.bank = bank;
     }
-
 }

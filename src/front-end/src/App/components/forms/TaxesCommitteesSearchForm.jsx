@@ -4,8 +4,8 @@ import ValidationResult from "../../validation/ValidationResult";
 import {connect} from 'react-redux';
 import {errorLabelStyle} from "../../styles/";
 import {Input} from 'material-ui';
-import Typography from "material-ui/es/Typography/Typography";
-import Button from "material-ui/es/Button/Button";
+import Typography from "material-ui/Typography";
+import Button from "material-ui/Button";
 import {validateTaxesCommitteeAddress, validateTaxesCommitteeName} from "../../actions/taxes-committees-actions";
 
 class TaxesCommitteesSearchForm extends React.Component {

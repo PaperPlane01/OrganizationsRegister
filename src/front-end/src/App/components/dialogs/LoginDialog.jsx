@@ -10,7 +10,7 @@ import Dialog, {
     DialogTitle,
 } from 'material-ui/Dialog'
 import {errorLabelStyle} from "../../styles";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 
 class LoginDialog extends React.Component {
     constructor(props) {

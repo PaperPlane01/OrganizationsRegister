@@ -167,11 +167,12 @@ export const bankUpdateFailure = (error) => {
 
 export const updateBank = (bank) => {
     return (dispatch) => {
-        axios.put(API_URL.concat(BANKS), JSON.stringify(bank), {headers: {
+        return axios.put(API_URL.concat(BANKS), JSON.stringify(bank), {headers: {
             'Content-type': 'application/json',
             token: localStorage.getItem('token')
         }}).then(response => {
             dispatch(bankUpdateSuccess(response.data));
+            return response.data;
         }).catch(error => {
             const response = error.response;
 

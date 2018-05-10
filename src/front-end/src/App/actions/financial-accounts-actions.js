@@ -85,7 +85,7 @@ export const financialAccountsSearchFailure = (error) => {
     }
 };
 
-export const findFinancialAccountsByCriteria = (searchCriteria) => {
+export const searchFinancialAccountsByCriteria = (searchCriteria) => {
     return (dispatch) => {
         axios.post(API_URL.concat(FINANCIAL_ACCOUNTS).concat(SEARCH), JSON.stringify(searchCriteria), {
                 headers: {
@@ -181,5 +181,11 @@ export const financialAccountNameValidated = (validationResult) => {
 export const validateFinancialAccountName = (name, acceptEmpty) => {
     return (dispatch) => {
         dispatch(financialAccountNameValidated(Validation.validateFinancialAccountName(name, acceptEmpty)));
+    }
+};
+
+export const clearFinancialAccountSelect = () => {
+    return {
+        type: financialAccountsActionsConstants.CLEAR_FINANCIAL_ACCOUNT_SELECT
     }
 };

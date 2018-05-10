@@ -1,5 +1,5 @@
 import React from 'react';
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 
 class PageNotFoundErrorPage extends React.Component {
     constructor(props) {

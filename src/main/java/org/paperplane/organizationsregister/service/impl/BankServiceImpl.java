@@ -7,16 +7,13 @@ import org.paperplane.organizationsregister.domain.search.BankSearchCriteria;
 import org.paperplane.organizationsregister.domain.Bank;
 import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
-import org.paperplane.organizationsregister.exception.entitynotfoundexception.BankNotFoundException;
 import org.paperplane.organizationsregister.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class BankServiceImpl implements BankService {
 
     private BankRepository bankRepository;
@@ -67,10 +64,4 @@ public class BankServiceImpl implements BankService {
         return bankRepository.findByCriteria(searchCriteria);
     }
 
-    @Override
-    public void assertBankExists(int id) {
-        if (bankRepository.findById(id) == null) {
-            throw new BankNotFoundException();
-        }
-    }
 }

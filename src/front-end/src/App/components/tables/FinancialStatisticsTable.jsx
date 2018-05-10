@@ -9,6 +9,7 @@ import TableHeaderWithSorting from "./TableHeaderWithSorting.jsx";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import sort from 'fast-sort';
+import {FinancialStatisticsUpdateDialog} from "../dialogs";
 
 class FinancialStatisticsTable extends React.Component {
     constructor(props) {
@@ -66,8 +67,8 @@ class FinancialStatisticsTable extends React.Component {
                         : sort(dataSource).asc(financialStatistics => financialStatistics.organization.fullName);
                 this.setState({dataSource, order, orderBy});
                 return;
-            case financialAccount:
-                dataSouce =
+            case 'financialAccount':
+                dataSource =
                     order === 'desc'
                         ? sort(dataSource).desc(financialStatistics => financialStatistics.financialAccount.name)
                         : sort(dataSource).asc(financialStatistics => financialStatistics.financialAccount.name);
@@ -82,8 +83,22 @@ class FinancialStatisticsTable extends React.Component {
         }
     };
 
+    replaceFinancialStatistics = (updatedFinancialStatistics) => {
+        let dataSource = this.state.dataSource;
+
+        dataSource.map(financialStatistics => (
+            financialStatistics.id === updatedFinancialStatistics.id
+                ? updatedFinancialStatistics
+                : financialStatistics
+        ));
+
+        this.setState({dataSource});
+    };
+
     render() {
         const { dataSource, order, orderBy, columnData} = this.state;
+        const {displayUpdateDialog} = this.props;
+
         let paperStyle = {
             width: '100%',
             overflowX: 'auto',
@@ -111,6 +126,13 @@ class FinancialStatisticsTable extends React.Component {
                                 <TableCell numeric>{financialStatistics.quarter}</TableCell>
                                 <TableCell numeric>{financialStatistics.sum}</TableCell>
                                 <TableCell>{financialStatistics.attribute === 'debit' ? 'Дебит' : 'Кредит'}</TableCell>
+                                {displayUpdateDialog
+                                    ? <FinancialStatisticsUpdateDialog financialStatisticsId={financialStatistics.id}
+                                                                       clearStateAfterClosing={true}
+                                                                       onUpdate={(updatedFinancialStatistics =>
+                                                                           this.replaceFinancialStatistics(updatedFinancialStatistics))}
+                                    />
+                                    : ''}
                             </TableRow>
                         )
                     })}
@@ -121,7 +143,8 @@ class FinancialStatisticsTable extends React.Component {
 }
 
 FinancialStatisticsTable.propTypes = {
-    dataSource: PropTypes.array
+    dataSource: PropTypes.array,
+    displayUpdateDialog: PropTypes.bool
 };
 
 export default FinancialStatisticsTable;

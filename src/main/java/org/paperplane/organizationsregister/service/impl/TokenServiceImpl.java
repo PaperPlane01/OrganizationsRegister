@@ -4,31 +4,20 @@ import org.paperplane.organizationsregister.data.TokenRepository;
 import org.paperplane.organizationsregister.domain.Token;
 import org.paperplane.organizationsregister.domain.User;
 import org.paperplane.organizationsregister.exception.InvalidTokenException;
-import org.paperplane.organizationsregister.exception.TokenExpiredException;
 import org.paperplane.organizationsregister.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Base64;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class TokenServiceImpl implements TokenService{
     private TokenRepository tokenRepository;
 
     @Autowired
     public TokenServiceImpl(TokenRepository tokenRepository) {
         this.tokenRepository = tokenRepository;
-    }
-
-    @Override
-    public void assertTokenNotExpired(Token token) {
-        Token receivedToken = tokenRepository.findById(token.getId());
-        if (receivedToken.isExpired()) {
-            throw new TokenExpiredException();
-        }
     }
 
     @Override

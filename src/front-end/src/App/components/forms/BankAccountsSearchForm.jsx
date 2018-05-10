@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {OrganizationSelect, BankSelect} from "../selects";
-import Button from "material-ui/es/Button/Button";
+import Button from "material-ui/Button";
 import {connect} from 'react-redux';
-import Input from "material-ui/es/Input/Input";
+import Input from "material-ui/Input";
 import ValidationResult from "../../validation/ValidationResult";
 import {validateBankAccountId} from "../../actions/bank-accounts-actions";
 import {fetchOrganizationsByName, handleOrganizationSelect} from "../../actions/organizations-actions";
 import {fetchBanksByName, handleBankSelect} from "../../actions/bank-actions";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {errorLabelStyle, formStyle} from "../../styles";
 import compose from 'recompose/compose';
-import withStyles from "material-ui/es/styles/withStyles";
+import withStyles from "material-ui/styles/withStyles";
 
 const styles = theme => formStyle(theme);
 

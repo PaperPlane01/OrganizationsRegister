@@ -22,7 +22,7 @@ import EconomicActivitySelect from '../selects/EconomicActivitySelect.jsx';
 import TaxesCommitteeSelect from '../selects/TaxesCommitteeSelect.jsx';
 import Typography from "material-ui/es/Typography/Typography";
 import {DatePicker} from "material-ui-pickers";
-import Button from "material-ui/es/Button/Button";
+import Button from "material-ui/Button";
 import {exceptions} from '../../constants/exception-constants';
 import Dialog, {
     DialogActions,

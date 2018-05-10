@@ -403,3 +403,9 @@ export const clearOrganizationsSearchPageState = () => {
         type: organizationsActionConstants.CLEAR_ORGANIZATIONS_SEARCH_PAGE_STATE
     }
 };
+
+export const clearOrganizationSelect = () => {
+    return {
+        type: organizationsActionConstants.CLEAR_ORGANIZATION_SELECT
+    }
+};

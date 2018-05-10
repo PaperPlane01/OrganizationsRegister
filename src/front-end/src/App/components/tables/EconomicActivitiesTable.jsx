@@ -6,6 +6,7 @@ import Table, {
     TableCell,
     TableRow,
 } from 'material-ui/Table';
+import {EconomicActivityUpdateDialog} from "../dialogs";
 import sort from 'fast-sort';
 
 class EconomicActivitiesTable extends React.Component {
@@ -21,8 +22,17 @@ class EconomicActivitiesTable extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({dataSource: nextProps.dataSource});
+        this.setState({dataSource: nextProps.dataSource}, () => console.log('dataSource set!'));
     }
+
+    replaceEconomicActivity = (updatedEconomicActivity) => {
+        let dataSource = this.state.dataSource
+            .map(economicActivity => (updatedEconomicActivity.id === economicActivity.id
+                ? updatedEconomicActivity
+                : economicActivity));
+
+        this.setState({dataSource});
+    };
 
     handleSortRequest = (event, property) => {
         const orderBy = property;
@@ -44,6 +54,7 @@ class EconomicActivitiesTable extends React.Component {
 
     render() {
         const {dataSource, order, orderBy, columnData} = this.state;
+        const {displayUpdateDialog} = this.props;
 
         return <div>
             <Table>
@@ -57,6 +68,13 @@ class EconomicActivitiesTable extends React.Component {
                         <TableCell>
                             {economicActivity.name}
                         </TableCell>
+                        {displayUpdateDialog === true
+                            ? <EconomicActivityUpdateDialog economicActivityID={economicActivity.id}
+                                                            clearStateAfterClosing={true}
+                                                            onUpdate={(economicActivity) =>
+                                                                this.replaceEconomicActivity(economicActivity)}
+                            />
+                            : ''}
                     </TableRow>))}
                 </TableBody>
             </Table>
@@ -65,7 +83,8 @@ class EconomicActivitiesTable extends React.Component {
 }
 
 EconomicActivitiesTable.propTypes = {
-    dataSource: PropTypes.array
+    dataSource: PropTypes.array,
+    displayUpdateDialog: PropTypes.bool
 };
 
 export default EconomicActivitiesTable;

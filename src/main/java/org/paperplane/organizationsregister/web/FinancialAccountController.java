@@ -1,5 +1,6 @@
 package org.paperplane.organizationsregister.web;
 
+import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
 import org.paperplane.organizationsregister.annotation.RequiresToken;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -18,6 +20,7 @@ public class FinancialAccountController {
     @Autowired
     private FinancialAccountService financialAccountService;
 
+    @AssertEntityExists
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public FinancialAccount findById(@EntityIdentifier(entityClass = FinancialAccount.class) @PathVariable("id") int id) {
@@ -40,7 +43,7 @@ public class FinancialAccountController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public FinancialAccount save(@RequestBody FinancialAccount financialAccount,
+    public FinancialAccount save(@RequestBody @Valid FinancialAccount financialAccount,
                                  @RequestHeader(value = "token", required = false) String tokenValue) {
         return financialAccountService.save(financialAccount);
     }
@@ -49,7 +52,7 @@ public class FinancialAccountController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public FinancialAccount update(@RequestBody FinancialAccount financialAccount,
+    public FinancialAccount update(@RequestBody @Valid FinancialAccount financialAccount,
                                    @RequestHeader(value = "token", required = false) String tokenValue) {
         return financialAccountService.update(financialAccount);
     }

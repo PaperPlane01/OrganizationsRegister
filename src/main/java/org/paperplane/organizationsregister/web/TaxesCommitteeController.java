@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -41,16 +42,16 @@ public class TaxesCommitteeController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public int save(@RequestBody TaxesCommittee taxesCommittee,
-                                            @RequestHeader(value = "token", required = false) String tokenValue) {
-        return taxesCommitteeService.save(taxesCommittee).getId();
+    public TaxesCommittee save(@RequestBody @Valid TaxesCommittee taxesCommittee,
+                               @RequestHeader(value = "token", required = false) String tokenValue) {
+        return taxesCommitteeService.save(taxesCommittee);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public TaxesCommittee update(@RequestBody TaxesCommittee taxesCommittee,
+    public TaxesCommittee update(@RequestBody @Valid TaxesCommittee taxesCommittee,
                                  @RequestHeader(value = "token", required = false) String tokenValue) {
        return taxesCommitteeService.update(taxesCommittee);
     }

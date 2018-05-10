@@ -15,5 +15,4 @@ public interface BankService {
     List<Organization> getOrganizationsServedByBank(Bank bank);
     List<BankAccount> findBankAccountsOfBank(Bank bank);
     List<Bank> findBanksByCriteria(BankSearchCriteria searchCriteria);
-    void assertBankExists(int id);
 }

@@ -2,14 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import ValidationResult from "../../validation/ValidationResult";
-import Button from "material-ui/es/Button/Button";
-import Dialog from "material-ui/es/Dialog/Dialog";
-import DialogTitle from "material-ui/es/Dialog/DialogTitle";
-import DialogActions from "material-ui/es/Dialog/DialogActions";
-import DialogContent from "material-ui/es/Dialog/DialogContent";
-import Typography from "material-ui/es/Typography/Typography";
+import Button from "material-ui/Button";
+import Typography from "material-ui/Typography"
+import Dialog, {DialogTitle, DialogActions, DialogContent} from "material-ui/Dialog";
 import {errorLabelStyle, successLabelStyle} from "../../styles/index";
-import Input from "material-ui/es/Input/Input";
+import Input from "material-ui/Input";
 import {
     clearTaxesCommitteeUpdateDialog, clearTaxesCommitteeValidationState,
     fetchTaxesCommitteeById, updateTaxesCommittee,
@@ -38,7 +35,7 @@ class TaxesCommitteeUpdateDialog extends React.Component {
 
         if (nextProps.updatedTaxesCommittee != undefined) {
             if (this.props.onUpdate != undefined) {
-                this.props.onUpdate(nextProps.updateTaxesCommittee);
+                this.props.onUpdate(nextProps.updatedTaxesCommittee);
             }
         }
     }

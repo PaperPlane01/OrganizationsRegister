@@ -25,7 +25,7 @@ class BanksTable extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({dataSource: nextProps.dataSource});
+        this.setState({dataSource: nextProps.dataSource}, () => console.log('dataSource set!'));
     }
 
     handleRequestSort = (event, property) => {
@@ -47,8 +47,6 @@ class BanksTable extends React.Component {
     };
 
     replaceBank = (updatedBank) => {
-        console.log('replacing bank!');
-        console.log(updatedBank);
         let dataSource = this.state.dataSource
             .map(bank => (bank.id === updatedBank.id
                 ? updatedBank

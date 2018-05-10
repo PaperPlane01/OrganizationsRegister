@@ -11,13 +11,10 @@ import org.paperplane.organizationsregister.domain.OrganizationType;
 import org.paperplane.organizationsregister.domain.search.OrganizationTypeSearchCriteria;
 import org.paperplane.organizationsregister.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -34,15 +31,8 @@ public class OrganizationController {
     @RequestMapping(value = "/{bin}", method = RequestMethod.GET)
     @AssertEntityExists
     @ResponseBody
-    public Organization getByBin(@PathVariable("bin") @EntityIdentifier(entityClass = Organization.class) long bin) {
+    public Organization findByBin(@PathVariable("bin") @EntityIdentifier(entityClass = Organization.class) long bin) {
         return organizationService.findByBin(bin);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = {"page"})
-    @ResponseBody
-    public List<Organization> findAll(@RequestParam("page") int page) {
-        Pageable pageRequest = PageRequest.of(page, 10, new Sort(Sort.Direction.ASC, "fullName"));
-        return organizationService.findAll(pageRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"nameContains"})
@@ -60,7 +50,7 @@ public class OrganizationController {
     @AssertEntityExists
     @RequestMapping(value = "/organization-types/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public OrganizationType findById(@PathVariable("id") @EntityIdentifier(entityClass = OrganizationType.class) int id) {
+    public OrganizationType findOrganizationTypeById(@PathVariable("id") @EntityIdentifier(entityClass = OrganizationType.class) int id) {
         return organizationService.findOrganizationTypeById(id);
     }
 
@@ -74,27 +64,26 @@ public class OrganizationController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public long save(@RequestBody Organization organization,
+    public Organization save(@RequestBody @Valid Organization organization,
                                           @RequestHeader(value = "token", required = false) String tokenValue) {
-        return organizationService.save(organization).getBin();
+        return organizationService.save(organization);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public Organization update(@RequestBody Organization organization,
-                                             @RequestHeader(value = "token", required = false) String tokenValue) {
+    public Organization update(@RequestBody @Valid Organization organization,
+                               @RequestHeader(value = "token", required = false) String tokenValue) {
         return organizationService.update(organization);
     }
 
     @RequestMapping(value = "/organization-types", method = RequestMethod.POST)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
-    public ResponseEntity saveOrganizationType(@RequestBody OrganizationType organizationType,
+    public OrganizationType saveOrganizationType(@RequestBody @Valid OrganizationType organizationType,
                                               @RequestHeader(value = "token", required = false) String tokenValue) {
-        organizationService.saveOrganizationType(organizationType);
-        return ResponseEntity.ok().build();
+        return organizationService.saveOrganizationType(organizationType);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)

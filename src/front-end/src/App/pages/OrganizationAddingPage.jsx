@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {OrganizationAddingForm} from '../components/forms';
 import {fetchCurrentUser} from "../actions/user-actions";
-import Typography from "material-ui/es/Typography/Typography";
-import Link from "material-ui-icons/es/Link";
+import Typography from "material-ui/Typography";
+import {Link} from 'react-router-dom';
 import {addOrganization} from "../actions/organizations-actions";
 
 class OrganizationAddingPage extends React.Component {

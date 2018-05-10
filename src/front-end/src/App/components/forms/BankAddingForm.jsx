@@ -3,10 +3,10 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {validateBankAddress, validateBankName} from "../../actions/bank-actions";
 import ValidationResult from "../../validation/ValidationResult";
-import Button from "material-ui/es/Button/Button";
-import Typography from "material-ui/es/Typography/Typography";
+import Button from "material-ui/Button";
+import Typography from "material-ui/Typography";
 import {errorLabelStyle} from "../../styles/index";
-import Input from "material-ui/es/Input/Input";
+import Input from "material-ui/Input";
 
 class BankAddingForm extends React.Component {
     constructor(props) {

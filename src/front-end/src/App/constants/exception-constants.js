@@ -7,8 +7,11 @@ export const exceptions = {
     TOKEN_EXPIRED: 'TokenExpiredException',
     UNAUTHORIZED: 'UnauthorizedException',
     INVALID_TOKEN: 'InvalidTokenException',
+    ECONOMIC_ACTIVITY_NOT_FOUND: 'EconomicActivityNotFoundException',
+    ORGANIZATION_TYPE_NOT_FOUND: 'OrganizationTypeNotFoundException',
     FINANCIAL_ACCOUNT_NOT_FOUND: 'FinancialAccountNotFoundException',
     FINANCIAL_STATISTICS_NOT_FOUND: 'FinancialStatisticsNotFoundException',
+    BANK_ACCOUNT_NOT_FOUND: 'BankAccountNotFoundException',
     BANK_ACCOUNT_ALREADY_EXISTS: 'BankAccountAlreadyExistsException',
     ORGANIZATION_ALREADY_EXISTS: 'OrganizationAlreadyExistsException'
 };

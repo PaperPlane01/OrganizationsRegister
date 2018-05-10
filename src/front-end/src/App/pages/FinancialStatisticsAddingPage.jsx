@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {FinancialStatisticsAddingForm} from '../components/forms';
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {errorLabelStyle, successLabelStyle} from "../styles";
 import {fetchCurrentUser} from "../actions/user-actions";
 import {addFinancialStatistics} from "../actions/financial-statistics-actions";

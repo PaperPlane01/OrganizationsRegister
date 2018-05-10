@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import Input from "material-ui/es/Input/Input";
+import Input from "material-ui/Input";
 import WrappedSelect from './WrappedSelect.jsx';
 
 class TaxesCommitteeSelect extends React.Component {

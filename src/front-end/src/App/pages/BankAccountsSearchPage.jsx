@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {BankAccountsTable} from '../components/tables';
 import {BankAccountsSearchForm} from '../components/forms';
 import {searchBankAccountsByCriteria} from "../actions/bank-accounts-actions";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {errorLabelStyle} from "../styles";
 
 class BankAccountsSearchPage extends React.Component {

@@ -6,17 +6,12 @@ import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.domain.OrganizationType;
 import org.paperplane.organizationsregister.domain.search.OrganizationTypeSearchCriteria;
 import org.paperplane.organizationsregister.exception.OrganizationAlreadyExistsException;
-import org.paperplane.organizationsregister.exception.entitynotfoundexception.OrganizationNotFoundException;
 import org.paperplane.organizationsregister.service.OrganizationService;
 import org.paperplane.organizationsregister.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,26 +37,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
 
         return organizationRepository.save(organization);
-    }
-
-    @Override
-    public List<Organization> findAllByNumberOfEmployeesBetween(int start, int end) {
-        return organizationRepository.findAllByNumberOfEmployeesBetween(start, end);
-    }
-
-    @Override
-    public List<Organization> findAllByFullNameContains(String line) {
-        return organizationRepository.findAllByFullNameContains(line);
-    }
-
-    @Override
-    public List<Organization> findOrganizationsWithRegistrationDateGreaterThan(Date date) {
-        return organizationRepository.findAllByRegistrationDateGreaterThan(date);
-    }
-
-    @Override
-    public List<Organization> findAll(Pageable pageRequest) {
-        return organizationRepository.findAllBy(pageRequest);
     }
 
     @Override
@@ -93,8 +68,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public void saveOrganizationType(OrganizationType organizationType) {
-        organizationTypeRepository.save(organizationType);
+    public OrganizationType saveOrganizationType(OrganizationType organizationType) {
+        return organizationTypeRepository.save(organizationType);
     }
 
     @Override
@@ -113,7 +88,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Transactional
     public Organization update(Organization organization) {
         if (organization.getPermittedEconomicActivities() == null) {
             organization.setPermittedEconomicActivities(Collections.singletonList(organization.getPrimaryEconomicActivity()));
@@ -124,14 +98,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
 
         return organizationRepository.save(organization);
-    }
-
-    @Override
-    public void assertOrganizationExistByBin(long bin) {
-        Organization organization = organizationRepository.findByBin(bin);
-        if (organization == null) {
-            throw new OrganizationNotFoundException();
-        }
     }
 
     @Override

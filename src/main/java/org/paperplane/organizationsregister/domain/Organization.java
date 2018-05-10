@@ -1,11 +1,8 @@
 package org.paperplane.organizationsregister.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -199,5 +196,4 @@ public class Organization implements Comparable<Organization> {
     public int compareTo(Organization o) {
         return this.fullName.compareTo(o.fullName);
     }
-
 }

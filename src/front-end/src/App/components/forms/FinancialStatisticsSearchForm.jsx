@@ -15,10 +15,10 @@ import Button from 'material-ui/Button';
 import compose from 'recompose/compose';
 import {withStyles} from 'material-ui';
 import {errorLabelStyle, formStyle} from "../../styles";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import ValidationResult from "../../validation/ValidationResult";
 import {YearSelectionDialog} from '../dialogs';
-import Input from "material-ui/es/Input/Input";
+import Input from "material-ui/Input";
 import {FinancialAccountSelect} from "../selects";
 import {fetchFinancialAccountsByName, handleFinancialAccountSelect} from "../../actions/financial-accounts-actions";
 
@@ -226,8 +226,6 @@ FinancialStatisticsSearchForm.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    console.log(state);
-
     const financialStatisticsSearch = state.financialStatisticsSearch;
     const {organizationSelect, quarterSelect, minYearDialog, maxYearDialog, attributeSelect, validation,
         financialAccountSelect}

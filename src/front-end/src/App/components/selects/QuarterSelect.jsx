@@ -1,7 +1,7 @@
 import React from 'react';
 import WrappedSelect from './WrappedSelect.jsx';
 import PropTypes from 'prop-types';
-import Input from "material-ui/es/Input/Input";
+import Input from "material-ui/Input";
 
 class QuarterSelect extends React.Component {
     constructor(props) {

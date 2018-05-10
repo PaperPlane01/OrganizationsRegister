@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
-    economicActivitiesSearchReducer, economicActivityValidationReducer, permittedEconomicActivitiesSelectReducer,
+    economicActivitiesSearchReducer, economicActivityUpdateReducer, economicActivityValidationReducer,
+    permittedEconomicActivitiesSelectReducer,
     primaryEconomicActivitySelectReducer
 } from "./economic-activities-reducers";
 import {
@@ -20,7 +21,8 @@ import {
 } from "./organizations-reducers";
 import {
     attributeSelectReducer, financialStatisticsAddingReducer,
-    financialStatisticsSearchReducer, financialStatisticsValidationReducer, maxYearDialogReducer, minYearDialogReducer,
+    financialStatisticsSearchReducer, financialStatisticsUpdateReducer, financialStatisticsValidationReducer,
+    maxYearDialogReducer, minYearDialogReducer,
     overallFinancialStatisticsSumReducer,
     quarterSelectReducer,
     yearDialogReducer
@@ -33,7 +35,11 @@ import {
     bankAccountSavingReducer, bankAccountsSearchReducer,
     bankAccountValidationReducer
 } from "./bank-accounts-reducers";
-import {financialAccountSelectReducer} from "./financial-accounts-reducers";
+import {
+    financialAccountAddingReducer,
+    financialAccountSelectReducer, financialAccountsSearchReducer, financialAccountUpdateReducer,
+    financialAccountValidationReducer
+} from "./financial-accounts-reducers";
 
 export default combineReducers({
     organizationsSearch: combineReducers({
@@ -125,6 +131,31 @@ export default combineReducers({
     overallSumSearchPage: combineReducers({
        overallSumSearchInfo: overallFinancialStatisticsSumReducer,
        financialAccountSelect: financialAccountSelectReducer
+    }),
+    financialAccountsSearchPage: combineReducers({
+        financialAccountsSearch: financialAccountsSearchReducer,
+        validation: financialAccountValidationReducer,
+    }),
+    financialAccountAddingPage: combineReducers({
+        financialAccountAddingInfo: financialAccountAddingReducer,
+        validation: financialAccountValidationReducer
+    }),
+    financialAccountUpdate: combineReducers({
+        financialAccountUpdateInfo: financialAccountUpdateReducer,
+        validation: financialAccountValidationReducer
+    }),
+    economicActivityUpdate: combineReducers({
+        economicActivityUpdateInfo: economicActivityUpdateReducer,
+        validation: economicActivityValidationReducer
+    }),
+    financialStatisticsUpdate: combineReducers({
+       organizationSelect: organizationSelectReducer,
+       attributeSelect: attributeSelectReducer,
+       yearDialog: yearDialogReducer,
+       quarterSelect: quarterSelectReducer,
+       validation: financialStatisticsValidationReducer,
+       financialAccountSelect: financialAccountSelectReducer,
+       financialStatisticsUpdateInfo: financialStatisticsUpdateReducer
     }),
     bankPage: bankPageReducer,
     routing: routerReducer,

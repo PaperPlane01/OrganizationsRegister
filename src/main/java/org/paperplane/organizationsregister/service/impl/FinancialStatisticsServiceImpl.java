@@ -9,12 +9,10 @@ import org.paperplane.organizationsregister.service.FinancialStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-@Transactional
 @Service
 public class FinancialStatisticsServiceImpl implements FinancialStatisticsService {
     private FinancialStatisticsRepository financialStatisticsRepository;

@@ -7,11 +7,9 @@ import org.paperplane.organizationsregister.service.TaxesCommitteeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class TaxesCommitteeServiceImpl implements TaxesCommitteeService{
 
     private TaxesCommitteeRepository taxesCommitteeRepository;
@@ -48,7 +46,6 @@ public class TaxesCommitteeServiceImpl implements TaxesCommitteeService{
 
     @Override
     public TaxesCommittee update(TaxesCommittee taxesCommittee) {
-        taxesCommitteeRepository.update(taxesCommittee);
-        return taxesCommitteeRepository.findById(taxesCommittee.getId());
+        return taxesCommitteeRepository.save(taxesCommittee);
     }
 }

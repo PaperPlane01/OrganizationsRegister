@@ -16,7 +16,6 @@ class FinancialAccountsTable extends React.Component {
         this.state = {
             dataSource: this.props.dataSource,
             columnData: [{id: 'name', numeric: false, disablePadding: false, label: 'Название бухгалтерского счёта'},
-                {id: 'organizationName', numeric: false, disablePadding: false, label: 'Организация'}
             ],
             order: 'asc',
             orderBy: 'name'
@@ -56,15 +55,9 @@ class FinancialAccountsTable extends React.Component {
                                         onRequestSort={this.handleSortRequest}
                 />
                 <TableBody>
-                    {dataSource.map(financialAccount => (<TableRow key={financialAccount.name}>
+                    {dataSource.map((financialAccount, index) => (<TableRow key={index}>
                         <TableCell>
                             {financialAccount.name}
-                        </TableCell>
-                        <TableCell>
-                            <Link to={'/organizations-register/'.concat('organizations/')
-                                .concat(financialAccount.organization.bin)}>
-                                {financialAccount.organization.fullName}
-                            </Link>
                         </TableCell>
                     </TableRow>))}
                 </TableBody>

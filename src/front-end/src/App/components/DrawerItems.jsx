@@ -76,6 +76,12 @@ class DrawerItems extends React.Component {
                     </ListItem>
                 </Link>
 
+                <Link to="/organizations-register/financial-accounts" style={menuLinkStyle}>
+                    <ListItem button>
+                        <ListItemText primary={'Бухгалтерские счета'}/>
+                    </ListItem>
+                </Link>
+
                 <Divider/>
 
                 <Link to='/organizations-register/financial-statistics/overall-sum' style={menuLinkStyle}>
@@ -112,6 +118,12 @@ class DrawerItems extends React.Component {
                 <Link to="/organizations-register/bank-accounts/add-bank-account" style={menuLinkStyle}>
                     <ListItem button>
                         <ListItemText primary={'Добавить банковский счёт'}/>
+                    </ListItem>
+                </Link>
+
+                <Link to="/organizations-register/financial-accounts/add-financial-account" style={menuLinkStyle}>
+                    <ListItem button>
+                        <ListItemText primary={'Добавить бухгалтерский счёт'}/>
                     </ListItem>
                 </Link>
             </div>

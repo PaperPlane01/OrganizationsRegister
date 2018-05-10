@@ -2,9 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {OrganizationTypesSearchForm} from '../components/forms';
-import Typography from "material-ui/es/Typography/Typography";
-import Card from "material-ui/es/Card/Card";
-import CardContent from "material-ui/es/Card/CardContent";
+import Typography from "material-ui/Typography";
+import Card, {CardContent} from "material-ui/Card";
 import {OrganizationTypesTable} from '../components/tables';
 import {searchOrganizationTypesByCriteria} from "../actions/organizations-types-actions";
 

@@ -6,12 +6,9 @@ import {
 } from "../../actions/bank-actions";
 import {connect} from 'react-redux';
 import ValidationResult from "../../validation/ValidationResult";
-import Button from "material-ui/es/Button/Button";
-import Dialog from "material-ui/es/Dialog/Dialog";
-import DialogTitle from "material-ui/es/Dialog/DialogTitle";
-import DialogActions from "material-ui/es/Dialog/DialogActions";
-import DialogContent from "material-ui/es/Dialog/DialogContent";
-import Typography from "material-ui/es/Typography/Typography";
+import Button from "material-ui/Button";
+import Dialog, {DialogTitle, DialogActions, DialogContent} from "material-ui/Dialog";
+import Typography from "material-ui/Typography";
 import {errorLabelStyle, successLabelStyle} from "../../styles/index";
 import Input from "material-ui/es/Input/Input";
 
@@ -32,12 +29,6 @@ class BankUpdateDialog extends React.Component {
             if (nextProps.initialBank != this.props.initialBank) {
                 this.setState({name: nextProps.initialBank.name, address: nextProps.initialBank.address});
                 return;
-            }
-        }
-
-        if (nextProps.updatedBank != undefined && this.props.updatedBank != nextProps.updatedBank) {
-            if (this.props.onUpdate != undefined) {
-                this.props.onUpdate(nextProps.updatedBank);
             }
         }
     }
@@ -75,7 +66,11 @@ class BankUpdateDialog extends React.Component {
                     id: this.props.initialBank.id,
                     name,
                     address
-                })
+                }).then(updatedBank => {
+                    if (this.props.onUpdate != undefined) {
+                        this.props.onUpdate(updatedBank);
+                    }
+                });
             }
         })
     };

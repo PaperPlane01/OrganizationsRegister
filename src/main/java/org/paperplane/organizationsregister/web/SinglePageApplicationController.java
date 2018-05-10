@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.ws.rs.Produces;
 
+
 @Controller
 @RequestMapping(value = "/")
 public class SinglePageApplicationController {

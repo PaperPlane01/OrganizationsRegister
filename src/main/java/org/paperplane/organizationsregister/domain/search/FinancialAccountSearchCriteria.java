@@ -5,7 +5,6 @@ import org.paperplane.organizationsregister.domain.Organization;
 public class FinancialAccountSearchCriteria {
     private Integer id;
     private String name;
-    private Organization organization;
 
     public FinancialAccountSearchCriteria() {
     }
@@ -24,13 +23,5 @@ public class FinancialAccountSearchCriteria {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
     }
 }

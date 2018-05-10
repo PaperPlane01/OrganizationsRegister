@@ -4,10 +4,9 @@ import {connect} from 'react-redux';
 import {OverallSumTable} from "../components/tables";
 import {OverallSumSearchForm} from "../components/forms";
 import {fetchOverallSumOfFinancialAccounts} from "../actions/financial-statistics-actions";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {errorLabelStyle} from "../styles/index";
-import Card from "material-ui/es/Card/Card";
-import CardContent from "material-ui/es/Card/CardContent";
+import Card, {CardContent} from "material-ui/Card/";
 
 class OverallSumSearchPage extends React.Component {
     constructor(props) {

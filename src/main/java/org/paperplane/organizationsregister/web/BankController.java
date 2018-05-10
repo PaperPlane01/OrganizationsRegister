@@ -10,10 +10,10 @@ import org.paperplane.organizationsregister.domain.BankAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.paperplane.organizationsregister.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -29,7 +29,7 @@ public class BankController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @AssertEntityExists
     @ResponseBody
-    public Bank getById(@PathVariable("id") @EntityIdentifier(entityClass = Bank.class) int id) {
+    public Bank findById(@PathVariable("id") @EntityIdentifier(entityClass = Bank.class) int id) {
         return bankService.findById(id);
     }
 
@@ -37,8 +37,8 @@ public class BankController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public Bank save(@RequestBody Bank bank,
-                                       @RequestHeader(value = "token", required = false) String tokenValue) {
+    public Bank save(@RequestBody @Valid Bank bank,
+                     @RequestHeader(value = "token", required = false) String tokenValue) {
         return bankService.save(bank);
     }
 
@@ -74,7 +74,7 @@ public class BankController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public Bank updateBank(@RequestBody Bank bank,
+    public Bank updateBank(@RequestBody @Valid Bank bank,
                            @RequestHeader(value = "token", required = false) String tokenValue) {
         return bankService.update(bank);
     }

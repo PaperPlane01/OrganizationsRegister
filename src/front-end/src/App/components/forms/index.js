@@ -10,3 +10,5 @@ export {default as BankAccountsSearchForm} from './BankAccountsSearchForm.jsx';
 export {default as FinancialStatisticsAddingForm} from './FinancialStatisticsAddingForm.jsx';
 export {default as BankAccountAddingForm} from './BankAccountAddingForm.jsx';
 export {default as OverallSumSearchForm} from './OverallSumSearchForm.jsx';
+export {default as FinancialAccountsSearchForm} from './FinancialAccountsSearchForm.jsx';
+export {default as FinancialAccountAddingForm} from './FinancialAccountAddingForm.jsx';

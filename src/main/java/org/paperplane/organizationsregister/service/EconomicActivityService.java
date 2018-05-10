@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface EconomicActivityService {
     EconomicActivity save(EconomicActivity economicActivity);
-    List<EconomicActivity> findByNameLike(String name);
     List<EconomicActivity> findByNameContains(String name);
     EconomicActivity findById(int id);
     List<EconomicActivity> findByCriteria(EconomicActivitySearchCriteria searchCriteria);
+    EconomicActivity update(EconomicActivity economicActivity);
     boolean existsById(Integer id);
 }

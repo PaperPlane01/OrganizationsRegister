@@ -6,12 +6,10 @@ import org.paperplane.organizationsregister.domain.search.FinancialAccountSearch
 import org.paperplane.organizationsregister.service.FinancialAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class FinancialAccountServiceImpl implements FinancialAccountService {
     @Autowired
     private FinancialAccountRepository financialAccountRepository;

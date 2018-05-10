@@ -20,7 +20,7 @@ import {validateAddress, validateFounder,
 } from "../../actions/organizations-actions";
 import compose from 'recompose/compose';
 import {errorLabelStyle, formStyle} from "../../styles/";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {Link} from "react-router-dom";
 import {OrganizationTypeSelect, TaxesCommitteeSelect, EconomicActivitySelect} from "../selects/";
 

@@ -1,6 +1,5 @@
 package org.paperplane.organizationsregister.web;
 
-import org.jboss.logging.Param;
 import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
@@ -8,14 +7,13 @@ import org.paperplane.organizationsregister.annotation.RequiresToken;
 import org.paperplane.organizationsregister.domain.FinancialAccount;
 import org.paperplane.organizationsregister.domain.FinancialStatisticsByQuarter;
 import org.paperplane.organizationsregister.domain.Organization;
-import org.paperplane.organizationsregister.domain.search.FinancialAccountSearchCriteria;
 import org.paperplane.organizationsregister.domain.search.FinancialStatisticsSearchCriteria;
 import org.paperplane.organizationsregister.service.FinancialStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +45,8 @@ public class FinancialStatisticsByQuarterController {
     @RequestMapping(method = RequestMethod.GET, params = {"bin", "year"})
     @ResponseBody
     public List<FinancialStatisticsByQuarter> getFinancialStatisticsOfOrganizationByYear(
-            @RequestParam("bin") @EntityIdentifier(entityClass = Organization.class) long bin, @RequestParam(value = "year") int year) {
+            @RequestParam("bin") @EntityIdentifier(entityClass = Organization.class) long bin,
+            @RequestParam(value = "year") int year) {
         return financialStatisticsService.findAllByOrganizationAndYear(new Organization(bin), year);
     }
 
@@ -56,7 +55,7 @@ public class FinancialStatisticsByQuarterController {
     @ResponseBody
     public List<FinancialStatisticsByQuarter> getFinancialStatisticsOfOrganizationByQuarterAndYear(
             @RequestParam("bin") @EntityIdentifier(entityClass = Organization.class) long bin, @RequestParam("year") int year,
-            @RequestParam("quarter") byte quarter) {
+            @RequestParam("quarter") int quarter) {
         return Collections.singletonList(financialStatisticsService
                 .findByOrganizationAndYearAndQuarter(new Organization(bin), year, quarter));
     }
@@ -89,12 +88,22 @@ public class FinancialStatisticsByQuarterController {
         return financialStatisticsService.findMinYear(organizationBin);
     }
 
-    @RequestMapping(method = RequestMethod.POST, headers = {"token"})
+    @RequestMapping(method = RequestMethod.POST)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
-    public FinancialStatisticsByQuarter save(@RequestBody FinancialStatisticsByQuarter financialStatisticsByQuarter,
-                               @RequestHeader(value = "token", required = false) String tokenValue) {
+    @ResponseBody
+    public FinancialStatisticsByQuarter save(@RequestBody @Valid FinancialStatisticsByQuarter financialStatisticsByQuarter,
+                                             @RequestHeader(value = "token", required = false) String tokenValue) {
         return financialStatisticsService.save(financialStatisticsByQuarter);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @RequiresToken
+    @RequiresRole(anyOf = {"admin"})
+    @ResponseBody
+    public FinancialStatisticsByQuarter update(@RequestBody @Valid FinancialStatisticsByQuarter financialStatisticsByQuarter,
+                                               @RequestHeader(value = "token", required = false) String tokenValue) {
+        return financialStatisticsService.update(financialStatisticsByQuarter);
     }
 
     @AssertEntityExists

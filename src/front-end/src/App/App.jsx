@@ -8,7 +8,6 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
-import withStyles from "material-ui/es/styles/withStyles";
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import ruLocale from 'date-fns/locale/ru';
@@ -17,11 +16,10 @@ import TaxesCommitteeSearchPage from './pages/TaxesCommitteesSearchPage.jsx';
 import {BankPage, BanksSearchPage, EconomicActivitiesSearchPage, FinancialStatisticsSearchPage, OrganizationPage,
     OrganizationAddingPage, OrganizationsSearchPage, OrganizationTypesSearchPage,
     PageNotFoundErrorPage, TaxesCommitteePage, TaxesCommitteesSearchPage, BankAddingPage,
-    BankAccountsSearchPage, FinancialStatisticsAddingPage, BankAccountAddingPage, OverallSumSearchPage} from './pages';
-import withWidth from "material-ui/es/utils/withWidth";
+    BankAccountsSearchPage, FinancialStatisticsAddingPage, BankAccountAddingPage, OverallSumSearchPage,
+    FinancialAccountsSearchPage, FinancialAccountAddingPage} from './pages';
 import compose from 'recompose/compose';
-import {Hidden} from "material-ui/es/index";
-import Drawer from "material-ui/es/Drawer/Drawer";
+import {Drawer, Hidden, withWidth, withStyles} from "material-ui";
 import DrawerItems from "./components/DrawerItems.jsx";
 
 const theme = createMuiTheme({
@@ -172,6 +170,9 @@ class Content extends React.Component {
         <Route exact path='/organizations-register/taxes-committees' component={TaxesCommitteesSearchPage}/>
         <Route exact path='/organizations-register/bank-accounts' component={BankAccountsSearchPage}/>
         <Route exact path='/organizations-register/bank-accounts/add-bank-account' component={BankAccountAddingPage}/>
+        <Route exact path='/organizations-register/financial-accounts' component={FinancialAccountsSearchPage}/>
+        <Route exaxt path='/organizations-register/financial-accounts/add-financial-account'
+               component={FinancialAccountAddingPage}/>
         <Route component={PageNotFoundErrorPage}/>
     </Switch>
     }

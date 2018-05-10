@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {BankAddingForm} from "../components/forms";
 import {fetchCurrentUser} from "../actions/user-actions";
 import {addBank, clearBankAddingPageState} from "../actions/bank-actions";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {errorLabelStyle, successLabelStyle} from "../styles/index";
 import Link from "react-router-dom/es/Link";
 

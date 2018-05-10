@@ -10,12 +10,12 @@ import {
     handleAttributeSelect, handleQuarterSelect, handleYearSelect,
     validateFinancialStatisticsSum
 } from "../../actions/financial-statistics-actions";
-import Typography from "material-ui/es/Typography/Typography";
-import Input from "material-ui/es/Input/Input";
+import Typography from "material-ui/Typography";
+import Input from "material-ui/Input";
 import {errorLabelStyle, formStyle} from "../../styles";
-import Button from "material-ui/es/Button/Button";
+import Button from "material-ui/Button";
 import compose from 'recompose/compose';
-import withStyles from "material-ui/es/styles/withStyles";
+import withStyles from "material-ui/styles/withStyles";
 
 const styles = theme => formStyle(theme);
 

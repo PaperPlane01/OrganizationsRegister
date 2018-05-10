@@ -1,11 +1,9 @@
 package org.paperplane.organizationsregister.data;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 @Component
 public class RepositoriesSingleton implements ApplicationContextAware {

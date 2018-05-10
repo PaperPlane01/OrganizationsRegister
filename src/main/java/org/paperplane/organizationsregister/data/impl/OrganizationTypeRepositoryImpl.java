@@ -1,11 +1,11 @@
 package org.paperplane.organizationsregister.data.impl;
 
 import com.google.common.collect.Iterables;
-import org.aspectj.weaver.ast.Or;
 import org.paperplane.organizationsregister.data.custom.OrganizationTypeCustomQueriesCaller;
 import org.paperplane.organizationsregister.domain.OrganizationType;
 import org.paperplane.organizationsregister.domain.search.OrganizationTypeSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,6 +15,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class OrganizationTypeRepositoryImpl implements OrganizationTypeCustomQueriesCaller {
     @Autowired
     private EntityManagerFactory entityManagerFactory;

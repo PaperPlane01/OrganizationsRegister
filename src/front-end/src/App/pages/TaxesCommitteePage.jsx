@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import Card, { CardActions, CardContent } from 'material-ui/Card';
-import Typography from "material-ui/es/Typography/Typography";
+import Card, { CardContent } from 'material-ui/Card';
 import {fetchTaxesCommitteeById} from "../actions/taxes-committees-actions";
 import {exceptions} from "../constants/exception-constants";
 import {fetchCurrentUser} from "../actions/user-actions";
 import {TaxesCommitteeUpdateDialog} from "../components/dialogs";
+import Typography from "material-ui/Typography";
 
 class TaxesCommitteePage extends React.Component {
     constructor(props) {
@@ -14,6 +14,10 @@ class TaxesCommitteePage extends React.Component {
     }
 
     componentDidMount() {
+        if (this.props.userLoggedIn && this.props.currentUser == undefined) {
+            this.props.fetchCurrentUser();
+        }
+
         this.props.fetchTaxesCommittee(this.props.match.params.id);
     }
 
@@ -25,7 +29,6 @@ class TaxesCommitteePage extends React.Component {
         if (userLoggedIn) {
             if (currentUser != undefined) {
                 if (currentUser.roles.map(role => (role.name)).includes('admin')) {
-                    console.log('admin!');
                     displayTaxesCommitteeUpdateDialog = true;
                 }
             }

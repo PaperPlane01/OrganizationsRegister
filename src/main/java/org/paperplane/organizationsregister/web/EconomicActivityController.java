@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -40,9 +41,18 @@ public class EconomicActivityController {
     @RequestMapping(method = RequestMethod.POST)
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
-    public void save(@RequestBody EconomicActivity economicActivity,
+    public EconomicActivity save(@RequestBody @Valid EconomicActivity economicActivity,
                      @RequestHeader(value = "token", required = false) String tokenValue) {
-        economicActivityService.save(economicActivity);
+        return economicActivityService.save(economicActivity);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @RequiresToken
+    @RequiresRole(anyOf = {"admin"})
+    @ResponseBody
+    public EconomicActivity update(@RequestBody @Valid EconomicActivity economicActivity,
+                                   @RequestHeader(value = "token", required = false) String tokenValue) {
+        return  economicActivityService.update(economicActivity);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = {"/search"})

@@ -2,12 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {YearSelection} from "material-ui-pickers/DatePicker/YearSelection";
 import withUtils from "material-ui-pickers/_shared/WithUtils";
-import Dialog from "material-ui/es/Dialog/Dialog";
-import DialogTitle from "material-ui/es/Dialog/DialogTitle";
-import DialogContent from "material-ui/es/Dialog/DialogContent";
-import Button from "material-ui/es/Button/Button";
-import Input from "material-ui/es/Input/Input";
-import DialogActions from "material-ui/es/Dialog/DialogActions";
+import Dialog, {DialogTitle, DialogActions, DialogContent} from "material-ui/Dialog";
+import Button from "material-ui/Button";
+import Input from "material-ui/Input";
 
 class YearSelectionDialog extends React.Component {
     constructor(props) {

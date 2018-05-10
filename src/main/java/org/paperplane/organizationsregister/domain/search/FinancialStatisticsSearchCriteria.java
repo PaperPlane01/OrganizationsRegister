@@ -3,7 +3,6 @@ package org.paperplane.organizationsregister.domain.search;
 import org.paperplane.organizationsregister.domain.FinancialAccount;
 import org.paperplane.organizationsregister.domain.Organization;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 
 public class FinancialStatisticsSearchCriteria {

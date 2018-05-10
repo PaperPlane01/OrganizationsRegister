@@ -10,7 +10,6 @@ import java.util.List;
 public interface FinancialAccountRepository extends JpaRepository<FinancialAccount, Integer>,
         FinancialAccountCustomQueriesCaller {
     FinancialAccount save(FinancialAccount financialAccount);
-    FinancialAccount findByName(String name);
     FinancialAccount findById(int id);
     List<FinancialAccount> findAllByNameContains(String line);
     List<FinancialAccount> findByCriteria(FinancialAccountSearchCriteria searchCriteria);

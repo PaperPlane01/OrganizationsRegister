@@ -5,9 +5,10 @@ import org.paperplane.organizationsregister.data.custom.FinancialAccountCustomQu
 import org.paperplane.organizationsregister.domain.FinancialAccount;
 import org.paperplane.organizationsregister.domain.search.FinancialAccountSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.ForeignKey;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -15,6 +16,8 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@Transactional
 public class FinancialAccountRepositoryImpl implements FinancialAccountCustomQueriesCaller {
 
     @Autowired

@@ -3,7 +3,7 @@ import {OrganizationsTable} from '../components/tables';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {clearOrganizationsSearchPageState, searchOrganizationsByCriteria} from "../actions/organizations-actions";
-import Typography from "material-ui/es/Typography/Typography";
+import Typography from "material-ui/Typography";
 import {OrganizationsSearchForm} from '../components/forms';
 
 class OrganizationsSearchPage extends React.Component {

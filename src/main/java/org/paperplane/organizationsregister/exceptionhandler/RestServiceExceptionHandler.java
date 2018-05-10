@@ -1,7 +1,6 @@
 package org.paperplane.organizationsregister.exceptionhandler;
 
 import com.google.common.collect.ImmutableMap;
-import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.exception.*;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.BankNotFoundException;
 import org.paperplane.organizationsregister.exception.entitynotfoundexception.OrganizationNotFoundException;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ControllerAdvice

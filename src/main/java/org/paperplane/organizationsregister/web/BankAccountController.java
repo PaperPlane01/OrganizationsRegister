@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.HeaderParam;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -25,14 +25,14 @@ public class BankAccountController {
     @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, params = {"bankID"})
     @ResponseBody
-    public List<BankAccount> findByBank(@RequestParam("bankID") @EntityIdentifier(entityClass = Bank.class) int bankID) {
+    public List<BankAccount> findByBankId(@RequestParam("bankID") @EntityIdentifier(entityClass = Bank.class) int bankID) {
         return bankAccountService.findByBank(new Bank(bankID));
     }
 
     @AssertEntityExists
     @RequestMapping(method = RequestMethod.GET, params = {"organizationBIN"})
     @ResponseBody
-    public List<BankAccount> findByOrganization(
+    public List<BankAccount> findByOrganizationBin(
             @RequestParam("organizationBIN")
             @EntityIdentifier(entityClass = Organization.class) long organizationBIN) {
         return bankAccountService.findByOrganization(new Organization(organizationBIN));
@@ -50,7 +50,7 @@ public class BankAccountController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public BankAccount save(@RequestBody BankAccount bankAccount,
+    public BankAccount save(@RequestBody @Valid BankAccount bankAccount,
                             @RequestHeader(value = "token", required = false) String tokenValue) {
         System.out.println(bankAccount.getId());
         return bankAccountService.save(bankAccount);
@@ -60,7 +60,7 @@ public class BankAccountController {
     @RequiresToken
     @RequiresRole(anyOf = {"admin"})
     @ResponseBody
-    public BankAccount update(@RequestBody BankAccount bankAccount,
+    public BankAccount update(@RequestBody @Valid BankAccount bankAccount,
                               @RequestHeader(value = "token", required = false) String tokenValue) {
         return bankAccountService.update(bankAccount);
     }

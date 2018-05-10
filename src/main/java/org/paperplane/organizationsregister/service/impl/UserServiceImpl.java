@@ -5,17 +5,12 @@ import org.paperplane.organizationsregister.data.UserRoleRepository;
 import org.paperplane.organizationsregister.domain.User;
 import org.paperplane.organizationsregister.domain.UserRole;
 import org.paperplane.organizationsregister.exception.NoMatchFoundForGivenUsernameAndPasswordException;
-import org.paperplane.organizationsregister.exception.entitynotfoundexception.UserNotFoundException;
 import org.paperplane.organizationsregister.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.List;
-
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private UserRoleRepository userRoleRepository;
@@ -44,11 +39,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findUsersWithRole(UserRole userRole) {
-        return userRepository.findAllByRolesContains(userRole);
-    }
-
-    @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -68,20 +58,6 @@ public class UserServiceImpl implements UserService {
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new NoMatchFoundForGivenUsernameAndPasswordException();
-        }
-    }
-
-    @Override
-    public void assertUserExistsByUserId(int id) {
-        if (userRepository.findById(id) == null) {
-            throw new UserNotFoundException();
-        }
-    }
-
-    @Override
-    public void assertUserExistsByUsername(String username) {
-        if (userRepository.findByUsername(username) == null) {
-            throw new UserNotFoundException();
         }
     }
 }

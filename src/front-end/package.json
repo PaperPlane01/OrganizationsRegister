@@ -20,6 +20,7 @@
     "babel-preset-react": "^6.24.1",
     "date-fns": "^2.0.0-alpha.7",
     "es6-template": "^1.0.4",
+    "fast-deep-equal": "^2.0.1",
     "fast-sort": "^1.2.6",
     "jss": "^9.8.1",
     "lodash": "^4.17.5",
@@ -43,6 +44,10 @@
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-template-literals": "^6.22.0",
+    "babel-plugin-uglify": "^1.0.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
     "serviceworker-webpack-plugin": "^1.0.0-alpha02",
     "webpack-cli": "^2.0.9"

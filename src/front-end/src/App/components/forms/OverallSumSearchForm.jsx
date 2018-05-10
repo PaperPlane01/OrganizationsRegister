@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import Typography from "material-ui/es/Typography/Typography";
-import Button from "material-ui/es/Button/Button";
+import Typography from "material-ui/Typography";
+import Button from "material-ui/Button";
 import {FinancialAccountSelect} from "../selects";
 import {fetchFinancialAccountsByName, handleFinancialAccountSelect} from "../../actions/financial-accounts-actions";
 import compose from 'recompose/compose';
-import withStyles from "material-ui/es/styles/withStyles";
+import withStyles from "material-ui/styles/withStyles";
 import {formStyle} from "../../styles";
 
 const styles = theme => formStyle(theme);

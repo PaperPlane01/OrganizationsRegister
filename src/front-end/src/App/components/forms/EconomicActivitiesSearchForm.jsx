@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import ValidationResult from "../../validation/ValidationResult";
 import {connect} from 'react-redux';
 import {errorLabelStyle} from "../../styles/";
-import {Input} from 'material-ui';
-import Typography from "material-ui/es/Typography/Typography";
-import Button from "material-ui/es/Button/Button";
+import Input from 'material-ui/Input';
+import Typography from "material-ui/Typography";
+import Button from "material-ui/Button";
 
 class EconomicActivitiesSearchForm extends React.Component {
     constructor(props) {
@@ -77,7 +77,6 @@ EconomicActivitiesSearchForm.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    console.log(state);
     const {economicActivitiesSearchPage} = state;
     const {nameValidationResult} = economicActivitiesSearchPage.validation.validationResults;
 

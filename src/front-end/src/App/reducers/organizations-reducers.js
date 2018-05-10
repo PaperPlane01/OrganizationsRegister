@@ -67,6 +67,8 @@ export const organizationSelectReducer = (state = {
             return {...state, pending: false, data: {...state.data, dataSource: action.organizations}, error: null};
         case organizationsActionConstants.ORGANIZATION_SELECTED:
             return {...state, pending: false, data: {...state.data, selectedOption: action.selectedOption}};
+        case organizationsActionConstants.CLEAR_ORGANIZATION_SELECT:
+            return {...state, pending: false, data: {...state.data, selectedOption: null, dataSource: null}};
         default:
             return state;
     }

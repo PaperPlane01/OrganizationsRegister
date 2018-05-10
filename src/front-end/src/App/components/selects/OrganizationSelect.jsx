@@ -4,7 +4,6 @@ import Input from "material-ui/es/Input/Input";
 import WrappedSelect from './WrappedSelect.jsx';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {loadOrganizationsWithNameContains, handleOrganizationSelect} from "../../actions/organizations-actions";
 
 class OrganizationSelect extends React.Component {
     constructor(props) {

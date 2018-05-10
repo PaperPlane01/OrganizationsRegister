@@ -6,7 +6,6 @@ import org.paperplane.organizationsregister.domain.Bank;
 import org.paperplane.organizationsregister.domain.Organization;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -28,17 +27,4 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 
     @Query("select organization from BankAccount bankAccount where bankAccount.bank = :#{#bank}")
     List<Organization> findOrganizationsServedByBank(@Param("bank") Bank bank);
-
-    @Modifying(clearAutomatically = true)
-    @Query("update Organization target " +
-            "set target.fullName = :#{#organization.fullName}, target.shortName = :#{#organization.shortName}, " +
-            "target.address = :#{#organization.address}, target.founder = :#{#organization.founder}, " +
-            "target.numberOfEmployees = :#{#organization.numberOfEmployees}, target.phoneNumber = :#{#organization.phoneNumber}, " +
-            "target.organizationType = :#{#organization.organizationType}, " +
-            "target.primaryEconomicActivity = :#{#organization.primaryEconomicActivity}, " +
-            "target.permittedEconomicActivities = :#{#organization.permittedEconomicActivities}, " +
-            "target.registrationDate = :#{#organization.registrationDate}, " +
-            "target.taxesCommittee = :#{#organization.taxesCommittee} " +
-            "where target.bin = :#{#organization.bin}")
-    void update(@Param("organization") Organization organization);
 }

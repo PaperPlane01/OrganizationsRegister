@@ -309,3 +309,90 @@ export const fetchOverallSumOfFinancialAccounts = (financialAccount) => {
         }
     };
 };
+
+export const financialStatisticsFetched = (financialStatistics) => {
+    return {
+        type: financialStatisticsConstants.SINGLE_FINANCIAL_STATISTICS_FETCH_SUCCESS,
+        financialStatistics
+    }
+};
+
+export const financialStatisticsFetchFailure = (error) => {
+    return {
+        type: financialStatisticsConstants.SINGLE_FINANCIAL_STATISTICS_FETCH_FAILURE,
+        error
+    }
+};
+
+export const fetchFinancialStatisticsById = (id) => {
+    return (dispatch) => {
+        return axios.get(API_URL.concat(FINANCIAL_STATISTICS).concat("/").concat(id)).then(response => {
+            dispatch(financialStatisticsFetched(response.data));
+            return response.data;
+        }).catch(error => {
+            const response = error.response;
+
+            if (response.data.exception != undefined) {
+                dispatch(financialStatisticsFetchFailure({status: response.status, exception: reponse.data.exception}));
+            } else {
+                dispatch(financialStatisticsFetchFailure({status: response.status, exception: exceptions.SERVER_ERROR}));
+            }
+        })
+    }
+};
+
+export const financialStatisticsUpdateSuccess = (updatedFinancialStatistics) => {
+    return {
+        type: financialStatisticsConstants.FINANCIAL_STATISTICS_UPDATE_SUCCESS,
+        updatedFinancialStatistics
+    }
+};
+
+export const financialStatisticsUpdateFailure = (error) => {
+    return {
+        type: financialStatisticsConstants.FINANCIAL_STATISTICS_UPDATE_FAILURE,
+        error
+    }
+};
+
+export const updateFinancialStatistics = (financialStatistics) => {
+    return (dispatch) => {
+        return axios.put(API_URL.concat(FINANCIAL_STATISTICS), JSON.stringify(financialStatistics), {
+            headers: {
+                'Content-type': 'application/json',
+                token: localStorage.getItem('token')
+            }
+        }).then(response => {
+            dispatch(financialStatisticsUpdateSuccess(response.data));
+            return response.data;
+        }).catch(error => {
+            const response = error.response;
+            const exception = response.data.exception;
+            const status = response.status;
+
+            if (exception != undefined) {
+                dipsatch(financialStatisticsUpdateFailure({status, exception}));
+            } else {
+                dispatch(financialStatisticsUpdateFailure({status, exception: exceptions.SERVER_ERROR}));
+            }
+        })
+    }
+};
+
+export const clearAttributeSelect = () => {
+    return {
+        type: financialStatisticsConstants.CLEAR_ATTRIBUTE_SELECT
+    }
+};
+
+export const clearFinancialStatisticsValidationState = () => {
+    return {
+        type: financialStatisticsConstants.CLEAR_FINANCIAL_STATISTICS_VALIDATION_STATE
+    }
+};
+
+export const clearFinancialStatisticsUpdateDialogState = () => {
+    return {
+        type: financialStatisticsConstants.CLEAR_FINANCIAL_STATISTICS_UPDATE_DIALOG_STATE
+    }
+}
