@@ -7,11 +7,13 @@ import org.paperplane.organizationsregister.exception.InvalidTokenException;
 import org.paperplane.organizationsregister.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class TokenServiceImpl implements TokenService{
     private TokenRepository tokenRepository;
 

@@ -1,5 +1,6 @@
 package org.paperplane.organizationsregister.web;
 
+import org.aspectj.weaver.ast.Or;
 import org.paperplane.organizationsregister.annotation.AssertEntityExists;
 import org.paperplane.organizationsregister.annotation.EntityIdentifier;
 import org.paperplane.organizationsregister.annotation.RequiresRole;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/api/banks")
@@ -68,6 +69,14 @@ public class BankController {
     @ResponseBody
     public List<Bank> findBanksByCriteria(@RequestBody BankSearchCriteria searchCriteria) {
         return bankService.findBanksByCriteria(searchCriteria);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/by-organization-registration-date")
+    @ResponseBody
+    public List<Map<Organization, Bank>> findBanksByOrganizationRegistrationDate(@RequestBody Date registrationDate) {
+        registrationDate.setHours(0);
+        registrationDate.setMinutes(0);
+        return bankService.findBanksByOrganizationRegistrationDate(registrationDate);
     }
 
     @RequestMapping(method = RequestMethod.PUT)

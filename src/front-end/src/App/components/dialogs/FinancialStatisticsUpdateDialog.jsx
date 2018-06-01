@@ -8,7 +8,6 @@ import Typography from "material-ui/Typography";
 import {errorLabelStyle, successLabelStyle, formStyle} from "../../styles/index";
 import Input from "material-ui/Input";
 import {withStyles} from 'material-ui';
-import equals from "fast-deep-equal";
 import {OrganizationSelect, FinancialAccountSelect, QuarterSelect, AttributeSelect} from "../selects";
 import {YearSelectionDialog} from "./index";
 import compose from 'recompose/compose';

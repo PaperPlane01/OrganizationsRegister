@@ -6,10 +6,12 @@ import org.paperplane.organizationsregister.domain.search.EconomicActivitySearch
 import org.paperplane.organizationsregister.service.EconomicActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class EconomicActivityServiceImpl implements EconomicActivityService {
 
     @Autowired

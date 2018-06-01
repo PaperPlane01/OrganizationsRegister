@@ -11,7 +11,9 @@ import org.paperplane.organizationsregister.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BankServiceImpl implements BankService {
@@ -62,6 +64,11 @@ public class BankServiceImpl implements BankService {
     @Override
     public List<Bank> findBanksByCriteria(BankSearchCriteria searchCriteria) {
         return bankRepository.findByCriteria(searchCriteria);
+    }
+
+    @Override
+    public List<Map<Organization, Bank>> findBanksByOrganizationRegistrationDate(Date registrationDate) {
+        return bankRepository.findBanksByOrganizationRegistrationDate(registrationDate);
     }
 
 }
